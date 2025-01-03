@@ -7,6 +7,10 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[abustract_album];
+GO
+
+
 CREATE TABLE [dbo].[abustract_album](
 	[abustract_album_id] [uniqueidentifier] NOT NULL,
 	[title] nvarchar(256) NOT NULL,

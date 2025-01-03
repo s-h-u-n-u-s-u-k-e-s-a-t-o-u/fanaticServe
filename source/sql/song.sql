@@ -7,16 +7,19 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[song];
+GO
+
 CREATE TABLE [dbo].[song](
 	[song_id] [uniqueidentifier] NOT NULL,
-    [title] nvarchar[123] NOT NULL,
-    [kana] nvarchar[123] NOT NULL,
+    [title] nvarchar(128) NOT NULL,
+    [kana] nvarchar(128) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
 
- CONSTRAINT [PK_media] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_song] PRIMARY KEY CLUSTERED 
 (
-	[media_type] ASC
+	[song_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

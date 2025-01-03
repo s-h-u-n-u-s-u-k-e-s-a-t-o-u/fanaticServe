@@ -8,6 +8,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[ID];
+GO
+
 CREATE TABLE [dbo].[ID](
 	[id] [uniqueidentifier] NOT NULL,
 	[created_at] [datetime] NULL,

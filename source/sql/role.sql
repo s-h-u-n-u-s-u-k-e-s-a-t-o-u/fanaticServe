@@ -4,6 +4,9 @@ GO
 SET ANSI_NULLS ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[role];
+GO
+
 CREATE TABLE [dbo].[role](
 	[role_id] int NOT NULL,
     [name] nvarchar(256) NOT NULL,
@@ -11,7 +14,7 @@ CREATE TABLE [dbo].[role](
 	[modified_at] [datetime] NULL,
  CONSTRAINT [PK_role] PRIMARY KEY CLUSTERED 
 (
-	[role] ASC
+	[role_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

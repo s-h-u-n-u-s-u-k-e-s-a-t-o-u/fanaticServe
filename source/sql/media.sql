@@ -7,9 +7,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[media];
+GO
+
 CREATE TABLE [dbo].[media](
 	[media_type] [int] NOT NULL,
-    [name] nvarchar[123] NOT NULL,
+    [name] nvarchar(128) NOT NULL,
+    [created_at] [datetime] NOT NULL,
  CONSTRAINT [PK_media] PRIMARY KEY CLUSTERED 
 (
 	[media_type] ASC

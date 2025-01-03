@@ -7,16 +7,19 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[organization];
+GO
+
 CREATE TABLE [dbo].[organization](
 	[organization_id] [uniqueidentifier] NOT NULL,
-    [name] nvarchar[123] NOT NULL,
-    [kana] nvarchar[123] NOT NULL,
+    [name] nvarchar(128) NOT NULL,
+    [kana] nvarchar(128) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
 
- CONSTRAINT [PK_media] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_organization] PRIMARY KEY CLUSTERED 
 (
-	[media_type] ASC
+	[organization_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

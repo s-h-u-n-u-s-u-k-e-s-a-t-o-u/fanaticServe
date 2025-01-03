@@ -7,6 +7,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[roleOnSong];
+GO
+
 CREATE TABLE [dbo].[roleOnSong](
 	[id] [uniqueidentifier] NOT NULL,
 	[song_id] [uniqueidentifier] NOT NULL,

@@ -7,11 +7,14 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[site];
+GO
+
 CREATE TABLE [dbo].[site](
 	[site_id] [uniqueidentifier] NOT NULL,
     [sequence] [int] NOT NULL,
-    [display_name] nvarcahr(256) NOT NULL,
-    [url] nvarcahr(256) NOT NULL,
+    [display_name] nvarchar(256) NOT NULL,
+    [url] nvarchar(256) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NULL,
  CONSTRAINT [PK_site] PRIMARY KEY CLUSTERED 
