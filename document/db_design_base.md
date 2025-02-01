@@ -22,11 +22,6 @@ NEWID() 関数
 
 erDiagram
 
-id{
-uuid id pk
-datetime created_at
-}
-
 song{
 uuid song_id pk
 string title
@@ -71,21 +66,25 @@ media{
     string name
 }
 
-abustract_album{
-  uuid abustract_album_id pk
+abstract_album{
+  uuid abstract_album_id pk
   string title
 }
 
 album{
   uuid album_id pk
-  uuid abustract_album_id
+  string code
   string title
   int media_type
   uuid label_id
   date release_on
 }
 
-abustract_album ||--|{ album:abustract_album_id
+abstract_album_link{
+  int id pk
+  uuid abstract_album_id
+  uuid album_id
+}
 
 track{
   uuid tack_id pk
@@ -94,6 +93,31 @@ track{
   string title
   int length
   uuid song_id
+}
+
+abstract_event{
+  uuid abstract_event_id pk
+  strting title
+  string note
+}
+
+event{
+  uuid event_id pk
+  strting title
+  date perform_at
+}
+
+abstract_event_link{
+  uuid id pk
+    uuid abstract_event_id
+    uuid event_id
+}
+
+set_list{
+  uuid set_list_id pk
+  string title
+  uuid song_id
+  string note
 }
 
 role {
@@ -115,12 +139,17 @@ roleOnAlbum{
   uuid person_id
 }
 
+event ||--|{ set_list:event_id
 
-id ||--|| song:id
-id ||--|| organization:id
-id ||--|| person:id
-id ||--|| label:id
-id ||--o{ site:id
+set_list ||--|| song:song_id
+
+
+abstract_album ||--|{abstract_album_link:abstract_album_id
+album ||--||abstract_album_link:album_id
+
+abstract_event ||--|{abstract_event_link:abstract_event_id
+event ||--|| abstract_event_link:event_id
+
 media ||--|{album:media_id
 album ||--|{ track:album_id
 song ||--|{ track:song_id 
