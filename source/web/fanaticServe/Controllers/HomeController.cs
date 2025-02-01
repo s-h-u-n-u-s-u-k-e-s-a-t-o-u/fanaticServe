@@ -21,15 +21,15 @@ namespace fanaticServe.Controllers
 
         public IActionResult Index()
         {
-            try
-            {
-                var iddata = _context.Abustract_Album.ToList();
-                return new ObjectResult(iddata);
-            }
-            catch (Exception e)
-            {
-                Console.Write(e.Message);
-            }
+            //try
+            //{
+            //    var iddata = _context.abustract_albums.ToList();
+            //    return new ObjectResult(iddata);
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.Write(e.Message);
+            //}
             return View();
         }
 

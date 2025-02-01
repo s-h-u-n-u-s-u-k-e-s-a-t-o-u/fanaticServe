@@ -1,0 +1,33 @@
+﻿@model IEnumerable<fanaticServe.Models.Abstract_album>
+@{
+    ViewData["Title"] = "Articles";
+}
+
+<h1>リリース一覧</h1>
+<a asp-action="Index">一覧表形式</A>
+
+    @foreach(var abs in Model){
+        <article class="abs-album">
+        <div>
+            <h4>@abs.title</h4>
+                @if( abs.albums != null){
+            <div class="variations">
+                        <table>
+                    @foreach(var album in abs.albums){
+                            <tr>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@album.album_id">
+                                        @Html.DisplayFor(modelItem => album.title)
+                                    </a>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => album.release_on)
+                                </td>
+                            </tr>
+                    }
+                        </table>
+            </div>
+                }
+        </div>
+        </article>
+    }

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<fanaticServe.Dto.ShowableAlbum>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>リリース一覧</h1>
+<a asp-action="Articles">記事形式</A>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.release_on)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.detailTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.media)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.release_on)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.title)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.album_id">
+                        @Html.DisplayFor(modelItem => item.detailTitle)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.media)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
