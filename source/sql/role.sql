@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS [dbo].[role];
 GO
 
 CREATE TABLE [dbo].[role](
-	[role_id] int NOT NULL,
+	[role_id] int identity(1,1) NOT NULL,
     [name] nvarchar(256) NOT NULL,
 	[created_at] [datetime] NULL,
 	[modified_at] [datetime] NULL,

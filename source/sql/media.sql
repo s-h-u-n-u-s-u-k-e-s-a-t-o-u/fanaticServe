@@ -12,7 +12,7 @@ GO
 
 CREATE TABLE [dbo].[media](
 	[media_type] [int] NOT NULL,
-    [name] nvarchar(128) NOT NULL,
+    [name] nvarchar(256) NOT NULL,
     [created_at] [datetime] NOT NULL,
  CONSTRAINT [PK_media] PRIMARY KEY CLUSTERED 
 (
