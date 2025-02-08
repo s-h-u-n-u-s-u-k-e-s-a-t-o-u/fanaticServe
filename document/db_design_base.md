@@ -141,7 +141,7 @@ roleOnAlbum{
 
 event ||--|{ set_list:event_id
 
-set_list ||--|| song:song_id
+set_list |o--o| song:song_id
 
 
 abstract_album ||--|{abstract_album_link:abstract_album_id
