@@ -12,13 +12,13 @@ GO
 
 CREATE TABLE [dbo].[track](
 	[track_id] [uniqueidentifier] NOT NULL,
-    [album_id] [uniqueidentifier] NOT NULL,
-    [track_no] INT NOT NULL,
-	[title] nvarchar(256) NOT NULL,
-    [length] int NOT NULL,
-    [song_id] [uniqueidentifier] NOT NULL,
+	[album_id] [uniqueidentifier] NOT NULL,
+	[track_no] [int] NOT NULL,
+	[title] [nvarchar](256) NOT NULL,
+	[length] [int] NOT NULL,
+	[song_id] [uniqueidentifier] NOT NULL,
 	[created_at] [datetime] NOT NULL,
-    [modified_at] [datetime] NOT NULL,
+	[modified_at] [datetime] NOT NULL,
  CONSTRAINT [PK_track] PRIMARY KEY CLUSTERED 
 (
 	[track_id] ASC

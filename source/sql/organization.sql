@@ -12,8 +12,8 @@ GO
 
 CREATE TABLE [dbo].[organization](
 	[organization_id] [uniqueidentifier] NOT NULL,
-    [name] nvarchar(256) NOT NULL,
-    [kana] nvarchar(256) NOT NULL,
+	[name] [nvarchar](256) NOT NULL,
+	[kana] [nvarchar](256) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
 

@@ -12,11 +12,11 @@ GO
 
 CREATE TABLE [dbo].[album](
 	[album_id] [uniqueidentifier] NOT NULL,
-    [code] nvarchar(256) ,
-	[title] nvarchar(256) NOT NULL,
-    [media_type] INT NOT NULL,
-    [release_on][datetime] NOT NULL,
-    [label_id] [uniqueidentifier],
+	[code] [nvarchar](256) NULL,
+	[title] [nvarchar](256) NOT NULL,
+	[media_type] [int] NOT NULL,
+	[release_on] [datetime] NOT NULL,
+	[label_id] [uniqueidentifier] NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
  CONSTRAINT [PK_album] PRIMARY KEY CLUSTERED 

@@ -13,9 +13,9 @@ GO
 CREATE TABLE [dbo].[set_list](
 	[set_list_id] [uniqueidentifier] NOT NULL,
     [live_event_id] [uniqueidentifier] NOT NULL,
-    [set_list_no] INT NOT NULL,
-	[title] nvarchar(256) NOT NULL,
-    [song_id] [uniqueidentifier],
+	[set_list_no] [int] NOT NULL,
+	[title] [nvarchar](256) NOT NULL,
+	[song_id] [uniqueidentifier] NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
  CONSTRAINT [PK_set_list] PRIMARY KEY CLUSTERED 

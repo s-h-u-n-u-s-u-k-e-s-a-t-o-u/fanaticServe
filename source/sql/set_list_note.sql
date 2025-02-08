@@ -1,21 +1,17 @@
 USE [Fanatic_Serve]
 GO
 
-/****** オブジェクト: Table [dbo].[set_list_note] スクリプト日付: 2025/02/04 19:14:16 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP TABLE IF EXISTS [dbo].[set_list_note];
-GO
-CREATE TABLE [dbo].[set_list_note] (
-    [set_list_id] UNIQUEIDENTIFIER NOT NULL,
-    [note]        NVARCHAR (MAX)   NULL,
-    [created_at]  DATETIME         NOT NULL,
-    [modified_at] DATETIME         NOT NULL,
-
+CREATE TABLE [dbo].[set_list_note](
+	[set_list_id] [uniqueidentifier] NOT NULL,
+	[note] [nvarchar](max) NULL,
+	[created_at] [datetime] NOT NULL,
+	[modified_at] [datetime] NOT NULL,
      CONSTRAINT [PK_set_list_note] PRIMARY KEY CLUSTERED 
 (
 	[set_list_id] ASC

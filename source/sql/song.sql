@@ -12,11 +12,10 @@ GO
 
 CREATE TABLE [dbo].[song](
 	[song_id] [uniqueidentifier] NOT NULL,
-    [title] nvarchar(256) NOT NULL,
-    [kana] nvarchar(256) NOT NULL,
+	[title] [nvarchar](256) NOT NULL,
+	[kana] [nvarchar](256) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
-
  CONSTRAINT [PK_song] PRIMARY KEY CLUSTERED 
 (
 	[song_id] ASC

@@ -24,11 +24,7 @@ CREATE TABLE [dbo].[abstract_event](
 GO
 
 EXEC sys.sp_addextendedproperty
-<<<<<<< HEAD
  @name=N'MS_Description', @value=N'抽象イベントID' ,
-=======
- @name=N'MS_Description', @value=N'抽象いベントID' ,
->>>>>>> 8f3629877881459f15adfae7fa9bcca26365d053
  @level0type=N'SCHEMA', @level0name=N'dbo',
  @level1type=N'TABLE', @level1name=N'abstract_event',
  @level2type=N'COLUMN', @level2name=N'abstract_event_id'

@@ -11,11 +11,11 @@ DROP TABLE IF EXISTS [dbo].[site];
 GO
 
 CREATE TABLE [dbo].[site](
-    [id] int identity(1,1) NOT NULL,
+	[id] [int] IDENTITY(1,1) NOT NULL,
 	[site_id] [uniqueidentifier] NOT NULL,
-    [sequence] [int] NOT NULL,
-    [display_name] nvarchar(256) NOT NULL,
-    [url] nvarchar(256) NOT NULL,
+	[sequence] [int] NOT NULL,
+	[display_name] [nvarchar](256) NOT NULL,
+	[url] [nvarchar](256) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NULL,
  CONSTRAINT [PK_site] PRIMARY KEY CLUSTERED 

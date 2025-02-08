@@ -10,11 +10,10 @@ GO
 DROP TABLE IF EXISTS [dbo].[label];
 GO
 
-
 CREATE TABLE [dbo].[label](
 	[label_id] [uniqueidentifier] NOT NULL,
     [organization_id] [uniqueidentifier] NOT NULL,
-    [name] nvarchar(256) NOT NULL,
+	[name] [nvarchar](256) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NULL,
  CONSTRAINT [PK_label] PRIMARY KEY CLUSTERED 
