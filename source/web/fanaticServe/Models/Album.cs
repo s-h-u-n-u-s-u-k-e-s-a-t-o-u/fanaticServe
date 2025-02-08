@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -13,46 +10,46 @@ public partial class Album
     /// アルバムID
     /// </summary>
     [Key]
-    public Guid album_id { get; set; }
+    public Guid Album_Id { get; set; }
 
     /// <summary>
     /// コード
     /// </summary>
     [StringLength(256)]
-    public string? code { get; set; }
+    public string? Code { get; set; }
 
     /// <summary>
     /// タイトル
     /// </summary>
     [StringLength(256)]
-    public string title { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     /// <summary>
     /// メディア種別
     /// </summary>
-    public int media_type { get; set; }
+    public int Media_Type { get; set; }
 
     /// <summary>
     /// リリース日
     /// </summary>
     [Column(TypeName = "datetime")]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
-    public DateTime release_on { get; set; }
+    public DateTime Release_On { get; set; }
 
     /// <summary>
     /// レーベルID
     /// </summary>
-    public Guid? label_id { get; set; }
+    public Guid? Label_Id { get; set; }
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime created_at { get; set; }
+    public DateTime Created_At { get; set; }
 
     /// <summary>
     /// 更新日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime modified_at { get; set; }
+    public DateTime Modified_At { get; set; }
 }

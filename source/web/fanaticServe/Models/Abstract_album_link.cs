@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -13,15 +10,15 @@ public partial class Abstract_album_link
     /// ID
     /// </summary>
     [Key]
-    public int id { get; set; }
+    public int Id { get; set; }
 
     /// <summary>
     /// アルバムID
     /// </summary>
-    public Guid album_id { get; set; }
+    public Guid Album_Id { get; set; }
 
     /// <summary>
     /// 抽象アルバムID
     /// </summary>
-    public Guid abstract_album_id { get; set; }
+    public Guid Abstract_Album_Id { get; set; }
 }

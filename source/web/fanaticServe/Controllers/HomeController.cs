@@ -11,9 +11,9 @@ namespace fanaticServe.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private readonly fanaticServeContext _context;
+        private readonly FanaticServeContext _context;
 
-        public HomeController(ILogger<HomeController> logger, fanaticServeContext context)
+        public HomeController(ILogger<HomeController> logger, FanaticServeContext context)
         {
             _logger = logger;
             _context = context;

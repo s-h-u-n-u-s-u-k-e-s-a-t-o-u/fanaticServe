@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -13,15 +10,15 @@ public partial class Abstract_event_link
     /// ID
     /// </summary>
     [Key]
-    public int id { get; set; }
+    public int Id { get; set; }
 
     /// <summary>
     /// イベントID
     /// </summary>
-    public Guid event_id { get; set; }
+    public Guid Event_Id { get; set; }
 
     /// <summary>
     /// 抽象イベントID
     /// </summary>
-    public Guid abstract_event_id { get; set; }
+    public Guid Abstract_Event_Id { get; set; }
 }

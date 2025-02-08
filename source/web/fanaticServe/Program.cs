@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 builder.Configuration.AddEnvironmentVariables(prefix: "SSSWare_");
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<fanaticServeContext>(options =>
+builder.Services.AddDbContext<FanaticServeContext>(options =>
     options.UseSqlServer(connectionString));
 
 

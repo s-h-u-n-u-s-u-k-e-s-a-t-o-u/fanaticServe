@@ -1,49 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
 [Table("site")]
-[Index("site_id", "sequence", Name = "UQ_site_site_id", IsUnique = true)]
 public partial class Site
 {
     [Key]
-    public int id { get; set; }
+    public int Id { get; set; }
 
     /// <summary>
     /// レーベルID
     /// </summary>
-    public Guid site_id { get; set; }
+    public Guid Site_Id { get; set; }
 
     /// <summary>
     /// 表示順
     /// </summary>
-    public int sequence { get; set; }
+    public int Sequence { get; set; }
 
     /// <summary>
     /// 表示名前
     /// </summary>
     [StringLength(256)]
-    public string display_name { get; set; } = null!;
+    public string Display_Name { get; set; } = null!;
 
     /// <summary>
     /// url
     /// </summary>
     [StringLength(256)]
-    public string url { get; set; } = null!;
+    public string Url { get; set; } = null!;
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime created_at { get; set; }
+    public DateTime Created_At { get; set; }
 
     /// <summary>
     /// 更新日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime? modified_at { get; set; }
+    public DateTime? Modified_At { get; set; }
 }

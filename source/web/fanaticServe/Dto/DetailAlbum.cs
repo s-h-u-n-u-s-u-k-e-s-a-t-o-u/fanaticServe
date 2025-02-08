@@ -1,14 +1,17 @@
 ﻿using fanaticServe.Models;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace fanaticServe.Dto;
 
 public class DetailAlbum
 {
+    [Key]
     public Guid Album_id { get; set; }
 
     [DisplayName("タイトル")]
-    public string Title { get; set; }
+    [Required]
+    public required string Title { get; set; }
 
     [DisplayName("コード")]
     public string? Code { get; set; }

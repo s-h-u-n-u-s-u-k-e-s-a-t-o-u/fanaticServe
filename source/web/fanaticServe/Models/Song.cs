@@ -13,29 +13,29 @@ public partial class Song
     /// 楽曲ID
     /// </summary>
     [Key]
-    public Guid song_id { get; set; }
+    public Guid Song_Id { get; set; }
 
     /// <summary>
     /// タイトル
     /// </summary>
     [StringLength(256)]
-    public string title { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     /// <summary>
     /// カナ
     /// </summary>
     [StringLength(256)]
-    public string kana { get; set; } = null!;
+    public string Kana { get; set; } = null!;
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime created_at { get; set; }
+    public DateTime Created_At { get; set; }
 
     /// <summary>
     /// 更新日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime modified_at { get; set; }
+    public DateTime Modified_At { get; set; }
 }

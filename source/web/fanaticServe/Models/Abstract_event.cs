@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -13,29 +10,29 @@ public partial class Abstract_event
     /// 抽象いベントID
     /// </summary>
     [Key]
-    public Guid abstract_event_id { get; set; }
+    public Guid Abstract_Event_Id { get; set; }
 
     /// <summary>
     /// タイトル
     /// </summary>
     [StringLength(256)]
-    public string title { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     /// <summary>
     /// ノート
     /// </summary>
     [StringLength(256)]
-    public string? note { get; set; }
+    public string? Note { get; set; }
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime? created_at { get; set; }
+    public DateTime? Created_At { get; set; }
 
     /// <summary>
     /// 更新日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime modified_at { get; set; }
+    public DateTime Modified_At { get; set; }
 }

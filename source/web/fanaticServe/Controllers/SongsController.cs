@@ -7,9 +7,9 @@ namespace fanaticServe.Controllers;
 
 public class SongsController : Controller
 {
-    private readonly fanaticServeContext _context;
+    private readonly FanaticServeContext _context;
 
-    public SongsController(fanaticServeContext context)
+    public SongsController(FanaticServeContext context)
     {
         _context = context;
     }
@@ -18,7 +18,7 @@ public class SongsController : Controller
     public async Task<IActionResult> Index()
     {
         var songs = _context.Songs;
-        return View(await songs.OrderBy(s => s.kana).ToArrayAsync());
+        return View(await songs.OrderBy(s => s.Kana).ToArrayAsync());
     }
 
     [HttpGet]
@@ -31,12 +31,12 @@ public class SongsController : Controller
 
         var song =
           await (from s in _context.Songs
-                 where s.song_id == id
+                 where s.Song_Id == id
                  select new DetailSong()
                  {
-                     song_id = s.song_id,
-                     title = s.title,
-                     kana = s.kana,
+                     song_id = s.Song_Id,
+                     title = s.Title,
+                     kana = s.Kana,
                  }).FirstOrDefaultAsync();
 
         if (song == null)
@@ -48,32 +48,32 @@ public class SongsController : Controller
             await (
             from album in _context.Albums
             join tack in _context.Tracks
-            on album.album_id equals tack.album_id
-            join media in _context.MediaTypes.DefaultIfEmpty() on album.media_type equals media.media_type
-            where tack.song_id == id
-            orderby album.release_on
+            on album.Album_Id equals tack.Album_Id
+            join media in _context.MediaTypes.DefaultIfEmpty() on album.Media_Type equals media.Media_Type
+            where tack.Song_Id == id
+            orderby album.Release_On
             select new ShowableAlbum()
             {
-                Album_id = album.album_id,
-                Title = album.title,
-                DetailTitle = album.title,
-                Release_on = album.release_on,
-                Media = media.name ?? ""
+                Album_id = album.Album_Id,
+                Title = album.Title,
+                DetailTitle = album.Title,
+                Release_on = album.Release_On,
+                Media = media.Name ?? ""
 
             }).ToArrayAsync();
 
         song.LiveEvents =
             await (
             from liveEvent in _context.LiveEvents
-            join setList in _context.SetLists
-            on liveEvent.live_event_id equals setList.Live_Event_Id
-            where setList.Song_id == id
+            join setList in _context.Set_list
+            on liveEvent.Live_Event_Id equals setList.Live_Event_Id
+            where setList.Song_Id == id
             select new ShowableLiveEvent()
             {
-                Live_Event_Id = liveEvent.live_event_id,
-                Title = liveEvent.title,
-                Place = liveEvent.place,
-                Perform_At = liveEvent.perform_at
+                Live_Event_Id = liveEvent.Live_Event_Id,
+                Title = liveEvent.Title,
+                Place = liveEvent.Place,
+                Perform_At = liveEvent.Perform_At
             }
             ).ToArrayAsync();
 

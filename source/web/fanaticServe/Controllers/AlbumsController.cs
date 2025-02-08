@@ -9,9 +9,9 @@ namespace fanaticServe.Controllers
 {
     public class AlbumsController : Controller
     {
-        private readonly fanaticServeContext _context;
+        private readonly FanaticServeContext _context;
 
-        public AlbumsController(fanaticServeContext context)
+        public AlbumsController(FanaticServeContext context)
         {
             _context = context;
         }
@@ -24,18 +24,18 @@ namespace fanaticServe.Controllers
             /// 一覧表形式でアルバム情報を表示する
             var records =
                 from absal in _context.Abstract_albums
-                join lk in _context.Abstract_album_link on absal.abstract_album_id equals lk.abstract_album_id
-                join alb in _context.Albums on lk.album_id equals alb.album_id
-                join media in _context.MediaTypes.DefaultIfEmpty() on alb.media_type equals media.media_type
-                orderby alb.release_on
+                join lk in _context.Abstract_album_link on absal.abstract_album_id equals lk.Abstract_Album_Id
+                join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
+                join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
+                orderby alb.Release_On
                 select new ShowableAlbum()
                 {
                     Abstract_album_id = absal.abstract_album_id,
                     Title = absal.title,
-                    Album_id = alb.album_id,
-                    DetailTitle = alb.title,
-                    Release_on = alb.release_on,
-                    Media = media.name ?? ""
+                    Album_id = alb.Album_Id,
+                    DetailTitle = alb.Title,
+                    Release_on = alb.Release_On,
+                    Media = media.Name ?? ""
                 };
 
             return View(await records.ToListAsync());
@@ -46,9 +46,9 @@ namespace fanaticServe.Controllers
         {
             var subTbl2 =
                 from link in _context.Abstract_album_link
-                join album in _context.Albums on link.album_id equals album.album_id
-                group new { link, album } by link.abstract_album_id into tbl2
-                select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.release_on) }
+                join album in _context.Albums on link.Album_Id equals album.Album_Id
+                group new { link, album } by link.Abstract_Album_Id into tbl2
+                select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
                        ;
 
             // 記事として表示する整形済みの抽象アルバム
@@ -67,19 +67,19 @@ namespace fanaticServe.Controllers
             foreach (var article in articles)
             {
                 var albums = from lk in _context.Abstract_album_link
-                             join alb in _context.Albums on lk.album_id equals alb.album_id
-                             join label in _context.Labels.DefaultIfEmpty() on alb.label_id equals label.label_id
-                             join media in _context.MediaTypes.DefaultIfEmpty() on alb.media_type equals media.media_type
-                             where article.Abstract_album_id.Equals(lk.abstract_album_id)
-                             orderby alb.release_on
+                             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
+                             join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
+                             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
+                             where article.Abstract_album_id.Equals(lk.Abstract_Album_Id)
+                             orderby alb.Release_On
                              select new DetailAlbum()
                              {
-                                 Album_id = alb.album_id,
-                                 Title = alb.title,
-                                 Code = alb.code,
-                                 Release_on = alb.release_on,
-                                 Label = label.name ?? "",
-                                 Media = media.name ?? ""
+                                 Album_id = alb.Album_Id,
+                                 Title = alb.Title,
+                                 Code = alb.Code,
+                                 Release_on = alb.Release_On,
+                                 Label = label.Name ?? "",
+                                 Media = media.Name ?? ""
                              };
                 article.Albums = albums.ToList();
 
@@ -127,19 +127,19 @@ namespace fanaticServe.Controllers
         private DetailAlbum? GetDetailAlbum(Guid album_id)
         {
             var album = (from lk in _context.Abstract_album_link
-                         join alb in _context.Albums on lk.album_id equals alb.album_id
-                         join label in _context.Labels.DefaultIfEmpty() on alb.label_id equals label.label_id
-                         join media in _context.MediaTypes.DefaultIfEmpty() on alb.media_type equals media.media_type
-                         where album_id.Equals(lk.album_id)
-                         orderby alb.release_on
+                         join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
+                         join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
+                         join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
+                         where album_id.Equals(lk.Album_Id)
+                         orderby alb.Release_On
                          select new DetailAlbum()
                          {
-                             Album_id = alb.album_id,
-                             Title = alb.title,
-                             Code = alb.code,
-                             Release_on = alb.release_on,
-                             Label = label.name ?? "",
-                             Media = media.name ?? ""
+                             Album_id = alb.Album_Id,
+                             Title = alb.Title,
+                             Code = alb.Code,
+                             Release_on = alb.Release_On,
+                             Label = label.Name ?? "",
+                             Media = media.Name ?? ""
                          }).FirstOrDefault();
 
             if (album != null)
@@ -154,15 +154,15 @@ namespace fanaticServe.Controllers
         {
             var tracks =
                 from trk in _context.Tracks
-                where album_id.Equals(trk.album_id)
-                orderby trk.track_no
+                where album_id.Equals(trk.Album_Id)
+                orderby trk.Track_No
                 select new Track()
                 {
-                    track_id = trk.track_id,
-                    track_no = trk.track_no,
-                    title = trk.title,
-                    length = trk.length,
-                    song_id = trk.song_id
+                    Track_Id = trk.Track_Id,
+                    Track_No = trk.Track_No,
+                    Title = trk.Title,
+                    Length = trk.Length,
+                    Song_Id = trk.Song_Id
                 };
             return tracks.ToList();
         }
@@ -172,9 +172,9 @@ namespace fanaticServe.Controllers
             var subTbl2 =
 
                     (from link in _context.Abstract_album_link
-                     join album in _context.Albums on link.album_id equals album.album_id
-                     group new { link, album } by link.abstract_album_id into tbl2
-                     select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.release_on) }
+                     join album in _context.Albums on link.Album_Id equals album.Album_Id
+                     group new { link, album } by link.Abstract_Album_Id into tbl2
+                     select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
                      ).FirstOrDefault()
                 ;
             if (subTbl2 == null)
@@ -198,19 +198,19 @@ namespace fanaticServe.Controllers
             if (article != null)
             {
                 var albums = from lk in _context.Abstract_album_link
-                             join alb in _context.Albums on lk.album_id equals alb.album_id
-                             join label in _context.Labels.DefaultIfEmpty() on alb.label_id equals label.label_id
-                             join media in _context.MediaTypes.DefaultIfEmpty() on alb.media_type equals media.media_type
-                             where lk.abstract_album_id.Equals(article.Abstract_album_id)
-                             orderby alb.release_on
+                             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
+                             join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
+                             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
+                             where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
+                             orderby alb.Release_On
                              select new DetailAlbum()
                              {
-                                 Album_id = alb.album_id,
-                                 Title = alb.title,
-                                 Code = alb.code,
-                                 Release_on = alb.release_on,
-                                 Label = label.name ?? "",
-                                 Media = media.name ?? ""
+                                 Album_id = alb.Album_Id,
+                                 Title = alb.Title,
+                                 Code = alb.Code,
+                                 Release_on = alb.Release_On,
+                                 Label = label.Name ?? "",
+                                 Media = media.Name ?? ""
                              };
                 article.Albums = albums.ToList();
 

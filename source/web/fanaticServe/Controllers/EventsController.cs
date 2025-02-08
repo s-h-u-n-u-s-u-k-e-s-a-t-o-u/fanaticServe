@@ -8,9 +8,9 @@ namespace fanaticServe.Controllers;
 
 public class EventsController : Controller
 {
-    private readonly fanaticServeContext _context;
+    private readonly FanaticServeContext _context;
 
-    public EventsController(fanaticServeContext context)
+    public EventsController(FanaticServeContext context)
     {
         _context = context;
     }
@@ -19,20 +19,20 @@ public class EventsController : Controller
     public async Task<IActionResult> Index()
     {
         var events =
-            from absEvent in _context.AbstractEvent
-            join link in _context.Abstract_Event_Link
-            on absEvent.Abstract_event_id equals link.abstract_event_id
+            from absEvent in _context.Abstract_event
+            join link in _context.Abstract_event_link
+            on absEvent.Abstract_Event_Id equals link.Abstract_Event_Id
             join liveEvent in _context.LiveEvents
-            on link.event_id equals liveEvent.live_event_id
-            orderby liveEvent.perform_at
+            on link.Event_Id equals liveEvent.Live_Event_Id
+            orderby liveEvent.Perform_At
             select new ShowableEvent()
             {
-                Abstract_event_id = absEvent.Abstract_event_id,
+                Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title,
-                Event_id = liveEvent.live_event_id,
-                DetailTitle = liveEvent.title,
+                Event_id = liveEvent.Live_Event_Id,
+                DetailTitle = liveEvent.Title,
                 Note = absEvent.Note,
-                Perform_at = liveEvent.perform_at
+                Perform_at = liveEvent.Perform_At
             };
 
         return View(await events.ToListAsync());
@@ -49,13 +49,13 @@ public class EventsController : Controller
 
         var liveEvent = await (
             from le in _context.LiveEvents
-            where le.live_event_id == id
+            where le.Live_Event_Id == id
             select new DetailEvent
             {
                 Live_event_id = id.Value,
-                Title = le.title,
-                Place = le.place,
-                Perform_at = le.perform_at
+                Title = le.Title,
+                Place = le.Place,
+                Perform_at = le.Perform_At
             }
             ).FirstOrDefaultAsync();
 
@@ -66,9 +66,9 @@ public class EventsController : Controller
 
         liveEvent.SetLists =
             await (
-            from setList in _context.SetLists
+            from setList in _context.Set_list
             join slNote in _context.SetListNotes.DefaultIfEmpty()
-            on setList.Set_List_Id equals slNote.set_list_id
+            on setList.Set_List_Id equals slNote.Set_List_Id
             where setList.Live_Event_Id == id
             orderby setList.Set_List_No
             select new ShowableSetList
@@ -77,8 +77,8 @@ public class EventsController : Controller
                 Live_Event_Id = id.Value,
                 Set_List_No = setList.Set_List_No,
                 Title = setList.Title,
-                Song_id = setList.Song_id,
-                Note = slNote.note ?? ""
+                Song_id = setList.Song_Id,
+                Note = slNote.Note ?? ""
             }
             ).ToListAsync();
 
@@ -94,11 +94,11 @@ public class EventsController : Controller
         }
 
         var eventGroup = await (
-            from absEvent in _context.AbstractEvent
-            where absEvent.Abstract_event_id == id
+            from absEvent in _context.Abstract_event
+            where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
             {
-                Abstract_event_id = absEvent.Abstract_event_id,
+                Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title,
                 Note = absEvent.Note
             }
@@ -109,16 +109,16 @@ public class EventsController : Controller
         }
 
         eventGroup.LiveEvents = await (
-            from linkedList in _context.Abstract_Event_Link
+            from linkedList in _context.Abstract_event_link
             join liveEvent in _context.LiveEvents
-            on linkedList.event_id equals liveEvent.live_event_id
-            where linkedList.abstract_event_id == id
+            on linkedList.Event_Id equals liveEvent.Live_Event_Id
+            where linkedList.Abstract_Event_Id == id
             select new DetailEvent()
             {
-                Live_event_id = liveEvent.live_event_id,
-                Title = liveEvent.title,
-                Perform_at = liveEvent.perform_at,
-                Place = liveEvent.place
+                Live_event_id = liveEvent.Live_Event_Id,
+                Title = liveEvent.Title,
+                Perform_at = liveEvent.Perform_At,
+                Place = liveEvent.Place
             }
             ).ToListAsync();
 
@@ -129,9 +129,9 @@ public class EventsController : Controller
             foreach (var liveEvent in eventGroup.LiveEvents)
             {
                 liveEvent.SetLists = await (
-                    from setList in _context.SetLists
+                    from setList in _context.Set_list
                     join slNote in _context.SetListNotes.DefaultIfEmpty()
-                    on setList.Set_List_Id equals slNote.set_list_id
+                    on setList.Set_List_Id equals slNote.Set_List_Id
                     where setList.Live_Event_Id == liveEvent.Live_event_id
                     orderby setList.Set_List_No
                     select new ShowableSetList()
@@ -140,8 +140,8 @@ public class EventsController : Controller
                         Live_Event_Id = setList.Live_Event_Id,
                         Set_List_No = setList.Set_List_No,
                         Title = setList.Title,
-                        Song_id = setList.Song_id,
-                        Note = slNote.note ?? ""
+                        Song_id = setList.Song_Id,
+                        Note = slNote.Note ?? ""
                     }
                     ).ToListAsync();
             }
@@ -154,10 +154,10 @@ public class EventsController : Controller
     {
         var articles =
             await (
-            from absEvent in _context.AbstractEvent
+            from absEvent in _context.Abstract_event
             select new ArticleEvent()
             {
-                Abstract_event_id = absEvent.Abstract_event_id,
+                Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title,
                 Note = absEvent.Note
             }
@@ -167,17 +167,17 @@ public class EventsController : Controller
         foreach (var article in articles)
         {
             article.LiveEvents = await (
-                from linkedList in _context.Abstract_Event_Link
+                from linkedList in _context.Abstract_event_link
                 join liveEvent in _context.LiveEvents
-                on linkedList.event_id equals liveEvent.live_event_id
-                where linkedList.abstract_event_id == article.Abstract_event_id
-                orderby liveEvent.perform_at
+                on linkedList.Event_Id equals liveEvent.Live_Event_Id
+                where linkedList.Abstract_Event_Id == article.Abstract_event_id
+                orderby liveEvent.Perform_At
                 select new DetailEvent()
                 {
-                    Live_event_id = liveEvent.live_event_id,
-                    Title = liveEvent.title,
-                    Place = liveEvent.place,
-                    Perform_at = liveEvent.perform_at
+                    Live_event_id = liveEvent.Live_Event_Id,
+                    Title = liveEvent.Title,
+                    Place = liveEvent.Place,
+                    Perform_at = liveEvent.Perform_At
                 }
                 ).ToListAsync();
 
@@ -187,9 +187,9 @@ public class EventsController : Controller
                 foreach (var liveEvent in article.LiveEvents)
                 {
                     liveEvent.SetLists = await (
-                        from setList in _context.SetLists
+                        from setList in _context.Set_list
                         join slNote in _context.SetListNotes.DefaultIfEmpty()
-                        on setList.Set_List_Id equals slNote.set_list_id
+                        on setList.Set_List_Id equals slNote.Set_List_Id
                         where setList.Live_Event_Id == liveEvent.Live_event_id
                         orderby setList.Set_List_No
                         select new ShowableSetList()
@@ -198,8 +198,8 @@ public class EventsController : Controller
                             Live_Event_Id = setList.Live_Event_Id,
                             Set_List_No = setList.Set_List_No,
                             Title = setList.Title,
-                            Song_id = setList.Song_id,
-                            Note = slNote.note ?? ""
+                            Song_id = setList.Song_Id,
+                            Note = slNote.Note ?? ""
                         }
                         ).ToListAsync();
                 }

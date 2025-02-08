@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -10,14 +7,14 @@ namespace fanaticServe.Models;
 public partial class MediaType
 {
     [Key]
-    public int media_type { get; set; }
+    public int Media_Type { get; set; }
 
     [StringLength(256)]
-    public string name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime created_at { get; set; }
+    public DateTime Created_At { get; set; }
 }

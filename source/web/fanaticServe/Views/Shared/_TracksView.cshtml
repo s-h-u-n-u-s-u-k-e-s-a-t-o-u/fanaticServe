@@ -14,11 +14,11 @@
     @foreach (var track in Model)
     {
         <div class="row">
-            <div class="col-1">@Html.DisplayFor(modelItem => track.track_no)</div>
+            <div class="col-1">@Html.DisplayFor(modelItem => track.Track_No)</div>
             <div class="col-5">
-                <a asp-controller="songs" asp-action="detail" asp-route-id="@track.song_id">@Html.DisplayFor(modelItem => track.title)</a>
+                <a asp-controller="songs" asp-action="detail" asp-route-id="@track.Song_Id">@Html.DisplayFor(modelItem => track.Title)</a>
             </div>
-            <div class="col-2">@Html.DisplayFor(modelItem => track.length)</div>
+            <div class="col-2">@Html.DisplayFor(modelItem => track.Length)</div>
         </div>
     }
 }

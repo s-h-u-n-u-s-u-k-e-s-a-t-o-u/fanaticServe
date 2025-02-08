@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -13,28 +10,28 @@ public partial class Label
     /// レーベルID
     /// </summary>
     [Key]
-    public Guid label_id { get; set; }
+    public Guid Label_Id { get; set; }
 
     /// <summary>
     /// 組織ID
     /// </summary>
-    public Guid organization_id { get; set; }
+    public Guid Organization_Id { get; set; }
 
     /// <summary>
     /// 名前
     /// </summary>
     [StringLength(256)]
-    public string name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime created_at { get; set; }
+    public DateTime Created_At { get; set; }
 
     /// <summary>
     /// 更新日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime? modified_at { get; set; }
+    public DateTime? Modified_At { get; set; }
 }
