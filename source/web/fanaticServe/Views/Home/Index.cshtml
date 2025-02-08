@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<ul>
+    <li>
+        <a asp-controller="Songs" asp-action="Index">楽曲一覧</a>
+    </li>
+    <li>
+        リリース :<a asp-controller="Albums" asp-action="Index">一覧</a> - <a asp-controller="Albums" asp-action="Articles">記事形式</a>
+    </li>
+    <li>
+        Event/Live <a asp-controller="Events" asp-action="Index">一覧</a> - <a asp-controller="Events" asp-action="Articles">記事形式</a>
+    </li>
+</ul>

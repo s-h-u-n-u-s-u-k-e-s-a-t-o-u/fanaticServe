@@ -12,8 +12,8 @@ GO
 
 CREATE TABLE [dbo].[song](
 	[song_id] [uniqueidentifier] NOT NULL,
-    [title] nvarchar(128) NOT NULL,
-    [kana] nvarchar(128) NOT NULL,
+    [title] nvarchar(256) NOT NULL,
+    [kana] nvarchar(256) NOT NULL,
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
 

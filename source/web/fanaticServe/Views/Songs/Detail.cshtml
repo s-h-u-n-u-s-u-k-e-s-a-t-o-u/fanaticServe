@@ -1,0 +1,17 @@
+﻿@model fanaticServe.Dto.DetailSong
+@{
+    ViewData["Title"] = Model.title ;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<dv>カナ:@Html.DisplayFor(m => m.kana)</dv>
+
+<div>
+    @await Html.PartialAsync("_albumsView", Model.Albums)
+
+</div>
+
+
+    @await Html.PartialAsync("_ShowableLiveEventView", Model.LiveEvents)
+

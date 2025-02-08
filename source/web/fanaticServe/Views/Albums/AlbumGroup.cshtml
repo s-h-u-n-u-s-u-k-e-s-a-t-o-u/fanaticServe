@@ -1,0 +1,20 @@
+﻿@model fanaticServe.Dto.ArticleAlbum
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<h1>@ViewData["Title"]</h1>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Release_On)</dt>
+    <dd>@Html.DisplayFor(model => model.Release_On)</dd>
+</dl>
+
+@if (Model.Albums != null)
+{
+    foreach(var album in Model.Albums) {
+        <div>
+            <a asp-action="Detail" asp-route-id="@album.Album_id">@Html.DisplayFor(modelItem => album.Title)</a>
+        </div>        
+        @await Html.PartialAsync("_DetailAlbumView", album)
+    }    
+}

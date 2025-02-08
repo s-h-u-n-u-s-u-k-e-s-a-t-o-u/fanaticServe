@@ -1,0 +1,24 @@
+﻿@model IEnumerable<fanaticServe.Models.Track>
+
+@* Track情報 *@
+@if (Model != null)
+{
+    <div class="row">
+        収録曲
+    </div>
+    <div class="row">
+        <div class="col-1"><i>トラック番号</i></div>
+        <div class="col-5"><i>曲名</i></div>
+        <div class="col-2"><i>長さ[秒]</i></div>
+    </div>
+    @foreach (var track in Model)
+    {
+        <div class="row">
+            <div class="col-1">@Html.DisplayFor(modelItem => track.track_no)</div>
+            <div class="col-5">
+                <a asp-controller="songs" asp-action="detail" asp-route-id="@track.song_id">@Html.DisplayFor(modelItem => track.title)</a>
+            </div>
+            <div class="col-2">@Html.DisplayFor(modelItem => track.length)</div>
+        </div>
+    }
+}

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<fanaticServe.Models.Song>
+
+@{
+    ViewData["Title"] = "楽曲一覧";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.kana)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.created_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.modified_at)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    <a asp-action="detail" asp-route-id="@item.song_id">@Html.DisplayFor(modelItem => item.title)</a>                
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem =>  item.kana)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.created_at)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.modified_at)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

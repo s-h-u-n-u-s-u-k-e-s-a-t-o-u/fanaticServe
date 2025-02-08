@@ -1,0 +1,31 @@
+﻿@model IEnumerable<fanaticServe.Dto.ArticleAlbum>
+@using  fanaticServe.Dto
+
+@{
+    ViewData["Title"] = "リリース一覧";
+}
+<h1>@ViewData["Title"] </h1>
+<a asp-action="Index">一覧表形式</A>
+
+    @foreach(ArticleAlbum abs in Model){
+        <article class="abs-album">
+        <div>
+            <h4><a asp-controller="Albums" asp-action="AlbumGroup" asp-route-id="@abs.Abstract_album_id">@abs.Title</a>                </h4>
+           <div>    
+               <span>リリース日</span>:<span>@Html.DisplayFor(model => abs.Release_On)</span>
+            </div> 
+                @if( abs.Albums != null){
+            <div class="variations">
+                    @* アルバム情報 *@
+                    @foreach(var album in abs.Albums){
+                        <div>
+                            <a asp-action="Detail" asp-route-id="@album.Album_id">@Html.DisplayFor(modelItem => album.Title)</a>
+                        </div>
+                       @await Html.PartialAsync("_DetailAlbumView",album);
+                    }
+            </div>
+                }
+        </div>
+        </article>
+        <hr />
+    }

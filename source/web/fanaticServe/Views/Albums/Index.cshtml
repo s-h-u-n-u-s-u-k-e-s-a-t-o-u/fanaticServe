@@ -1,0 +1,56 @@
+﻿@model IEnumerable<fanaticServe.Dto.ShowableAlbum>
+
+@{
+    ViewData["Title"] = "リリース一覧";
+    String preTitle ="";
+}
+
+<h1>@ViewData["Title"] </h1>
+
+<a asp-action="Articles">記事形式</A>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Release_on)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DetailTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Media)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Release_on)
+                </td>
+                <td>
+                    @{
+                        if(!preTitle.Equals(item.Title)){
+                        <a asp-action="AlbumGroup" asp-route-id="@item.Abstract_album_id">
+                        @Html.DisplayFor(modelItem => item.Title)
+                        </a>
+                        }
+                        preTitle = item.Title;
+                    }
+                </td>
+                <td>
+                    <a asp-action="Detail" asp-route-id="@item.Album_id">
+                        @Html.DisplayFor(modelItem => item.DetailTitle)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Media)
+                </td>
+            </tr>;
+        }
+    </tbody>
+</table>

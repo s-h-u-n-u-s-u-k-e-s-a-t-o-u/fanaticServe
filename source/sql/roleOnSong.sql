@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS [dbo].[roleOnSong];
 GO
 
 CREATE TABLE [dbo].[roleOnSong](
-	[id] [uniqueidentifier] NOT NULL,
+	[id] int identity(1,1) NOT NULL,
 	[song_id] [uniqueidentifier] NOT NULL,
     [role_id] [uniqueidentifier] NOT NULL,
     [person_id] [uniqueidentifier] NOT NULL,

@@ -1,0 +1,12 @@
+﻿@model fanaticServe.Dto.DetailEvent
+
+<div class="row">
+    <div class="col-5">
+        @Html.DisplayNameFor(modelItem => Model.Place):@Html.DisplayFor(modelItem => Model.Place)
+    </div>
+    <div class="col-2">
+        @Html.DisplayNameFor(modelItem => Model.Perform_at):@Html.DisplayFor(modelItem => Model.Perform_at)
+    </div>
+</div>
+
+@await Html.PartialAsync("_SetListsView", Model.SetLists)

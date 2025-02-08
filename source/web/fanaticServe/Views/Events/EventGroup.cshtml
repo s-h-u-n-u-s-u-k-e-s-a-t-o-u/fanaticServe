@@ -1,0 +1,20 @@
+﻿@model fanaticServe.Dto.ArticleEvent
+
+@{
+    ViewData["Title"] = Model.Title;
+    String preTitle = Model.Title;
+}
+
+<h1>@ViewData["Title"]</h1>
+<dl>
+    <dt>@Html.DisplayNameFor(model => model.Perform_on)</dt>
+    <dd>@Html.DisplayFor(model => model.Perform_on)</dd>
+</dl>
+
+@if (Model.LiveEvents != null)
+{
+    foreach (var liveEvent in Model.LiveEvents)
+    {
+        @await Html.PartialAsync("_DetailEventView", liveEvent)
+    }
+}

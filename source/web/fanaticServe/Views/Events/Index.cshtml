@@ -1,0 +1,54 @@
+﻿@model IEnumerable<fanaticServe.Dto.ShowableEvent>
+
+@{
+    ViewData["Title"] = "Event/Live 一覧"; 
+    String preTitle = "";
+}
+
+<h1>@ViewData["Title"]</h1>
+<a asp-action="Articles">記事表形式</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Perform_at)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DetailTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Perform_at)
+                </td>
+                <td>
+                    @if (!preTitle.Equals(item.Title)){
+                        <a asp-action="EventGroup" asp-route-id="@item.Abstract_event_id">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </a>
+                    }
+                </td>
+                <td>
+                    <a asp-action="detail" asp-route-id="@item.Event_id">
+                        @Html.DisplayFor(modelItem => item.DetailTitle)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+            </tr>
+            preTitle = item.Title;
+        }
+    </tbody>
+</table>

@@ -1,0 +1,18 @@
+﻿@model IEnumerable<fanaticServe.Dto.ShowableAlbum>
+
+@if (Model != null)
+{
+    <div class="card">
+        <div class="card-header">この曲を収録しているアルバム</div>
+        <div class="card-body">
+            @foreach (var album in Model)
+            {
+                <div>
+                    @Html.DisplayFor(m => album.Title)
+
+                </div>
+            }
+        </div>
+
+    </div>
+}

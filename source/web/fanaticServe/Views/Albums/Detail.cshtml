@@ -1,0 +1,11 @@
+﻿@model fanaticServe.Dto.DetailAlbum
+
+@{
+    ViewData["Title"] = Model.Title; 
+}
+<div>
+    <h1>@Html.DisplayFor(modelItem => modelItem.Title)</h1>    
+</div>
+<div>
+     @await Html.PartialAsync("_DetailAlbumView", Model)
+</div>

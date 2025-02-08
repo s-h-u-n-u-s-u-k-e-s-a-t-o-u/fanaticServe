@@ -12,9 +12,10 @@ GO
 
 CREATE TABLE [dbo].[album](
 	[album_id] [uniqueidentifier] NOT NULL,
-    [abustract_album_id] [uniqueidentifier] NOT NULL,
+    [code] nvarchar(256) ,
 	[title] nvarchar(256) NOT NULL,
     [media_type] INT NOT NULL,
+    [release_on][datetime] NOT NULL,
     [label_id] [uniqueidentifier],
 	[created_at] [datetime] NOT NULL,
     [modified_at] [datetime] NOT NULL,
@@ -33,10 +34,10 @@ EXEC sys.sp_addextendedproperty
 GO
 
 EXEC sys.sp_addextendedproperty
- @name=N'MS_Description', @value=N'抽象アルバムID' ,
+ @name=N'MS_Description', @value=N'コード' ,
  @level0type=N'SCHEMA', @level0name=N'dbo',
  @level1type=N'TABLE', @level1name=N'album',
- @level2type=N'COLUMN', @level2name=N'abustract_album_id'
+ @level2type=N'COLUMN', @level2name=N'code'
 GO
 
 EXEC sys.sp_addextendedproperty
@@ -44,6 +45,13 @@ EXEC sys.sp_addextendedproperty
  @level0type=N'SCHEMA', @level0name=N'dbo',
  @level1type=N'TABLE', @level1name=N'album',
  @level2type=N'COLUMN', @level2name=N'title'
+GO
+
+EXEC sys.sp_addextendedproperty
+ @name=N'MS_Description', @value=N'リリース日' ,
+ @level0type=N'SCHEMA', @level0name=N'dbo',
+ @level1type=N'TABLE', @level1name=N'album',
+ @level2type=N'COLUMN', @level2name=N'release_on'
 GO
 
 EXEC sys.sp_addextendedproperty

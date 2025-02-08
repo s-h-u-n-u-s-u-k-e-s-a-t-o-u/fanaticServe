@@ -1,0 +1,15 @@
+﻿@model fanaticServe.Dto.DetailEvent
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+<div class="row">
+    <div>
+        <h1>@Html.DisplayFor(modelItem => Model.Title)</h1>
+    </div>
+</div>
+<div class="row">
+    <div>
+        @await Html.PartialAsync("_DetailEventView", Model)
+    </div>
+</div>
