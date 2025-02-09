@@ -45,4 +45,6 @@ public partial class FanaticServeContext : DbContext
     public virtual DbSet<LiveEvent> LiveEvents { get; set; }
 
     public virtual DbSet<Set_List_Note> SetListNotes { get; set; }
+
+    
 }
