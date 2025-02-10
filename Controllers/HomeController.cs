@@ -1,8 +1,7 @@
 using fanaticServe.Data;
 using fanaticServe.Models;
+using fanaticServe.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace fanaticServe.Controllers
@@ -19,9 +18,16 @@ namespace fanaticServe.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult ReleaseNote()
+        {
+            return View(fanaticServe.Dto.ReleaseNote.GetReleaseNotes());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

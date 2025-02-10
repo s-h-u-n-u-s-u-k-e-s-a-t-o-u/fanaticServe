@@ -12,6 +12,8 @@ namespace fanaticServe.Dto
 
         public Guid Album_id { get; set; }
 
+        public string? Code { get; set; }
+
         [DisplayName("バリエーション")]
         public required string DetailTitle { get; set; }
 
@@ -21,5 +23,11 @@ namespace fanaticServe.Dto
 
         [DisplayName("媒体")]
         public string? Media { get; set; }
+
+        [DisplayName("トラック No")]
+        public int Track_No { get; set; }
+
+        [DisplayName("曲名")]
+        public string Track_Title { get; set; } = null!;
     }
 }

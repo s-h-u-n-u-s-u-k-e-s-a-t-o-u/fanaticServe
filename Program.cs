@@ -11,12 +11,11 @@ builder.Logging.AddDebug();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Configuration.AddEnvironmentVariables(prefix: "SSSWare_");
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Configuration.AddEnvironmentVariables(prefix: "SQLCONNSTR_SSSWare_");
+var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_SSSWare_ConnectionStrings__DefaultConnection");
 
 builder.Services.AddDbContext<FanaticServeContext>(options =>
     options.UseSqlServer(connectionString));
-
 
 // データベース例外フィルター
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
