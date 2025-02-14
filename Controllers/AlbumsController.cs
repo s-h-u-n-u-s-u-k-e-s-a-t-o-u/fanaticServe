@@ -24,14 +24,14 @@ namespace fanaticServe.Controllers
             /// 一覧表形式でアルバム情報を表示する
             var records =
                 from absal in _context.Abstract_albums
-                join lk in _context.Abstract_album_link on absal.abstract_album_id equals lk.Abstract_Album_Id
+                join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
                 join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
                 join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
                 orderby alb.Release_On
                 select new ShowableAlbum()
                 {
-                    Abstract_album_id = absal.abstract_album_id,
-                    Title = absal.title,
+                    Abstract_album_id = absal.Abstract_Album_Id,
+                    Title = absal.Title,
                     Album_id = alb.Album_Id,
                     DetailTitle = alb.Title,
                     Release_on = alb.Release_On,
@@ -45,7 +45,7 @@ namespace fanaticServe.Controllers
         public IActionResult Articles()
         {
             var subTbl2 =
-                from link in _context.Abstract_album_link
+                from link in _context.Abstract_album_links
                 join album in _context.Albums on link.Album_Id equals album.Album_Id
                 group new { link, album } by link.Abstract_Album_Id into tbl2
                 select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
@@ -54,19 +54,19 @@ namespace fanaticServe.Controllers
             // 記事として表示する整形済みの抽象アルバム
             var articles = (
                 from abs in _context.Abstract_albums
-                join subT in subTbl2 on abs.abstract_album_id equals subT.abstract_album_id
+                join subT in subTbl2 on abs.Abstract_Album_Id equals subT.abstract_album_id
                 orderby subT.release_on
                 select new ArticleAlbum()
                 {
-                    Abstract_album_id = abs.abstract_album_id,
-                    Title = abs.title,
+                    Abstract_album_id = abs.Abstract_Album_Id,
+                    Title = abs.Title,
                     Release_On = subT.release_on
                 }).ToList();
 
             // 抽象アルバムとアルバムを紐づけ
             foreach (var article in articles)
             {
-                var albums = from lk in _context.Abstract_album_link
+                var albums = from lk in _context.Abstract_album_links
                              join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
                              join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
                              join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
@@ -126,7 +126,7 @@ namespace fanaticServe.Controllers
 
         private DetailAlbum? GetDetailAlbum(Guid album_id)
         {
-            var album = (from lk in _context.Abstract_album_link
+            var album = (from lk in _context.Abstract_album_links
                          join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
                          join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
                          join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
@@ -171,7 +171,7 @@ namespace fanaticServe.Controllers
         {
             var subTbl2 =
 
-                    (from link in _context.Abstract_album_link
+                    (from link in _context.Abstract_album_links
                      join album in _context.Albums on link.Album_Id equals album.Album_Id
                      group new { link, album } by link.Abstract_Album_Id into tbl2
                      select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
@@ -186,18 +186,18 @@ namespace fanaticServe.Controllers
             var article =
 
                 (from abs in _context.Abstract_albums
-                 where abs.abstract_album_id.Equals(id)
+                 where abs.Abstract_Album_Id.Equals(id)
                  select new ArticleAlbum()
                  {
-                     Abstract_album_id = abs.abstract_album_id,
-                     Title = abs.title,
+                     Abstract_album_id = abs.Abstract_Album_Id,
+                     Title = abs.Title,
                      Release_On = subTbl2.release_on
                  }).FirstOrDefault();
 
             // 抽象アルバムとアルバムを紐づけ
             if (article != null)
             {
-                var albums = from lk in _context.Abstract_album_link
+                var albums = from lk in _context.Abstract_album_links
                              join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
                              join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
                              join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type

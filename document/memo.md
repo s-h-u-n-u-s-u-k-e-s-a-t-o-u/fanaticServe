@@ -60,8 +60,16 @@
 
 visual studioのpckage manager consoleで実行する
 
-``` MPC
+``` PMC
 Scaffold-DbContext -NoOnConfiguring 'Data Source=DESKTOP-9NUP2PU\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=fanatic_serve;' Microsoft.EntityFrameworkCore.SqlServer -UseDatabaseNames -DataAnnotations  -OutputDir Models -Force
+```
+
+``` poweshell 別ver
+dotnet ef dbcontext scaffold "Server=your_server;Database=Fanatic_Serve;User Id=your_username;Password=your_password;" Microsoft.EntityFrameworkCore.SqlServer -o Models -t abstract_album_note
+```
+
+``` PMC
+Scaffold-DbContext -NoOnConfiguring 'Data Source=DESKTOP-9NUP2PU\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=fanatic_serve;' Microsoft.EntityFrameworkCore.SqlServer -UseDatabaseNames -DataAnnotations -OutputDir Models -Force -Tables abstract_album_note
 ```
 
 環境変数構成プロバイダーを使用する、プレフィックス ASPNETCORE_ が付いた環境変数。

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using fanaticServe.Constants;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace fanaticServe.Dto;
 
@@ -26,5 +28,6 @@ public class ShowableLiveEvent
     /// 開演日時
     /// </summary>
     [DisplayName("開演日時")]
+    [DisplayFormat(DataFormatString = Format.DateTimeFormat)]
     public DateTime? Perform_At { get; set; }
 }

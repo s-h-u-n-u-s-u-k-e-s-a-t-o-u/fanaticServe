@@ -1,0 +1,26 @@
+﻿@model IEnumerable<fanaticServe.Dto.ReleaseNote>
+
+@{
+    ViewData["Title"] = "Release Note";
+}
+
+<h1>@ViewData["Title"]</h1>
+<table class="table">
+    <thead >
+        <tr>
+            <th>Version</th>
+            <th>Release Date</th>
+            <th>Release Note</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var releaseNote in Model)
+        {
+            <tr>
+                <td class="tab-content">@Html.DisplayFor(note=> releaseNote.Version)</td>
+                <td class="tab-content">@Html.DisplayFor(note => releaseNote.ReleaseDate)</td>
+                <td class="tab-content">@Html.DisplayFor(note => releaseNote.Note)</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -13,7 +13,6 @@ GO
 CREATE TABLE [dbo].[abstract_event](
 	[abstract_event_id] [uniqueidentifier] NOT NULL,
 	[title] nvarchar(256) NOT NULL,
-	[note] nvarchar(256) ,
 	[created_at] [datetime] NULL,
     [modified_at] [datetime] NOT NULL,
  CONSTRAINT [PK_abstract_event] PRIMARY KEY CLUSTERED 
@@ -35,13 +34,6 @@ EXEC sys.sp_addextendedproperty
  @level0type=N'SCHEMA', @level0name=N'dbo',
  @level1type=N'TABLE', @level1name=N'abstract_event',
  @level2type=N'COLUMN', @level2name=N'title'
-GO
-
-EXEC sys.sp_addextendedproperty
- @name=N'MS_Description', @value=N'ノート' ,
- @level0type=N'SCHEMA', @level0name=N'dbo',
- @level1type=N'TABLE', @level1name=N'abstract_event',
- @level2type=N'COLUMN', @level2name=N'note'
 GO
 
 EXEC sys.sp_addextendedproperty

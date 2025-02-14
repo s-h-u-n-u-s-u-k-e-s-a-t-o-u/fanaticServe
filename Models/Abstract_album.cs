@@ -10,23 +10,23 @@ public partial class Abstract_album
     /// 抽象アルバムID
     /// </summary>
     [Key]
-    public Guid abstract_album_id { get; set; }
+    public Guid Abstract_Album_Id { get; set; }
 
     /// <summary>
     /// タイトル
     /// </summary>
     [StringLength(256)]
-    public string title { get; set; } = null!;
+    public string Title { get; set; } = null!;
 
     /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime? created_at { get; set; }
+    public DateTime? Created_At { get; set; }
 
     /// <summary>
     /// 更新日時
     /// </summary>
     [Column(TypeName = "datetime")]
-    public DateTime modified_at { get; set; }
+    public DateTime Modified_At { get; set; }
 }

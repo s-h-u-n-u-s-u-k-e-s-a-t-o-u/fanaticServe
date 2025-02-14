@@ -7,7 +7,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP TABLE IF EXISTS [dbo].[abstract_event];
+DROP TABLE IF EXISTS [dbo].[abstract_event_link];
 GO
 
 CREATE TABLE [dbo].[abstract_event_link](

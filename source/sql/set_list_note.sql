@@ -7,6 +7,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+DROP TABLE IF EXISTS [dbo].[set_list_note];
+GO
+
 CREATE TABLE [dbo].[set_list_note](
 	[set_list_id] [uniqueidentifier] NOT NULL,
 	[note] [nvarchar](max) NULL,

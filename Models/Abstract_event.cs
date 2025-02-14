@@ -19,12 +19,6 @@ public partial class Abstract_event
     public string Title { get; set; } = null!;
 
     /// <summary>
-    /// ノート
-    /// </summary>
-    [StringLength(256)]
-    public string? Note { get; set; }
-
-    /// <summary>
     /// 登録日時
     /// </summary>
     [Column(TypeName = "datetime")]

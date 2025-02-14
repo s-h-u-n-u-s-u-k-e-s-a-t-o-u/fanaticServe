@@ -12,13 +12,19 @@ public partial class FanaticServeContext : DbContext
 
     public virtual DbSet<Abstract_album> Abstract_albums { get; set; }
 
+    public virtual DbSet<Abstract_Album_Note> Abstract_Album_Notes { get; set; }
+    
     public virtual DbSet<Album> Albums { get; set; }
 
-    public virtual DbSet<Abstract_album_link> Abstract_album_link { get; set; }
+    public virtual DbSet<Album_Note> Album_Notes { get; set; }   
 
-    public virtual DbSet<Abstract_event> Abstract_event { get; set; }
+    public virtual DbSet<Abstract_album_link> Abstract_album_links { get; set; }
 
-    public virtual DbSet<Abstract_event_link> Abstract_event_link { get; set; }
+    public virtual DbSet<Abstract_event> Abstract_events { get; set; }
+
+    public virtual DbSet<Abstract_Event_Note> Abstract_Event_Notes { get; set; }
+    
+    public virtual DbSet<Abstract_event_link> Abstract_event_links { get; set; }
 
     public virtual DbSet<Label> Labels { get; set; }
 
@@ -44,5 +50,7 @@ public partial class FanaticServeContext : DbContext
 
     public virtual DbSet<LiveEvent> LiveEvents { get; set; }
 
-    public virtual DbSet<Set_List_Note> SetListNotes { get; set; }
+    public virtual DbSet<Live_Event_Note> Live_Event_Notes { get; set; }
+    
+    public virtual DbSet<Set_List_Note> SetListNotes { get; set; }    
 }

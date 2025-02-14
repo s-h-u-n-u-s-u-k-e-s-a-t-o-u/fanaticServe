@@ -1,3 +1,4 @@
+using fanaticServe.Constants;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -21,7 +22,7 @@ public class ArticleAlbum
     /// 発売日
     /// </summary>
     [DisplayName("発売日")]
-    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+    [DisplayFormat(DataFormatString = Format.DateFormat)]
     public DateTime Release_On { get; set; }
 
     public IEnumerable<DetailAlbum>? Albums { get; set; }

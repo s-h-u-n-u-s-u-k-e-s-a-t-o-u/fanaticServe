@@ -19,8 +19,8 @@ public class EventsController : Controller
     public async Task<IActionResult> Index()
     {
         var events =
-            from absEvent in _context.Abstract_event
-            join link in _context.Abstract_event_link
+            from absEvent in _context.Abstract_events
+            join link in _context.Abstract_event_links
             on absEvent.Abstract_Event_Id equals link.Abstract_Event_Id
             join liveEvent in _context.LiveEvents
             on link.Event_Id equals liveEvent.Live_Event_Id
@@ -31,7 +31,6 @@ public class EventsController : Controller
                 Title = absEvent.Title,
                 Event_id = liveEvent.Live_Event_Id,
                 DetailTitle = liveEvent.Title,
-                Note = absEvent.Note,
                 Perform_at = liveEvent.Perform_At
             };
 
@@ -94,13 +93,12 @@ public class EventsController : Controller
         }
 
         var eventGroup = await (
-            from absEvent in _context.Abstract_event
+            from absEvent in _context.Abstract_events
             where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
             {
                 Abstract_event_id = absEvent.Abstract_Event_Id,
-                Title = absEvent.Title,
-                Note = absEvent.Note
+                Title = absEvent.Title
             }
             ).FirstOrDefaultAsync();
         if (eventGroup == null)
@@ -109,7 +107,7 @@ public class EventsController : Controller
         }
 
         eventGroup.LiveEvents = await (
-            from linkedList in _context.Abstract_event_link
+            from linkedList in _context.Abstract_event_links
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
             where linkedList.Abstract_Event_Id == id
@@ -154,12 +152,11 @@ public class EventsController : Controller
     {
         var articles =
             await (
-            from absEvent in _context.Abstract_event
+            from absEvent in _context.Abstract_events
             select new ArticleEvent()
             {
                 Abstract_event_id = absEvent.Abstract_Event_Id,
-                Title = absEvent.Title,
-                Note = absEvent.Note
+                Title = absEvent.Title
             }
             ).ToListAsync();
 
@@ -167,7 +164,7 @@ public class EventsController : Controller
         foreach (var article in articles)
         {
             article.LiveEvents = await (
-                from linkedList in _context.Abstract_event_link
+                from linkedList in _context.Abstract_event_links
                 join liveEvent in _context.LiveEvents
                 on linkedList.Event_Id equals liveEvent.Live_Event_Id
                 where linkedList.Abstract_Event_Id == article.Abstract_event_id

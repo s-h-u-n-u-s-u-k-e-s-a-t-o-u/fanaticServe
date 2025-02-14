@@ -34,9 +34,9 @@ public class SongsController : Controller
                  where s.Song_Id == id
                  select new DetailSong()
                  {
-                     song_id = s.Song_Id,
-                     title = s.Title,
-                     kana = s.Kana,
+                     Song_Id = s.Song_Id,
+                     Title = s.Title,
+                     Kana = s.Kana,
                  }).FirstOrDefaultAsync();
 
         if (song == null)
@@ -47,20 +47,26 @@ public class SongsController : Controller
         song.Albums =
             await (
             from album in _context.Albums
-            join tack in _context.Tracks
-            on album.Album_Id equals tack.Album_Id
+            join track in _context.Tracks
+            on album.Album_Id equals track.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on album.Media_Type equals media.Media_Type
-            where tack.Song_Id == id
+            where track.Song_Id == id
             orderby album.Release_On
+            
             select new ShowableAlbum()
             {
                 Album_id = album.Album_Id,
+                Code = album.Code,
                 Title = album.Title,
                 DetailTitle = album.Title,
                 Release_on = album.Release_On,
-                Media = media.Name ?? ""
-
-            }).ToArrayAsync();
+                Media = media.Name ?? "",
+                Track_No= track.Track_No,
+                Track_Title=track.Title
+            }).OrderBy(a=>a.Release_on)
+            .ThenBy(suba=>suba.Code)
+            .ThenBy(suba => suba.Track_No)
+            .ToArrayAsync();
 
         song.LiveEvents =
             await (

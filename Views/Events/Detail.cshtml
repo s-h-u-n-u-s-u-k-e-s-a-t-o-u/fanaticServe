@@ -8,8 +8,8 @@
         <h1>@Html.DisplayFor(modelItem => Model.Title)</h1>
     </div>
 </div>
-<div class="row">
-    <div>
+<div class="card">
+    <div class="card-body">
         @await Html.PartialAsync("_DetailEventView", Model)
     </div>
 </div>

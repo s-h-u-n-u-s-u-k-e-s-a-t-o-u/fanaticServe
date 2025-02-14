@@ -7,7 +7,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-DROP TABLE IF EXISTS [dbo].[label];
+DROP TABLE IF EXISTS [dbo].[live_event];
 GO
 
 CREATE TABLE [dbo].[live_event](
