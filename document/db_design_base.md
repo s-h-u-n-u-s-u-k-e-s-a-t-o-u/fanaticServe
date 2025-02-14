@@ -4,161 +4,242 @@
 - 日時(datetime)の項目は末尾に _at
 - 登録日時 created_at datetime
 - 更新日時 modified_at datetime
-- 名前 name verchar(256)
-- カナ kana verchar(256) カタカナのみ
-
-## 雑記
-
-- データ登録
-SQLServer ユニークIDの発番
+- 名前 name nverchar(256)
+- カナ kana nverchar(256) カタカナのみ
+- 備考 note nvarchar(max)
 
 <https://learn.microsoft.com/ja-jp/sql/t-sql/functions/newid-transact-sql?view=sql-server-ver16>
 
 NEWID() 関数
 
-## ダイアグラム
+## ERダイアグラム
 
 ```mermaid
 
 erDiagram
 
 song{
-uuid song_id pk
-string title
-string kana
-datetime created_at
-datetime modified_at
+  uniqueidentifier song_id pk
+  nvarchar title
+  nvarchar kana
+  datetime created_at
+  datetime modified_at
 }
 
-person{
-uuid person_id pk
-string name
-string kana
-datetime created_at
-datetime modified_at
+song_note{
+  uniqueidentifier song_id pk
+  nvarchar note
+  datetime created_at
+  datetime modified_at
 }
 
 organization{
-uuid organization_id pk
-string name
-string kana
-datetime created_at
-datetime modified_at
+  uniqueidentifier organization_id pk
+  nvarchar name
+  nvarchar kana
+  datetime created_at
+  datetime modified_at
+}
+
+person{
+  uniqueidentifier person_id pk
+  nvarchar name
+  nvarchar kana
+  datetime created_at
+  datetime modified_at
 }
 
 label{
-  uuid label_id pk
-  uuid organization_id
-  string name
+  uniqueidentifier label_id pk
+  uniqueidentifier organization_id
+  nvarchar name
+  datetime created_at
+  datetime modified_at
 }
 
 site{
-uuid site_id pk
-int sequence pk
-string displayName
-string url
-datetime created_at
-datetime modified_at
+  uniqueidentifier site_id pk
+  int sequence
+  nvarchar display_name
+  nvarchar url
+  datetime created_at
+  datetime modified_at
 }
 
 media{
-    int media_type pk
-    string name
+  int media_type pk
+  nvarchar name
+  datetime created_at
+  datetime modified_at
 }
 
 abstract_album{
-  uuid abstract_album_id pk
-  string title
+  uniqueidentifier abstract_album_id pk
+  nvarchar title
+  datetime created_at
+  datetime modified_at
+}
+
+abstract_album_note{
+  uniqueidentifier abstract_album_id
+  nvarchar note
+  datetime created_at
+  datetime modified_at
 }
 
 album{
-  uuid album_id pk
-  string code
-  string title
+  uniqueidentifier album_id pk
+  nvarchar code
+  nvarchar title
   int media_type
-  uuid label_id
   date release_on
+  uniqueidentifier label_id
+  datetime created_at
+  datetime modified_at
+}
+
+album_note{
+  uniqueidentifier album_id pk
+  nvarchar note
+  datetime created_at
+  datetime modified_at
 }
 
 abstract_album_link{
-  int id pk
-  uuid abstract_album_id
-  uuid album_id
+  int_IDENTITY id pk
+  uniqueidentifier abstract_album_id
+  uniqueidentifier album_id
+  datetime created_at
+  datetime modified_at
 }
 
 track{
-  uuid tack_id pk
-  uuid alubm_id 
-  number track_no 
-  string title
+  uniqueidentifier tack_id pk
+  uniqueidentifier alubm_id
+  number track_no
+  nvarchar title
   int length
-  uuid song_id
+  uniqueidentifier song_id
+  datetime created_at
+  datetime modified_at
+}
+
+track_note{
+  uniqueidentifier tack_id pk
+  nvarchar note
+  datetime created_at
+  datetime modified_at  
 }
 
 abstract_event{
-  uuid abstract_event_id pk
-  strting title
-  string note
+  uniqueidentifier abstract_event_id pk
+  nvarchar title
+  nvarchar note
+  datetime created_at
+  datetime modified_at
 }
 
-event{
-  uuid event_id pk
-  strting title
-  date perform_at
+abstract_event_note{
+  uniqueidentifier abstract_event_id
+  nvarchar note
+  datetime created_at
+  datetime modified_at
+}
+
+live_event{
+  uniqueidentifier live_event_id pk
+  nvarchar title
+  nvarchar place
+  datetime perform_at
+  datetime created_at
+  datetime modified_at
+}
+
+live_event_note{
+  uniqueidentifier live_event_id pk
+  nvarchar note
+  datetime created_at
+  datetime modified_at
 }
 
 abstract_event_link{
-  uuid id pk
-    uuid abstract_event_id
-    uuid event_id
+  int_IDENTITY id pk
+  uniqueidentifier abstract_event_id
+  uniqueidentifier event_id
+  datetime created_at
+  datetime modified_at
 }
 
 set_list{
-  uuid set_list_id pk
-  string title
-  uuid song_id
-  string note
+  uniqueidentifier set_list_id pk
+  uniqueidentifier live_event_id
+  int set_list_no
+  nvarchar title
+  uniqueidentifier song_id
+  datetime created_at
+  datetime modified_at  
+}
+
+set_list_note{
+  uniqueidentifier set_list_id pk
+  nvarchar note
+  datetime created_at
+  datetime modified_at  
 }
 
 role {
-  int id pk
-  string name
+  int_IDENTITY id pk
+  nvarchar name
   datetime created_at
   datetime modified_at
 }
 
 roleOnSong{
-  uuid song_id
-  uuid role_id
-  uuid person_id
+  int_IDENTITY id
+  uniqueidentifier song_id
+  uniqueidentifier role_id
+  uniqueidentifier person_id
+  datetime created_at
+  datetime modified_at
 }
 
 roleOnAlbum{
-  uuid album_id
-  uuid roll_id
-  uuid person_id
+  int_IDENTITY id
+  uniqueidentifier album_id
+  uniqueidentifier roll_id
+  uniqueidentifier person_id
+  datetime created_at
+  datetime modified_at
 }
 
-event ||--|{ set_list:event_id
+abstract_album ||--|{ abstract_album_link:abstract_album_id
+abstract_album ||--o| abstract_album_note:abstract_album_id
+album ||--|| abstract_album_link:album_id
+album ||--o| album_note:album_id
+
+abstract_event ||--|{ abstract_event_link:abstract_event_id
+abstract_event ||--o| abstract_event_note:abstract_event_id
+live_event ||--|| abstract_event_link:event_id
+live_event ||--|{ set_list:event_id
+live_event ||--o| live_event_note:event_id
 
 set_list |o--o| song:song_id
+set_list ||--|{ set_list_note:set_list_id
 
-
-abstract_album ||--|{abstract_album_link:abstract_album_id
-album ||--||abstract_album_link:album_id
-
-abstract_event ||--|{abstract_event_link:abstract_event_id
-event ||--|| abstract_event_link:event_id
-
-media ||--|{album:media_id
+media ||--|{ album:media_id
 album ||--|{ track:album_id
 song ||--|{ track:song_id 
+song ||--o| song_note:song_id
+track ||--o| track_note:song_id
+
 song ||--|{ roleOnSong:song_id
 album ||--|{ roleOnAlbum:album_id
+
 person ||--|{roleOnSong:person_id
 person ||--|{roleOnAlbum:person_id
 role ||--|{ roleOnSong:role_id
 role ||--|{ roleOnAlbum:role_id
+
 organization ||--|{ label:organization_id
-label ||--|{album:label_id
+label ||--|{ album:label_id
 ```

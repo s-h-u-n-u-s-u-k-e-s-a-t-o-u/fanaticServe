@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS [dbo].[site];
 GO
 
 CREATE TABLE [dbo].[site](
-	[id] [int] IDENTITY(1,1) NOT NULL,
 	[site_id] [uniqueidentifier] NOT NULL,
 	[sequence] [int] NOT NULL,
 	[display_name] [nvarchar](256) NOT NULL,
@@ -20,7 +19,7 @@ CREATE TABLE [dbo].[site](
     [modified_at] [datetime] NULL,
  CONSTRAINT [PK_site] PRIMARY KEY CLUSTERED 
 (
-	[id] ASC
+	[site_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
 constraint [UQ_site_site_id] unique ([site_id],[sequence])
 ) ON [PRIMARY]

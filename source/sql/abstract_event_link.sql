@@ -14,6 +14,8 @@ CREATE TABLE [dbo].[abstract_event_link](
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[event_id] [uniqueidentifier] NOT NULL,
 	[abstract_event_id] [uniqueidentifier] NOT NULL,
+	[created_at] [datetime] NOT NULL,
+	[modified_at] [datetime] NOT NULL,
  CONSTRAINT [PK_abstract_event_link] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

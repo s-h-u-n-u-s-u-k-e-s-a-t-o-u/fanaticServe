@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[abstract_album_note](
 	[modified_at] [datetime] NOT NULL,
      CONSTRAINT [PK_abstract_album_note] PRIMARY KEY CLUSTERED 
 (
-	[album_id] ASC
+	[abstract_album_id] ASC
 )
 );
 
