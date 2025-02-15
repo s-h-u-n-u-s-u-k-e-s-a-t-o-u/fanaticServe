@@ -8,8 +8,6 @@
 - カナ kana nverchar(256) カタカナのみ
 - 備考 note nvarchar(max)
 
-<https://learn.microsoft.com/ja-jp/sql/t-sql/functions/newid-transact-sql?view=sql-server-ver16>
-
 NEWID() 関数
 
 ## ERダイアグラム
