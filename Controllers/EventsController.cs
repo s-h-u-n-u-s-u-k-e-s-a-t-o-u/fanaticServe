@@ -63,23 +63,7 @@ public class EventsController : Controller
             return NotFound();
         }
 
-        liveEvent.SetLists =
-            await (
-            from setList in _context.Set_list
-            join slNote in _context.SetListNotes.DefaultIfEmpty()
-            on setList.Set_List_Id equals slNote.Set_List_Id
-            where setList.Live_Event_Id == id
-            orderby setList.Set_List_No
-            select new ShowableSetList
-            {
-                Set_List_Id = setList.Set_List_Id,
-                Live_Event_Id = id.Value,
-                Set_List_No = setList.Set_List_No,
-                Title = setList.Title,
-                Song_id = setList.Song_Id,
-                Note = slNote.Note ?? ""
-            }
-            ).ToListAsync();
+        liveEvent.SetLists = await GetSelList(id.Value);
 
         return View(liveEvent);
     }
@@ -126,22 +110,7 @@ public class EventsController : Controller
 
             foreach (var liveEvent in eventGroup.LiveEvents)
             {
-                liveEvent.SetLists = await (
-                    from setList in _context.Set_list
-                    join slNote in _context.SetListNotes.DefaultIfEmpty()
-                    on setList.Set_List_Id equals slNote.Set_List_Id
-                    where setList.Live_Event_Id == liveEvent.Live_event_id
-                    orderby setList.Set_List_No
-                    select new ShowableSetList()
-                    {
-                        Set_List_Id = setList.Set_List_Id,
-                        Live_Event_Id = setList.Live_Event_Id,
-                        Set_List_No = setList.Set_List_No,
-                        Title = setList.Title,
-                        Song_id = setList.Song_Id,
-                        Note = slNote.Note ?? ""
-                    }
-                    ).ToListAsync();
+                liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
             }
         }
         return View(eventGroup);
@@ -183,22 +152,7 @@ public class EventsController : Controller
                 article.Perform_on = article.LiveEvents.Min(e => e.Perform_at);
                 foreach (var liveEvent in article.LiveEvents)
                 {
-                    liveEvent.SetLists = await (
-                        from setList in _context.Set_list
-                        join slNote in _context.SetListNotes.DefaultIfEmpty()
-                        on setList.Set_List_Id equals slNote.Set_List_Id
-                        where setList.Live_Event_Id == liveEvent.Live_event_id
-                        orderby setList.Set_List_No
-                        select new ShowableSetList()
-                        {
-                            Set_List_Id = setList.Set_List_Id,
-                            Live_Event_Id = setList.Live_Event_Id,
-                            Set_List_No = setList.Set_List_No,
-                            Title = setList.Title,
-                            Song_id = setList.Song_Id,
-                            Note = slNote.Note ?? ""
-                        }
-                        ).ToListAsync();
+                    liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
                 }
             }
         }
@@ -206,5 +160,25 @@ public class EventsController : Controller
         return View(
             (from article in articles orderby article.Perform_on select article).ToArray()
             );
+    }
+
+    private async Task<List<ShowableSetList>> GetSelList(Guid Live_event_id)
+    {
+        return await (
+            from setList in _context.Set_list
+            join slNote in _context.SetListNotes.DefaultIfEmpty()
+            on setList.Set_List_Id equals slNote.Set_List_Id
+            where setList.Live_Event_Id == Live_event_id
+            orderby setList.Set_List_No
+            select new ShowableSetList()
+            {
+                Set_List_Id = setList.Set_List_Id,
+                Live_Event_Id = setList.Live_Event_Id,
+                Set_List_No = setList.Set_List_No,
+                Title = setList.Title,
+                Song_id = setList.Song_Id,
+                Note = slNote.Note ?? ""
+            }
+        ).ToListAsync();
     }
 }
