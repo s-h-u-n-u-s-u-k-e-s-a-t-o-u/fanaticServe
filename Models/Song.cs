@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Models;
 
@@ -19,12 +17,14 @@ public partial class Song
     /// タイトル
     /// </summary>
     [StringLength(256)]
+    [DisplayName("タイトル")]
     public string Title { get; set; } = null!;
 
     /// <summary>
     /// カナ
     /// </summary>
     [StringLength(256)]
+    [DisplayName("カナ")]
     public string Kana { get; set; } = null!;
 
     /// <summary>

@@ -10,17 +10,18 @@
 @foreach (ArticleEvent abs in Model)
 {
     <article class="abs-album">
-        <div>
-            <div>
-            <h4><a asp-controller="Events" asp-action="EventGroup" asp-route-id="@abs.Abstract_event_id">@abs.Title</a>                </h4>
-            </div>
-            <div>
-                <span>開催日</span>:<span>@Html.DisplayFor(model => abs.Perform_on)</span>
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h4><a asp-controller="Events" asp-action="EventGroup" asp-route-id="@abs.Abstract_event_id">@abs.Title</a></h4>
+                </div>
+                <div>
+                    <span>開催日</span>:<span>@Html.DisplayFor(model => abs.Perform_on)</span>
+                </div>
             </div>
             @if (abs.LiveEvents != null)
             {
-                <div class="variations">
-
+                <div class="card-body variations">
                     @* ライブ/イベント情報 *@
                     @foreach (var detailEvent in abs.LiveEvents)
                     {
@@ -29,12 +30,10 @@
                                 @Html.DisplayFor(modelItem => detailEvent.Title)
                             </a>
                         </div>
-
                         @await Html.PartialAsync("_DetailEventView", detailEvent)
-                     }
+                    }
                 </div>
             }
         </div>
     </article>
-    <hr />
 }

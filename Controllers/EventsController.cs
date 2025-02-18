@@ -166,10 +166,11 @@ public class EventsController : Controller
     {
         return await (
             from setList in _context.Set_list
-            join slNote in _context.SetListNotes.DefaultIfEmpty()
-            on setList.Set_List_Id equals slNote.Set_List_Id
+            join slNote in _context.SetListNotes
+            on setList.Set_List_Id equals slNote.Set_List_Id into joinT
             where setList.Live_Event_Id == Live_event_id
             orderby setList.Set_List_No
+            from subT in joinT.DefaultIfEmpty()
             select new ShowableSetList()
             {
                 Set_List_Id = setList.Set_List_Id,
@@ -177,7 +178,7 @@ public class EventsController : Controller
                 Set_List_No = setList.Set_List_No,
                 Title = setList.Title,
                 Song_id = setList.Song_Id,
-                Note = slNote.Note ?? ""
+                Note = subT.Note ?? ""
             }
         ).ToListAsync();
     }
