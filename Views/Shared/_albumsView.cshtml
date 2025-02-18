@@ -24,7 +24,11 @@
                             <tr>
                                 <td>@Html.DisplayFor(m => album.Release_on)</td>
                                 <td>@Html.DisplayFor(m => album.Media)</td>
-                                <td>@Html.DisplayFor(m => album.Title)</td>
+                                <td>
+                                    <a asp-controller="Albums" asp-action="Detail" asp-route-id="@album.Album_id">
+                                        @Html.DisplayFor(m => album.Title)
+                                    </a>
+                                </td>
                                 <td>@Html.DisplayFor(m => album.Track_No)</td>
                                 <td>@Html.DisplayFor(m => album.Track_Title)</td>
                             </tr>
