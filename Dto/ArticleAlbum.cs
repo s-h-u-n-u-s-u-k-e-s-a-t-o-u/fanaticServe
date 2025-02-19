@@ -6,6 +6,8 @@ namespace fanaticServe.Dto;
 
 public class ArticleAlbum
 {
+    private IEnumerable<DetailAlbum>? _albums;
+
     /// <summary>
     /// 抽象アルバムID
     /// </summary>
@@ -25,5 +27,16 @@ public class ArticleAlbum
     [DisplayFormat(DataFormatString = Format.DateFormat)]
     public DateTime Release_On { get; set; }
 
-    public IEnumerable<DetailAlbum>? Albums { get; set; }
+    public IEnumerable<DetailAlbum>? Albums
+    {
+        get => _albums;
+        set
+        {
+            _albums = value;
+            if (value != null)
+            {
+                this.Release_On = value.Min(a => a.Release_on);
+            }
+        }
+    }
 }

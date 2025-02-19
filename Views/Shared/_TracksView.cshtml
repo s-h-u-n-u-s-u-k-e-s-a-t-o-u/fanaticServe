@@ -6,19 +6,30 @@
     <div class="row">
         収録曲
     </div>
-    <div class="row">
-        <div class="col-1"><i>トラック番号</i></div>
-        <div class="col-5"><i>曲名</i></div>
-        <div class="col-2"><i>長さ[秒]</i></div>
-    </div>
-    @foreach (var track in Model)
-    {
-        <div class="row">
-            <div class="col-1">@Html.DisplayFor(modelItem => track.Track_No)</div>
-            <div class="col-5">
-                <a asp-controller="songs" asp-action="detail" asp-route-id="@track.Song_Id">@Html.DisplayFor(modelItem => track.Title)</a>
-            </div>
-            <div class="col-2">@Html.DisplayFor(modelItem => track.Length)</div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><i>トラック</i></th>
+                        <th><i>曲名</i></th>
+                        <th><i>長さ[秒]</i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var track in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => track.Track_No)</td>
+                            <td>
+                                <a asp-controller="songs" asp-action="detail" asp-route-id="@track.Song_Id">@Html.DisplayFor(modelItem => track.Title)</a>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => track.Length)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
-    }
+    </div>
 }

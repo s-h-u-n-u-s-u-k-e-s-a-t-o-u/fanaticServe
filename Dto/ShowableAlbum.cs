@@ -25,7 +25,7 @@ public class ShowableAlbum
     [DisplayName("媒体")]
     public string? Media { get; set; }
 
-    [DisplayName("トラック No")]
+    [DisplayName("トラック")]
     public int Track_No { get; set; }
 
     [DisplayName("曲名")]

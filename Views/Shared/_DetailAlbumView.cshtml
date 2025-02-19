@@ -1,18 +1,23 @@
 ﻿@model fanaticServe.Dto.DetailAlbum
 
-<div class="row">    
-    <div class="col-3">
-        @Html.DisplayNameFor(modelItem => Model.Code):@Html.DisplayFor(modelItem => Model.Code)
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-3">
+                @Html.DisplayNameFor(modelItem => Model.Code):@Html.DisplayFor(modelItem => Model.Code)
+            </div>
+            <div class="col-3">
+                @Html.DisplayNameFor(modelItem => Model.Release_on):@Html.DisplayFor(modelItem => Model.Release_on)
+            </div>
+            <div class="col-3">
+                @Html.DisplayNameFor(modelItem => Model.Label):@Html.DisplayFor(modelItem => Model.Label)
+            </div>
+            <div class="col-3">
+                @Html.DisplayNameFor(modelItem => Model.Media):@Html.DisplayFor(modelItem => Model.Media)
+            </div>
+        </div>
     </div>
-    <div class="col-3">
-        @Html.DisplayNameFor(modelItem => Model.Release_on):@Html.DisplayFor(modelItem => Model.Release_on)
-    </div>
-    <div class="col-3">
-        @Html.DisplayNameFor(modelItem => Model.Label):@Html.DisplayFor(modelItem => Model.Label)
-    </div>
-    <div class="col-3">
-        @Html.DisplayNameFor(modelItem => Model.Media):@Html.DisplayFor(modelItem => Model.Media)
+    <div class="card-body">
+        @await Html.PartialAsync("_TracksView", Model.Tracks)
     </div>
 </div>
-
-@await Html.PartialAsync("_TracksView", Model.Tracks)
