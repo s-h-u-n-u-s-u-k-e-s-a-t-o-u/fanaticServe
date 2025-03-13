@@ -120,7 +120,6 @@ bcp dbo.abstract_album in ".\abstract_album.dat" -c -t "\t" -C 65001 -S DESKTOP-
 bcp dbo.album in ".\album.dat" -c -t "\t" -C 65001 -S DESKTOP-9NUP2PU\SQLEXPRESS -d fanatic_serve -T
 ```
 
-
 ## SqlServer雑記
 
 - データ登録
