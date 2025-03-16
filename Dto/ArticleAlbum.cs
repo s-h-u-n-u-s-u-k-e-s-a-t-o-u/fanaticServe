@@ -33,9 +33,17 @@ public class ArticleAlbum
         set
         {
             _albums = value;
-            if (value != null)
+            if (value != null && value.Count()>0)
             {
-                this.Release_On = value.Min(a => a.Release_on);
+                try
+                {
+                    this.Release_On = value.Min(a => a.Release_on);
+
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }

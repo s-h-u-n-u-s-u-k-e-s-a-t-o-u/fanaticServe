@@ -76,7 +76,11 @@ dotnet ef dbcontext scaffold "Server=your_server;Database=Fanatic_Serve;User Id=
 ```
 
 ``` PMC
-Scaffold-DbContext -NoOnConfiguring 'Data Source=DESKTOP-9NUP2PU\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=fanatic_serve;' Microsoft.EntityFrameworkCore.SqlServer -UseDatabaseNames -DataAnnotations -OutputDir Models -Force -Tables album_note
+Scaffold-DbContext -NoOnConfiguring 'Data Source=DESKTOP-9NUP2PU\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=fanatic_serve;' Microsoft.EntityFrameworkCore.SqlServer -UseDatabaseNames -DataAnnotations -OutputDir Models
+```
+
+``` PMC
+Scaffold-DbContext -NoOnConfiguring 'Data Source=DESKTOP-9NUP2PU\SQLEXPRESS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False;Database=fanatic_serve;' Microsoft.EntityFrameworkCore.SqlServer -UseDatabaseNames -DataAnnotations -OutputDir Models -ContextDir Data -Context FanaticServeContext -Force
 ```
 
 環境変数構成プロバイダーが勝手に色々やってる。
