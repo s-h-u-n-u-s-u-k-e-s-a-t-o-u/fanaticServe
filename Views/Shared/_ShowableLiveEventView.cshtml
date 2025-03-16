@@ -2,17 +2,34 @@
 
 @if (Model != null)
 {
-    <div>
-        <div class="row">
-            <div></div>
-            <div></div>
+    <div class="card">
+        <div class="card-header">この曲を歌唱したイベント</div>
+        <div class="card-body">
+            @if (Model != null)
+            {
+                var f = Model.First();
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(m => f.Perform_At)</th>
+                            <th>@Html.DisplayNameFor(m => f.Title)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var liveEvent in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(mbox => liveEvent.Perform_At)</td>
+                                <td>
+                                    <a asp-controller="Events" asp-action="Detail" asp-route-id="@liveEvent.Live_Event_Id">
+                                        @Html.DisplayFor(mbox => liveEvent.Title)
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
-        @foreach (var liveEvent in Model)
-        {
-            <div class="row">
-                <div>@Html.DisplayFor(mbox => liveEvent.Perform_At)</div>
-                <div>@Html.DisplayFor(mbox => liveEvent.Title)</div>
-            </div>
-        }
     </div>
 }

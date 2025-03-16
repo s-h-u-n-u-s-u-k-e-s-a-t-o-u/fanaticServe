@@ -2,24 +2,28 @@
 
 @if (Model != null)
 {
-    <div class="row">
-        <div class="col-2"><i>曲順</i></div>
-        <div class="col-5"><i>曲名</i></div>
-        <div class="col-5"></div>
-    </div>
-    @foreach (var setList in Model)
-    {
-        <div class="row">
-            <div class="col-2">
-                @Html.DisplayFor(model => setList.Set_List_No)
-            </div>
-            <div class="col-5">
-                @Html.DisplayFor(model => setList.Title)
-            </div>
-            <div class="col-5">
-                @Html.DisplayFor(model => setList.Note)
-            </div>
-        </div>
-    }
-
+    <table class="table">
+        <thead>
+            <tr >
+                <th class="set-list-number"><i>曲順</i></th>
+                <th class="set-list-title"><i>曲名</i></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var setList in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => setList.Set_List_No)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => setList.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => setList.Note)
+                    </td>
+                </tr>
+            }
+    </table>
 }

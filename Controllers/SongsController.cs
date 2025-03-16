@@ -74,6 +74,7 @@ public class SongsController : Controller
             join setList in _context.Set_list
             on liveEvent.Live_Event_Id equals setList.Live_Event_Id
             where setList.Song_Id == id
+            orderby liveEvent.Perform_At
             select new ShowableLiveEvent()
             {
                 Live_Event_Id = liveEvent.Live_Event_Id,
