@@ -95,6 +95,7 @@ public class EventsController : Controller
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
             where linkedList.Abstract_Event_Id == id
+            orderby liveEvent.Perform_At
             select new DetailEvent()
             {
                 Live_event_id = liveEvent.Live_Event_Id,
