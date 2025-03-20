@@ -1,13 +1,11 @@
 ﻿@model IEnumerable<fanaticServe.Dto.ShowableLiveEvent>
 
-@if (Model != null)
+@if (Model != null && Model.Count() > 0)
 {
+    var f = Model.First();
     <div class="card">
         <div class="card-header">この曲を歌唱したイベント</div>
         <div class="card-body">
-            @if (Model != null)
-            {
-                var f = Model.First();
                 <table class="table">
                     <thead>
                         <tr>
@@ -29,7 +27,6 @@
                         }
                     </tbody>
                 </table>
-            }
         </div>
     </div>
 }

@@ -1,41 +1,38 @@
 ﻿@model IEnumerable<fanaticServe.Dto.ShowableAlbum>
 
-@if (Model != null)
+@if (Model != null && Model.Count() > 0)
 {
+    var f = Model.First();
     <div class="card">
         <div class="card-header">この曲を収録しているアルバム</div>
         <div class="card-body">
-            @if (Model != null)
-            {
-                var f = Model.First();
-                <table class="table">
-                    <thead>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(m => f.Release_on)</th>
+                        <td>@Html.DisplayNameFor(m => f.Media)</td>
+                        <td>@Html.DisplayNameFor(m => f.Title)</td>
+                        <td>@Html.DisplayNameFor(m => f.Track_No)</td>
+                        <td>@Html.DisplayNameFor(m => f.Track_Title)</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var album in Model)
+                    {
                         <tr>
-                            <th>@Html.DisplayNameFor(m => f.Release_on)</th>
-                            <td>@Html.DisplayNameFor(m => f.Media)</td>
-                            <td>@Html.DisplayNameFor(m => f.Title)</td>
-                            <td>@Html.DisplayNameFor(m => f.Track_No)</td>
-                            <td>@Html.DisplayNameFor(m => f.Track_Title)</td>
+                            <td>@Html.DisplayFor(m => album.Release_on)</td>
+                            <td>@Html.DisplayFor(m => album.Media)</td>
+                            <td>
+                                <a asp-controller="Albums" asp-action="Detail" asp-route-id="@album.Album_id">
+                                    @Html.DisplayFor(m => album.Title)
+                                </a>
+                            </td>
+                            <td>@Html.DisplayFor(m => album.Track_No)</td>
+                            <td>@Html.DisplayFor(m => album.Track_Title)</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var album in Model)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(m => album.Release_on)</td>
-                                <td>@Html.DisplayFor(m => album.Media)</td>
-                                <td>
-                                    <a asp-controller="Albums" asp-action="Detail" asp-route-id="@album.Album_id">
-                                        @Html.DisplayFor(m => album.Title)
-                                    </a>
-                                </td>
-                                <td>@Html.DisplayFor(m => album.Track_No)</td>
-                                <td>@Html.DisplayFor(m => album.Track_Title)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 }

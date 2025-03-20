@@ -51,8 +51,7 @@ public class SongsController : Controller
             on album.Album_Id equals track.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on album.Media_Type equals media.Media_Type
             where track.Song_Id == id
-            orderby album.Release_On
-            
+            orderby album.Release_On            
             select new ShowableAlbum()
             {
                 Album_id = album.Album_Id,
@@ -71,7 +70,7 @@ public class SongsController : Controller
         song.LiveEvents =
             await (
             from liveEvent in _context.LiveEvents
-            join setList in _context.Set_list
+            join setList in _context.Set_list.DefaultIfEmpty()
             on liveEvent.Live_Event_Id equals setList.Live_Event_Id
             where setList.Song_Id == id
             orderby liveEvent.Perform_At
