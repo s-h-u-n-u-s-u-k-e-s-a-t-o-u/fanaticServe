@@ -17,8 +17,41 @@ public class SongsController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var songs = _context.Songs;
-        return View(await songs.OrderBy(s => s.Kana).ToArrayAsync());
+        var songs = await (
+            _context.Songs
+            .Select(song => new ShowableSong()
+            {
+                Song_Id = song.Song_Id,
+                Title = song.Title,
+                Kana = song.Kana
+            })
+            ).ToListAsync();
+
+        foreach (var song in songs)
+        {
+            var setlist = await (
+                 _context.Set_list
+                .Where(sl => sl.Song_Id == song.Song_Id)
+                .Join(
+                     _context.LiveEvents,
+                    sl => sl.Live_Event_Id,
+                    le => le.Live_Event_Id,
+                    (sl, le) => new { le.Perform_At, le.Title })
+                .OrderByDescending(sl => sl.Perform_At)
+                ).ToListAsync();
+
+            if (setlist != null && setlist.Count > 0)
+            {
+                song.Count = setlist.Count;
+                var rec = setlist
+                    .Select(r => new { r.Perform_At, r.Title })
+                    .First();
+                song.EventTitle = rec.Title;
+                song.LastPeformAt = rec.Perform_At;
+            }
+        }
+
+        return View(songs.OrderBy(s => s.Kana));
     }
 
     [HttpGet]
@@ -51,7 +84,7 @@ public class SongsController : Controller
             on album.Album_Id equals track.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on album.Media_Type equals media.Media_Type
             where track.Song_Id == id
-            orderby album.Release_On            
+            orderby album.Release_On
             select new ShowableAlbum()
             {
                 Album_id = album.Album_Id,
@@ -60,10 +93,10 @@ public class SongsController : Controller
                 DetailTitle = album.Title,
                 Release_on = album.Release_On,
                 Media = media.Name ?? "",
-                Track_No= track.Track_No,
-                Track_Title=track.Title
-            }).OrderBy(a=>a.Release_on)
-            .ThenBy(suba=>suba.Code)
+                Track_No = track.Track_No,
+                Track_Title = track.Title
+            }).OrderBy(a => a.Release_on)
+            .ThenBy(suba => suba.Code)
             .ThenBy(suba => suba.Track_No)
             .ToArrayAsync();
 
