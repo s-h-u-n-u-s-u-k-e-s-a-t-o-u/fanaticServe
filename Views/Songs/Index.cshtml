@@ -1,4 +1,4 @@
-﻿@model IEnumerable<fanaticServe.Models.Song>
+﻿@model IEnumerable<fanaticServe.Dto.ShowableSong>
 
 @{
     ViewData["Title"] = "楽曲一覧";
@@ -17,6 +17,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.Kana)
             </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Count)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastPeformAt)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +37,16 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem =>  item.Kana)
-            </td>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastPeformAt)
+                </td>
         </tr>
 }
     </tbody>
