@@ -98,6 +98,20 @@ var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
 
 (この記述の前であること →  var app = builder.Build();)
 
+# DBがアイドル状態になる問題
+
+接続の回復性
+https://learn.microsoft.com/ja-jp/ef/core/miscellaneous/connection-resiliency
+
+options.UseSqlServer() の引数でリトライするよう指定する。
+
+``` c# asp.net core
+    services.AddDbContext<PicnicContext>(
+        options => options.UseSqlServer(
+            "<connection string>",
+            providerOptions => providerOptions.EnableRetryOnFailure()));
+```
+
 # Sqlserver データローダー bcp
 
 ## ファイルエクスポートする場合
