@@ -8,8 +8,6 @@
 - カナ kana nverchar(256) カタカナのみ
 - 備考 note nvarchar(max)
 
-NEWID() 関数
-
 ## ERダイアグラム
 
 ```mermaid

@@ -15,7 +15,7 @@ builder.Configuration.AddEnvironmentVariables(prefix: "SQLCONNSTR_SSSWare_");
 var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_SSSWare_ConnectionStrings__DefaultConnection");
 
 builder.Services.AddDbContext<FanaticServeContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure()));
 
 // データベース例外フィルター
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -39,3 +39,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
