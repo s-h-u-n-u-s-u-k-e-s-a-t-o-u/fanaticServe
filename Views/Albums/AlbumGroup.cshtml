@@ -11,10 +11,15 @@
 
 @if (Model.Albums != null)
 {
-    foreach(var album in Model.Albums) {
-        <div>
-            <a asp-action="Detail" asp-route-id="@album.Album_id">@Html.DisplayFor(modelItem => album.Title)</a>
-        </div>        
-        @await Html.PartialAsync("_DetailAlbumView", album)
-    }    
+    foreach (var album in Model.Albums)
+    {
+        <div class="card">
+            <div class="card-header">
+                <a asp-action="Detail" asp-route-id="@album.Album_id">@Html.DisplayFor(model => album.Title)</a>
+            </div>
+            <div class="card-body">
+                @await Html.PartialAsync("_DetailAlbumView", album)
+            </div> 
+        </div>
+    }
 }

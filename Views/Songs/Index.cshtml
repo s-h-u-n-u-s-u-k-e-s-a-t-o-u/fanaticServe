@@ -4,9 +4,17 @@
     ViewData["Title"] = "楽曲一覧";
 }
 
+@section Styles {
+    <style>
+        .ruby {
+            font-size: 9pt;
+        }
+    </style> 
+}
+
 <h1>@ViewData["Title"]</h1>
 
-@Model.Count()件の楽曲があります。
+@Model.Count()曲の楽曲があります。
 
 <table class="table">
     <thead>
@@ -14,10 +22,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Kana)
-            </th>
-
             <th>
                 @Html.DisplayNameFor(model => model.Count)
             </th>
@@ -33,16 +37,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                    <a asp-action="detail" asp-route-id="@item.Song_Id">@Html.DisplayFor(modelItem => item.Title)</a>                
+                    <ruby>
+                        <a asp-action="detail" asp-route-id="@item.Song_Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                        <rt><span class="ruby">@Html.DisplayFor(modelItem => item.Kana)</span></rt>
+                        </ruby>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem =>  item.Kana)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Count)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EventTitle)
+                    <a asp-action="detail" asp-controller="Events" asp-route-id="@item.LiveEventID"> @Html.DisplayFor(modelItem => item.EventTitle)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.LastPeformAt)

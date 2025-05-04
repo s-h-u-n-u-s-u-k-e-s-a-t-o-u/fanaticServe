@@ -105,7 +105,7 @@ public class EventsController : Controller
             }
             ).ToListAsync();
 
-        if (eventGroup.LiveEvents != null && eventGroup.LiveEvents.Count() > 0)
+        if (eventGroup.LiveEvents != null && eventGroup.LiveEvents.Any())
         {
             eventGroup.Perform_on = eventGroup.LiveEvents.Min(e => e.Perform_at);
 
@@ -148,7 +148,7 @@ public class EventsController : Controller
                 }
                 ).ToListAsync();
 
-            if (article.LiveEvents != null && article.LiveEvents.Count() > 0)
+            if (article.LiveEvents != null && article.LiveEvents.Any())
             {
                 article.Perform_on = article.LiveEvents.Min(e => e.Perform_at);
                 foreach (var liveEvent in article.LiveEvents)

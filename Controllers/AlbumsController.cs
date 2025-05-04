@@ -103,7 +103,7 @@ public class AlbumsController : Controller
             }
         }
 
-        return View(articles);
+        return View(articles.OrderBy(item=>item.Release_On));
     }
 
     [HttpGet]
