@@ -122,19 +122,24 @@ public class AlbumsController : Controller
         var album =
             await (
             from lk in _context.Abstract_album_links
-            join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
-            join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
-            join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
+            join alb in _context.Albums 
+            on lk.Album_Id equals alb.Album_Id
             where album_id.Equals(lk.Album_Id)
             orderby alb.Release_On
+            join label in _context.Labels
+            on alb.Label_Id equals label.Label_Id into joinedTable1
+            from jt1 in joinedTable1.DefaultIfEmpty()
+            join media in _context.MediaTypes
+            on alb.Media_Type equals media.Media_Type into joinedTable2
+            from jt2 in joinedTable2.DefaultIfEmpty()
             select new DetailAlbum()
             {
                 Album_id = alb.Album_Id,
                 Title = alb.Title,
                 Code = alb.Code,
                 Release_on = alb.Release_On,
-                Label = label.Name ?? "",
-                Media = media.Name ?? ""
+                Label = jt1.Name ?? "",
+                Media = jt2.Name ?? ""
             }
             ).FirstOrDefaultAsync();
 
@@ -198,19 +203,22 @@ public class AlbumsController : Controller
             article.Albums =
                 await (
                 from lk in _context.Abstract_album_links
-                join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
-                join label in _context.Labels.DefaultIfEmpty() on alb.Label_Id equals label.Label_Id
-                join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
+                join alb in _context.Albums 
+                on lk.Album_Id equals alb.Album_Id
                 where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
                 orderby alb.Release_On
+                join label in _context.Labels on alb.Label_Id equals label.Label_Id into joinedTable1
+                from jt1 in joinedTable1.DefaultIfEmpty()
+                join media in _context.MediaTypes on alb.Media_Type equals media.Media_Type into joinedTable2
+                from jt2 in joinedTable2.DefaultIfEmpty()
                 select new DetailAlbum()
                 {
                     Album_id = alb.Album_Id,
                     Title = alb.Title,
                     Code = alb.Code,
                     Release_on = alb.Release_On,
-                    Label = label.Name ?? "",
-                    Media = media.Name ?? ""
+                    Label = jt1.Name ?? "",
+                    Media = jt2.Name ?? ""
                 }).ToListAsync();
 
             // アルバムにトラック情報を紐づけ
