@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/fanaticServe.styles.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="base-bg-color">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm  navbar-light bg-white border-bottom box-shadow mb-3">
         </nav>
@@ -37,7 +37,11 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            <div class="article-outer">
+                <div class="article-inner">
+                    @RenderBody()
+                </div>
+            </div>
         </main>
     </div>
 
