@@ -2,10 +2,9 @@
 @model IEnumerable<fanaticServe.Dto.ArticleEvent>
 
 @{
-    ViewData["Title"] = "Event/Live 一覧";
+    ViewData["Title"] = "セットリスト";
 }
 <h1>@ViewData["Title"]</h1>
-<a asp-action="index">一覧表形式</a>
 
 @foreach (ArticleEvent abs in Model)
 {

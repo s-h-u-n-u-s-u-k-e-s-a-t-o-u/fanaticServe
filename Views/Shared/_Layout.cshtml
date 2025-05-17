@@ -13,50 +13,38 @@
 <body class="base-bg-color">
     <div class="container">
         <div class="row">
-            <div class="col-2">
-
-                <div class="container">
-                    <div class="row">
-                        <div class="article-outer ">
-                            <div class="article-inner">
-                                <h1>
-                                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Configuration["SiteTitle"]</a>
-                                </h1>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="article-outer ">
-                            <div class="article-inner">
-                                <ul>
-                                    <li>
-                                        <a asp-controller="Songs" asp-action="Index">楽曲一覧</a>
-                                    </li>
-                                    <li>
-                                        リリース
-                                        <ul>
-                                            <li><a asp-controller="Albums" asp-action="Index">一覧</a> </li>
-                                            <li><a asp-controller="Albums" asp-action="Articles">記事形式</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        Event/Live
-                                        <ul>
-                                            <li><a asp-controller="Events" asp-action="Index">一覧</a> </li>
-                                            <li><a asp-controller="Events" asp-action="Articles">記事形式</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+            <div class="col-12">
+                <div class="article-outer ">
+                    <div class="article-inner">
+                        <h1>
+                            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Configuration["SiteTitle"]</a>
+                        </h1>
                     </div>
                 </div>
-
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2" style="padding-right:2px;">
+                <div class="article-outer ">
+                    <div class="article-inner">
+                        <ul>
+                            <li><a asp-controller="Events" asp-action="Articles">セットリスト</a></li>
+                            <li><a asp-controller="Events" asp-action="Index">イベント一覧</a></li>
+                        </ul>
+                        <ul>
+                            <li><a asp-controller="Albums" asp-action="Index">Discography</a> </li>
+                            <li><a asp-controller="Albums" asp-action="Articles">Discography - 収録曲</a></li>
+                        </ul>
+                        <ul>
+                            <li><a asp-controller="Songs" asp-action="Index">楽曲</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="col-10">
                 <main role="main" class="pb-3">
                     <div class="article-outer ">
-                        <div class="article-inner">
+                        <div class="article-inner" style="max-height:720px;overflow-y:scroll;scroll-behavior:auto;">
                             @RenderBody()
                         </div>
                     </div>

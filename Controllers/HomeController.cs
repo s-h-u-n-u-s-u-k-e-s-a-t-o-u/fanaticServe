@@ -20,7 +20,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return Redirect("/Events/Index");
+        return Redirect("/Events/Articles");
 
         //        return View();
     }
