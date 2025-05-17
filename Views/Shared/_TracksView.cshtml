@@ -8,7 +8,7 @@
             <tr>
                 <th><i>トラック</i></th>
                 <th><i>曲名</i></th>
-                <th><i>長さ[秒]</i></th>
+                <!-- <th><i>長さ[秒]</i></th> -->
             </tr>
         </thead>
         <tbody>
@@ -19,7 +19,7 @@
                     <td>
                         <a asp-controller="songs" asp-action="detail" asp-route-id="@track.Song_Id">@Html.DisplayFor(modelItem => track.Title)</a>
                     </td>
-                    <td>@Html.DisplayFor(modelItem => track.Length)</td>
+                    <!-- <td>@Html.DisplayFor(modelItem => track.Length)</td> -->
                 </tr>
             }
         </tbody>

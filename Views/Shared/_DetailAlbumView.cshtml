@@ -4,13 +4,23 @@
     <div class="card-header">
         <div class="row">
             <div class="col-3">
-                @Html.DisplayNameFor(modelItem => Model.Code):@Html.DisplayFor(modelItem => Model.Code)
+                @if (!string.IsNullOrEmpty( Model.Code))
+                {
+                    <span>
+                        @Html.DisplayNameFor(modelItem => Model.Code):@Html.DisplayFor(modelItem => Model.Code)
+                    </span>
+                }
             </div>
             <div class="col-3">
                 @Html.DisplayNameFor(modelItem => Model.Release_on):@Html.DisplayFor(modelItem => Model.Release_on)
             </div>
             <div class="col-3">
-                @Html.DisplayNameFor(modelItem => Model.Label):@Html.DisplayFor(modelItem => Model.Label)
+                @if (!string.IsNullOrEmpty(Model.Label))
+                {
+                    <span>
+                        @Html.DisplayNameFor(modelItem => Model.Label):@Html.DisplayFor(modelItem => Model.Label)
+                    </span>
+                }
             </div>
             <div class="col-3">
                 @Html.DisplayNameFor(modelItem => Model.Media):@Html.DisplayFor(modelItem => Model.Media)

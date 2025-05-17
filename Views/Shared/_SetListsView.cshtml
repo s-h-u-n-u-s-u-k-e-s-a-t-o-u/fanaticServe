@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<fanaticServe.Dto.ShowableSetList>
 
-@if (Model != null && Model.Count()>0)
+@if (Model != null && Model.Count() > 0)
 {
     <table class="table">
         <thead>
-            <tr >
+            <tr>
                 <th class="set-list-number"><i>曲順</i></th>
                 <th class="set-list-title"><i>曲名</i></th>
                 <th></th>
@@ -18,7 +18,16 @@
                         @Html.DisplayFor(model => setList.Set_List_No)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => setList.Title)
+                        @if (setList.Song_id == null)
+                        {
+                            @Html.DisplayFor(model => setList.Title)
+                        }
+                        else
+                        {
+                            <a asp-controller="Songs" asp-action="Detail" asp-route-id="@setList.Song_id">
+                                @Html.DisplayFor(model => setList.Title)
+                            </a>
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(model => setList.Note)

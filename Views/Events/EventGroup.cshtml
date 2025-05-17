@@ -6,30 +6,35 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<div>
-    <dl>
-        <dt>
-            @Html.DisplayNameFor(model => model.Note)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Note)
-        </dd>
-    </dl>
-</div>
+@if(!string.IsNullOrEmpty(Model.Note))
+{
+    <div>
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.Note)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Note)
+            </dd>
+        </dl>
+    </div>    
+}
 
 @if (Model.LiveEvents != null)
 {
     foreach (var liveEvent in Model.LiveEvents)
     {
-        <div class="card">
-            <div class="card-header">
-                <a asp-controller="Events" asp-action="detail" asp-route-id="@liveEvent.Live_event_id">
-                    @Html.DisplayFor(model => liveEvent.Title)
-                </a>
+        <article class="article-outer">
+            <div class="card article-inner">
+                <div class="card-header ">
+                    <a asp-controller="Events" asp-action="detail" asp-route-id="@liveEvent.Live_event_id">
+                        @Html.DisplayFor(model => liveEvent.Title)
+                    </a>
+                </div>
+                <div class="card-body">
+                    @await Html.PartialAsync("_DetailEventView", liveEvent)
+                </div>
             </div>
-            <div class="card-body">
-                @await Html.PartialAsync("_DetailEventView", liveEvent)
-            </div>
-        </div>
+        </article>
     }
 }

@@ -13,13 +13,15 @@
 {
     foreach (var album in Model.Albums)
     {
-        <div class="card">
-            <div class="card-header">
-                <a asp-action="Detail" asp-route-id="@album.Album_id">@Html.DisplayFor(model => album.Title)</a>
+        <article class="article-outer">
+            <div class="card article-inner">
+                <div class="card-header">
+                    <a asp-action="Detail" asp-route-id="@album.Album_id">@Html.DisplayFor(model => album.Title)</a>
+                </div>
+                <div class="card-body">
+                    @await Html.PartialAsync("_DetailAlbumView", album)
+                </div>
             </div>
-            <div class="card-body">
-                @await Html.PartialAsync("_DetailAlbumView", album)
-            </div> 
-        </div>
+        </article>
     }
 }
