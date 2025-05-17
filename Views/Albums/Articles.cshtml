@@ -16,7 +16,7 @@
                     <h4><a asp-controller="Albums" asp-action="AlbumGroup" asp-route-id="@abs.Abstract_album_id">@abs.Title</a></h4>
                 </div>
                 <div>    
-                    <span>リリース日</span>:<span>@Html.DisplayFor(model => abs.Release_On)</span>
+                    <span>発売日</span>:<span>@Html.DisplayFor(model => abs.Release_On)</span>
                 </div> 
             </div>
             @if( abs.Albums != null)

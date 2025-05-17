@@ -32,7 +32,7 @@ public class ShowableSong
 
     public Guid? LiveEventID { get; set; }
 
-    [DisplayName("最近歌ったイベント")]
+    [DisplayName("最近歌唱したイベント")]
     public string? EventTitle { get; set; }
 
     [DisplayName("開催日")]

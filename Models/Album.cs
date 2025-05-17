@@ -30,7 +30,7 @@ public partial class Album
     public int Media_Type { get; set; }
 
     /// <summary>
-    /// リリース日
+    /// 発売日
     /// </summary>
     [Column(TypeName = "datetime")]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]

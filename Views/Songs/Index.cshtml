@@ -9,7 +9,7 @@
         .ruby {
             font-size: 9pt;
         }
-    </style> 
+    </style>
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -34,14 +34,15 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
                     <ruby>
                         <a asp-action="detail" asp-route-id="@item.Song_Id">@Html.DisplayFor(modelItem => item.Title)</a>
                         <rt><span class="ruby">@Html.DisplayFor(modelItem => item.Kana)</span></rt>
-                        </ruby>
-            </td>
+                    </ruby>
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Count)
                 </td>
@@ -51,7 +52,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.LastPeformAt)
                 </td>
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
