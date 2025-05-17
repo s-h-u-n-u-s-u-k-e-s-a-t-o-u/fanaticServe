@@ -21,19 +21,30 @@ body {
   margin-bottom: 60px;
 }
 
+.container .row [class*=col-] {
+    margin: 0;
+    padding: 0;
+}
+
 .base-bg-color {
     background-color:#ff63ad;
 }
 
 .article-outer {
-    background-color: #ffffff;
+    background-color:transparent;
+    width: 100%;
+    max-width: 1020px;
+    padding: 1px;
+    margin-bottom:2px;
     border-style: solid;
     border-color: #ffffff;
     border-width: 2px;
-    border-radius: 15px;
+    border-radius: 18px;
 }
 
     .article-outer > .article-inner {
+        width: 100%;
+        padding: 0;
         background-color: #faf4ec;
         border-style: solid;
         border-color: black;
