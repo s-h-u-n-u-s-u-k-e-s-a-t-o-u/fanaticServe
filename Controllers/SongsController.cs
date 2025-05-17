@@ -36,7 +36,7 @@ public class SongsController : Controller
                      _context.LiveEvents,
                     sl => sl.Live_Event_Id,
                     le => le.Live_Event_Id,
-                    (sl, le) => new { le.Perform_At, le.Title })
+                    (sl, le) => new {le.Live_Event_Id,  le.Perform_At, le.Title })
                 .OrderByDescending(sl => sl.Perform_At)
                 ).ToListAsync();
 
@@ -44,8 +44,9 @@ public class SongsController : Controller
             {
                 song.Count = setlist.Count;
                 var rec = setlist
-                    .Select(r => new { r.Perform_At, r.Title })
+                    .Select(r => new {r.Live_Event_Id, r.Perform_At, r.Title })
                     .First();
+                song.LiveEventID = rec.Live_Event_Id;
                 song.EventTitle = rec.Title;
                 song.LastPeformAt = rec.Perform_At;
             }

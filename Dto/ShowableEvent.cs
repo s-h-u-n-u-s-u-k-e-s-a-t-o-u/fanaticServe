@@ -37,9 +37,9 @@ public class ShowableEvent
     public string? Note { get; set; }
 
     /// <summary>
-    /// 開演時間
+    /// 開催日時
     /// </summary>
-    [DisplayName("開演時間")]
+    [DisplayName("開催日時")]
     [DisplayFormat(DataFormatString = Format.DateTimeFormat)]
     public DateTime? Perform_at { get; set; }
 

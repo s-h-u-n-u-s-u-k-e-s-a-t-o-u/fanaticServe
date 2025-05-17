@@ -7,12 +7,16 @@
 
 <dv>カナ:@Html.DisplayFor(m => m.Kana)</dv>
 
-<div>
-    @await Html.PartialAsync("_albumsView", Model.Albums)
+<div class="article-outer">
+    <div class="article-inner">
+        @await Html.PartialAsync("_albumsView", Model.Albums)
+    </div>
 </div>
 
-<div>
-    @await Html.PartialAsync("_ShowableLiveEventView", Model.LiveEvents)
+<div class="article-outer">
+    <div class="article-inner">
+        @await Html.PartialAsync("_ShowableLiveEventView", Model.LiveEvents)
+    </div>
 </div>
 
 

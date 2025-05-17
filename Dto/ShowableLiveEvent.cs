@@ -25,9 +25,9 @@ public class ShowableLiveEvent
     public string? Place { get; set; }
 
     /// <summary>
-    /// 開演日時
+    /// 開催日時
     /// </summary>
-    [DisplayName("開演日時")]
+    [DisplayName("開催日時")]
     [DisplayFormat(DataFormatString = Format.DateTimeFormat)]
     public DateTime? Perform_At { get; set; }
 }

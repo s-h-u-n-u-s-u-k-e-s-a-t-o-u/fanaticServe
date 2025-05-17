@@ -38,7 +38,6 @@ public class ArticleAlbum
                 try
                 {
                     this.Release_On = value.Min(a => a.Release_on);
-
                 }
                 catch(Exception e)
                 {
