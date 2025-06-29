@@ -3,9 +3,7 @@
     ViewData["Title"] = Model.Title;
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<dv>カナ:@Html.DisplayFor(m => m.Kana)</dv>
+<h1><ruby>@ViewData["Title"]<rt><span class="ruby">@Html.DisplayFor(m => m.Kana)</span></rt></ruby></h1>
 
 <div class="article-outer">
     <div class="article-inner">
