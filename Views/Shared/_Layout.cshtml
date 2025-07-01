@@ -7,24 +7,24 @@
     <title>@ViewData["Title"] - @Configuration["SiteTitle"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/fanaticServe.styles.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="base-bg-color">
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="col-sm-12">
                 <div class="article-outer ">
                     <div class="article-inner">
                         <h1>
                             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@Configuration["SiteTitle"]</a>
                         </h1>
+                        <div>情報は個人で収集したもので、正確さを保証するものではありません。</div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-2" style="padding-right:2px;">
+            <div class="col-sm-2" style="padding-right:2px;">
                 <div class="article-outer ">
                     <div class="article-inner">
                         <ul>
@@ -37,14 +37,15 @@
                         </ul>
                         <ul>
                             <li><a asp-controller="Songs" asp-action="Index">楽曲</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="ReleaseNote">ReleaseNote</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div class="col-10">
+            <div class="col-sm-10">
                 <main role="main" class="pb-3">
                     <div class="article-outer ">
-                        <div class="article-inner" style="max-height:720px;overflow-y:scroll;scroll-behavior:auto;">
+                        <div class="article-inner">
                             @RenderBody()
                         </div>
                     </div>
@@ -52,11 +53,6 @@
             </div>
         </div>
     </div>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <a asp-area="" asp-controller="Home" asp-action="ReleaseNote">ReleaseNote</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

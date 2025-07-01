@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<fanaticServe.Dto.ShowableEvent>
 
 @{
-    ViewData["Title"] = "イベント 一覧"; 
+    ViewData["Title"] = "イベント 一覧";
     String preTitle = "";
 }
 
 <h1>@ViewData["Title"]</h1>
 <table class="table">
-    <thead>
+    <thead class="only-pc">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Perform_at)
+                    @Html.DisplayNameFor(model => model.Perform_at)
             </th>
             <th>
             </th>
@@ -25,7 +25,8 @@
                     @Html.DisplayFor(modelItem => item.Perform_at)
                 </td>
                 <td>
-                    @if (!preTitle.Equals(item.Title)){
+                    @if (!preTitle.Equals(item.Title))
+                    {
                         <a asp-action="EventGroup" asp-route-id="@item.Abstract_event_id">
                             @Html.DisplayFor(modelItem => item.Title)
                         </a>
