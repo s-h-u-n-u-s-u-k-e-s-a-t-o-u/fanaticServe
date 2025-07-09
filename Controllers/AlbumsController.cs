@@ -25,7 +25,7 @@ public class AlbumsController : Controller
             join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
-            orderby alb.Release_On
+            orderby  alb.Release_On ascending, alb.Title ascending
             select new ShowableAlbum()
             {
                 Abstract_album_id = absal.Abstract_Album_Id,
