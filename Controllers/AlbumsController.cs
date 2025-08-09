@@ -25,7 +25,7 @@ public class AlbumsController : Controller
             join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
-            orderby alb.Release_On
+            orderby  alb.Release_On ascending, alb.Title ascending
             select new ShowableAlbum()
             {
                 Abstract_album_id = absal.Abstract_Album_Id,
@@ -72,15 +72,20 @@ public class AlbumsController : Controller
 
         foreach (var article in articles)
         {
-            article.Albums =
-            await (
+            article.Albums = await (
                 from absAlbumLink in _context.Abstract_album_links
+
                 join album in _context.Albums
                 on absAlbumLink.Album_Id equals album.Album_Id
-                join media in _context.MediaTypes.DefaultIfEmpty()
-                on album.Media_Type equals media.Media_Type
-                join l in _context.Labels.DefaultIfEmpty()
-                on album.Label_Id equals l.Label_Id
+
+                join media in _context.MediaTypes
+                on album.Media_Type equals media.Media_Type into mt
+                from mediaType in mt.DefaultIfEmpty()
+
+                join l in _context.Labels
+                on album.Label_Id equals l.Label_Id into lb
+                from labelName in lb.DefaultIfEmpty()
+
                 where absAlbumLink.Abstract_Album_Id.Equals(article.Abstract_album_id)
                 orderby album.Release_On
                 select new DetailAlbum()
@@ -89,10 +94,10 @@ public class AlbumsController : Controller
                     Title = album.Title,
                     Code = album.Code,
                     Release_on = album.Release_On,
-                    Label = l.Name ?? "",
-                    Media = media.Name ?? "",
+                    Label = labelName.Name,
+                    Media = mediaType.Name
                 }
-           ).ToListAsync();
+                ).ToListAsync();
 
             if (article.Albums != null)
             {
@@ -103,11 +108,12 @@ public class AlbumsController : Controller
             }
         }
 
-        return View(articles.OrderBy(item=>item.Release_On));
+        var ordered = articles.OrderBy(item => item.Release_On);
+        return View(ordered);
     }
 
     [HttpGet]
-    public async Task< IActionResult> AlbumGroup(Guid? id)
+    public async Task<IActionResult> AlbumGroup(Guid? id)
     {
         if (id == null)
         {
@@ -122,7 +128,7 @@ public class AlbumsController : Controller
         var album =
             await (
             from lk in _context.Abstract_album_links
-            join alb in _context.Albums 
+            join alb in _context.Albums
             on lk.Album_Id equals alb.Album_Id
             where album_id.Equals(lk.Album_Id)
             orderby alb.Release_On
@@ -203,7 +209,7 @@ public class AlbumsController : Controller
             article.Albums =
                 await (
                 from lk in _context.Abstract_album_links
-                join alb in _context.Albums 
+                join alb in _context.Albums
                 on lk.Album_Id equals alb.Album_Id
                 where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
                 orderby alb.Release_On

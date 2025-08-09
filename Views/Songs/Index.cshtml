@@ -3,15 +3,6 @@
 @{
     ViewData["Title"] = "楽曲";
 }
-
-@section Styles {
-    <style>
-        .ruby {
-            font-size: 9pt;
-        }
-    </style>
-}
-
 <h1>@ViewData["Title"]</h1>
 
 @Model.Count()曲の楽曲があります。
@@ -40,7 +31,7 @@
                 <td>
                     <ruby>
                         <a asp-action="detail" asp-route-id="@item.Song_Id">@Html.DisplayFor(modelItem => item.Title)</a>
-                        <rt><span class="ruby">@Html.DisplayFor(modelItem => item.Kana)</span></rt>
+                        <rt class="only-pc"><span class="ruby">@Html.DisplayFor(modelItem => item.Kana)</span></rt>
                     </ruby>
                 </td>
                 <td>
