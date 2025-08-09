@@ -109,7 +109,6 @@ public class AlbumsController : Controller
         }
 
         var ordered = articles.OrderBy(item => item.Release_On);
-
         return View(ordered);
     }
 

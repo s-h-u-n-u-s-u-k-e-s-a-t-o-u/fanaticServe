@@ -2,14 +2,14 @@ html {
     font-size: 11px;
 }
 
-/* 769pxˆÈã‚Ì‚Æ‚« */
+/* 769pxï¿½Èï¿½Ì‚Æ‚ï¿½ */
 @media screen and (min-width: 769px) {
     .only-sp {
         display: none;
     }
 }
 
-/* 768pxˆÈ‰º‚Ì‚Æ‚« */
+/* 768pxï¿½È‰ï¿½ï¿½Ì‚Æ‚ï¿½ */
 @media screen and (max-width: 768px) {
     .only-pc {
         display: none;

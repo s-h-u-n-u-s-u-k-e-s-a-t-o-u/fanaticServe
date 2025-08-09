@@ -7,11 +7,14 @@
     <title>@ViewData["Title"] - @Configuration["SiteTitle"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/fanaticServe.styles.css" asp-append-version="true" />
+
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="base-bg-color">
     <div class="container">
         <div class="row">
+
             <div class="col-sm-12">
                 <div class="article-outer ">
                     <div class="article-inner">
