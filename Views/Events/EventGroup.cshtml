@@ -6,8 +6,12 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+<a asp-action="EventGroup" asp-route-id="@Model.Abstract_event_id" asp-route-sortOrder="@ViewData["GroupDateSortParm"]">開催日で並び替え</a>
+        |
+<a asp-action="EventGroup" asp-route-id="@Model.Abstract_event_id" asp-route-sortOrder="@ViewData["GroupTitleSortParm"]"> タイトルで並び替え </a>
 @if(!string.IsNullOrEmpty(Model.Note))
 {
+
     <div>
         <dl>
             <dt>

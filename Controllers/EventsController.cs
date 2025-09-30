@@ -90,12 +90,16 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> EventGroup(Guid? id)
+    public async Task<IActionResult> EventGroup(Guid? id, string sortOrder)
     {
         if (id == null)
         {
             return NotFound();
         }
+
+        // ソート条件の初期化
+        ViewData["GroupDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
         var eventGroup = await (
             from absEvent in _context.Abstract_events
@@ -106,6 +110,7 @@ public class EventsController : Controller
                 Title = absEvent.Title
             }
             ).FirstOrDefaultAsync();
+
         if (eventGroup == null)
         {
             return NotFound();
@@ -116,7 +121,6 @@ public class EventsController : Controller
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
             where linkedList.Abstract_Event_Id == id
-            orderby liveEvent.Perform_At
             select new DetailEvent()
             {
                 Live_event_id = liveEvent.Live_Event_Id,
@@ -133,6 +137,26 @@ public class EventsController : Controller
             foreach (var liveEvent in eventGroup.LiveEvents)
             {
                 liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
+            }
+        }
+
+        if (eventGroup.LiveEvents != null)
+        {
+            switch (sortOrder)
+            {
+                case "title":
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderBy(e => e.Title);
+                    break;
+                case "date_desc":
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderByDescending(e => e.Perform_at);
+                    break;
+                case "title_desc":
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderByDescending(e => e.Title);
+
+                    break;
+                default:
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderBy(e => e.Perform_at);
+                    break;
             }
         }
         return View(eventGroup);
