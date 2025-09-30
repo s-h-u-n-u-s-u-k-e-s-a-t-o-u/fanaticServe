@@ -6,6 +6,9 @@
 }
 <h1>@ViewData["Title"]</h1>
 
+<a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleDateSortParm"]">開催日で並び替え</a> |
+<a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleTitleSortParm"]">タイトルで並び替え</a>
+
 @foreach (ArticleEvent abs in Model)
 {
     <article class="abs-album article-outer">

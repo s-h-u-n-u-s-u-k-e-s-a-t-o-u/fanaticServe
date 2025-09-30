@@ -3,6 +3,7 @@ using fanaticServe.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace fanaticServe.Controllers;
 
@@ -16,15 +17,18 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string sortOrder)
     {
+        // ソート条件の初期化
+        ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["TitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
+
         var events =
             from absEvent in _context.Abstract_events
             join link in _context.Abstract_event_links
             on absEvent.Abstract_Event_Id equals link.Abstract_Event_Id
             join liveEvent in _context.LiveEvents
             on link.Event_Id equals liveEvent.Live_Event_Id
-            orderby liveEvent.Perform_At
             select new ShowableEvent()
             {
                 Abstract_event_id = absEvent.Abstract_Event_Id,
@@ -33,6 +37,23 @@ public class EventsController : Controller
                 DetailTitle = liveEvent.Title,
                 Perform_at = liveEvent.Perform_At
             };
+
+        // ソート条件に応じて並び替え
+        switch (sortOrder)
+        {
+            case "date_desc":
+                events = events.OrderByDescending(e => e.Perform_at);
+                break;
+            case "title":
+                events = events.OrderBy(e => e.DetailTitle);
+                break;
+            case "title_desc":
+                events = events.OrderByDescending(e => e.DetailTitle);
+                break;
+            default:
+                events = events.OrderBy(e => e.Perform_at);
+                break;
+        }
 
         return View(await events.ToListAsync());
     }
@@ -69,12 +90,16 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> EventGroup(Guid? id)
+    public async Task<IActionResult> EventGroup(Guid? id, string sortOrder)
     {
         if (id == null)
         {
             return NotFound();
         }
+
+        // ソート条件の初期化
+        ViewData["GroupDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
         var eventGroup = await (
             from absEvent in _context.Abstract_events
@@ -85,6 +110,7 @@ public class EventsController : Controller
                 Title = absEvent.Title
             }
             ).FirstOrDefaultAsync();
+
         if (eventGroup == null)
         {
             return NotFound();
@@ -95,7 +121,6 @@ public class EventsController : Controller
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
             where linkedList.Abstract_Event_Id == id
-            orderby liveEvent.Perform_At
             select new DetailEvent()
             {
                 Live_event_id = liveEvent.Live_Event_Id,
@@ -114,12 +139,36 @@ public class EventsController : Controller
                 liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
             }
         }
+
+        if (eventGroup.LiveEvents != null)
+        {
+            switch (sortOrder)
+            {
+                case "title":
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderBy(e => e.Title);
+                    break;
+                case "date_desc":
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderByDescending(e => e.Perform_at);
+                    break;
+                case "title_desc":
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderByDescending(e => e.Title);
+
+                    break;
+                default:
+                    eventGroup.LiveEvents = eventGroup.LiveEvents.OrderBy(e => e.Perform_at);
+                    break;
+            }
+        }
         return View(eventGroup);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Articles()
+    public async Task<IActionResult> Articles(string sortOrder)
     {
+        // ソート条件の初期化
+        ViewData["ArticleDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["ArticleTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
+
         var articles =
             await (
             from absEvent in _context.Abstract_events
@@ -128,7 +177,8 @@ public class EventsController : Controller
                 Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title
             }
-            ).ToListAsync();
+            ).ToListAsync()
+            ;
 
         // イベント詳細を取得
         foreach (var article in articles)
@@ -158,9 +208,24 @@ public class EventsController : Controller
             }
         }
 
-        return View(
-            (from article in articles orderby article.Perform_on select article).ToArray()
-            );
+        // ソート条件に応じて並び替え
+        switch (sortOrder)
+        {
+            case "date_desc":
+                articles = articles.OrderByDescending(e => e.Perform_on).ToList();
+                break;
+            case "title":
+                articles = articles.OrderBy(e => e.Title).ToList();
+                break;
+            case "title_desc":
+                articles = articles.OrderByDescending(e => e.Title).ToList();
+                break;
+            default:
+                articles = articles.OrderBy(e => e.Perform_on).ToList();
+                break;
+        }
+
+        return View(articles);
     }
 
     private async Task<List<ShowableSetList>> GetSelList(Guid Live_event_id)
