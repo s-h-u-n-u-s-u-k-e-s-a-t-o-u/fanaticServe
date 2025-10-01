@@ -4,6 +4,10 @@
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<a asp-action="AlbumGroup" asp-route-sortOrder="@ViewData["GroupDateSort"]">発売日で並び替え</a> |
+<a asp-action="AlbumGroup" asp-route-sortOrder="@ViewData["GroupTitleSort"]">タイトルで並び替え</a>
+
 <dl>
     <dt>@Html.DisplayNameFor(model => model.Release_On)</dt>
     <dd>@Html.DisplayFor(model => model.Release_On)</dd>

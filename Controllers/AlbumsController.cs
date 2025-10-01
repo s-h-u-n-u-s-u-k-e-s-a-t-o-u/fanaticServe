@@ -17,15 +17,18 @@ public class AlbumsController : Controller
 
     // GET: Albums
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string sortOrder)
     {
+        // 並び変えの判定
+        ViewData["DateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
+        ViewData["TitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
+
         /// 一覧表形式でアルバム情報を表示する
         var records =
             from absal in _context.Abstract_albums
             join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
-            orderby  alb.Release_On ascending, alb.Title ascending
             select new ShowableAlbum()
             {
                 Abstract_album_id = absal.Abstract_Album_Id,
@@ -35,6 +38,22 @@ public class AlbumsController : Controller
                 Release_on = alb.Release_On,
                 Media = media.Name ?? ""
             };
+
+        switch (sortOrder)
+        {
+            case "title":
+                records = records.OrderBy(r => r.Title);
+                break;
+            case "titleDesending":
+                records = records.OrderByDescending(r => r.Title);
+                break;
+            case "dateDesending":
+                records = records.OrderByDescending(r => r.Release_on);
+                break;
+            default:
+                records = records.OrderBy(r => r.Release_on);
+                break;
+        }
 
         return View(await records.ToListAsync());
     }
@@ -58,8 +77,12 @@ public class AlbumsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Articles()
+    public async Task<IActionResult> Articles(string sortOrder)
     {
+        // 並び変えの判定
+        ViewData["ArticleDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
+        ViewData["ArticleTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
+
         var articles =
             await (
             from absAlbum in _context.Abstract_albums
@@ -108,19 +131,60 @@ public class AlbumsController : Controller
             }
         }
 
-        var ordered = articles.OrderBy(item => item.Release_On);
-        return View(ordered);
+        switch (sortOrder)
+        {
+            case "title":
+                articles = articles.OrderBy(r => r.Title).ToList();
+                break;
+            case "titleDesending":
+                articles = articles.OrderByDescending(r => r.Title).ToList();
+                break;
+            case "dateDesending":
+                articles = articles.OrderByDescending(r => r.Release_On).ToList();
+                break;
+            default:
+                articles = articles.OrderBy(r => r.Release_On).ToList();
+                break;
+        }
+        return View(articles);
     }
 
     [HttpGet]
-    public async Task<IActionResult> AlbumGroup(Guid? id)
+    public async Task<IActionResult> AlbumGroup(Guid? id, string sortOrder)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        return View(await GetArticleAlbum(id.Value));
+        // 並び変えの判定
+        ViewData["GroupDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
+        ViewData["GroupTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
+
+        var article = await GetArticleAlbum(id.Value);
+
+        if (article != null)
+        {
+            switch (sortOrder)
+            {
+                case "titleDesending":
+                    article.Albums = article.Albums?.OrderByDescending(r => r.Title);
+                    break;
+
+                case "title":
+                    article.Albums = article.Albums?.OrderBy(r => r.Title);
+                    break;
+
+                case "dateDesending":
+                    article.Albums = article.Albums?.OrderByDescending(r => r.Release_on);
+                    break;
+
+                default:
+                    article.Albums = article.Albums?.OrderBy(r => r.Release_on);
+                    break;
+            }
+        }
+        return View(article);
     }
 
     private async Task<DetailAlbum?> GetDetailAlbum(Guid album_id)
@@ -212,7 +276,6 @@ public class AlbumsController : Controller
                 join alb in _context.Albums
                 on lk.Album_Id equals alb.Album_Id
                 where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
-                orderby alb.Release_On
                 join label in _context.Labels on alb.Label_Id equals label.Label_Id into joinedTable1
                 from jt1 in joinedTable1.DefaultIfEmpty()
                 join media in _context.MediaTypes on alb.Media_Type equals media.Media_Type into joinedTable2

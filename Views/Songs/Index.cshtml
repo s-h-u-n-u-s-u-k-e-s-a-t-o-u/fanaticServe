@@ -6,6 +6,10 @@
 <h1>@ViewData["Title"]</h1>
 
 @Model.Count()曲の楽曲があります。
+<div>
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSort"]">タイトルで並び替え</a>|
+    <a asp-action="Index" asp-route-sortOrder="@ViewData["CountSort"]">歌唱回数で並び替え</a>
+</div>
 
 <table class="table">
     <thead>
