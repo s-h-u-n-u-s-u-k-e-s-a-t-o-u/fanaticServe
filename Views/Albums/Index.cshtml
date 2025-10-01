@@ -6,6 +6,10 @@
 }
 
 <h1>@ViewData["Title"] </h1>
+
+<a asp-action="Index" asp-route-sortOrder="@ViewData["DateSort"]">発売日で並び替え</a> |
+<a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSort"]">タイトルで並び替え</a>
+
 <table class="table">
     <thead>
         <tr>
