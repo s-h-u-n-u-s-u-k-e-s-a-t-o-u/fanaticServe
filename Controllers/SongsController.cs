@@ -15,8 +15,11 @@ public class SongsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string sortOrder)
     {
+        ViewData["TitleSort"] = String.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
+        ViewData["CountSort"] = sortOrder == "Count" ? "Count_desc" : "Count";
+
         var songs = await (
             _context.Songs
             .Select(song => new ShowableSong()
@@ -36,7 +39,7 @@ public class SongsController : Controller
                      _context.LiveEvents,
                     sl => sl.Live_Event_Id,
                     le => le.Live_Event_Id,
-                    (sl, le) => new {le.Live_Event_Id,  le.Perform_At, le.Title })
+                    (sl, le) => new { le.Live_Event_Id, le.Perform_At, le.Title })
                 .OrderByDescending(sl => sl.Perform_At)
                 ).ToListAsync();
 
@@ -44,7 +47,7 @@ public class SongsController : Controller
             {
                 song.Count = setlist.Count;
                 var rec = setlist
-                    .Select(r => new {r.Live_Event_Id, r.Perform_At, r.Title })
+                    .Select(r => new { r.Live_Event_Id, r.Perform_At, r.Title })
                     .First();
                 song.LiveEventID = rec.Live_Event_Id;
                 song.EventTitle = rec.Title;
@@ -52,7 +55,24 @@ public class SongsController : Controller
             }
         }
 
-        return View(songs.OrderBy(s => s.Kana));
+        switch (sortOrder)
+        {
+            case "Count_desc":
+                songs = songs.OrderByDescending(s => s.Count).ToList();
+                break;
+            case "Count":
+                songs = songs.OrderBy(s => s.Count).ToList();
+                break;
+            case "Title_desc":
+                songs = songs.OrderByDescending(s => s.Kana).ToList();
+                break;
+            default:
+                songs = songs.OrderBy(s => s.Kana).ToList();
+                break;
+        }
+
+
+        return View(songs);
     }
 
     [HttpGet]
