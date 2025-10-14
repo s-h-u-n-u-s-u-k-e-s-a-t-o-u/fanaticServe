@@ -67,17 +67,16 @@ public class EventsController : Controller
             return NotFound();
         }
 
-        var liveEvent = await (
-            from le in _context.LiveEvents
-            where le.Live_Event_Id == id
-            select new DetailEvent
+        var liveEvent = await _context.LiveEvents
+            .Where(le => le.Live_Event_Id == id)
+            .Select(le => new DetailEvent
             {
-                Live_event_id = id.Value,
+                Live_event_id = le.Live_Event_Id,
                 Title = le.Title,
                 Place = le.Place,
                 Perform_at = le.Perform_At
-            }
-            ).FirstOrDefaultAsync();
+            })
+            .FirstOrDefaultAsync();
 
         if (liveEvent == null)
         {
@@ -85,6 +84,7 @@ public class EventsController : Controller
         }
 
         liveEvent.SetLists = await GetSelList(id.Value);
+        liveEvent.Note = (await GetLiveEventNote(liveEvent.Live_event_id))?.Note;
 
         return View(liveEvent);
     }
@@ -137,6 +137,7 @@ public class EventsController : Controller
             foreach (var liveEvent in eventGroup.LiveEvents)
             {
                 liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
+                liveEvent.Note = (await GetLiveEventNote(liveEvent.Live_event_id))?.Note;
             }
         }
 
@@ -248,4 +249,10 @@ public class EventsController : Controller
             }
         ).ToListAsync();
     }
+
+    async private Task<Live_Event_Note?> GetLiveEventNote(Guid liveEventId)
+    {
+        return await _context.Live_Event_Notes.SingleOrDefaultAsync(le => le.Live_Event_Id == liveEventId);
+    }
+
 }
