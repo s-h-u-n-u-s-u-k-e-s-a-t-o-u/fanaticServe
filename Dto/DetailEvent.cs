@@ -34,5 +34,7 @@ public class DetailEvent
     /// </summary>
     [DisplayName("セットリスト")]
     public IEnumerable<ShowableSetList>? SetLists { get; set; }
+
+    public string? Note { get; set; }
 }
 

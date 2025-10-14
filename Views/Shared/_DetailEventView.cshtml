@@ -12,6 +12,12 @@
         </div>
     </div>
     <div class="card-body">
+        @if (!String.IsNullOrEmpty(Model.Note))
+        {
+            <div class="row">
+                <div class="col-sm-12">@Model.Note</div>
+            </div>
+        }
         @await Html.PartialAsync("_SetListsView", Model.SetLists)
     </div>
 </div>
