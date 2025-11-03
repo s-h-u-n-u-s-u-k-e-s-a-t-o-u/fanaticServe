@@ -3,8 +3,20 @@
 
 @{
     ViewData["Title"] = "setlist";
+    var currentFilter = ViewData["CurrentFilter"] as string;
+    var currentSort = ViewData["CurrentSort"] as string;
 }
 <h1>@ViewData["Title"]</h1>
+
+<form asp-action="Articles" method="get" class="mb-2">
+    <input type="text" name="searchString" value="@currentFilter" placeholder="タイトルで検索" />
+    <input type="hidden" name="sortOrder" value="@currentSort" />
+    <button type="submit">検索</button>
+    @if (!string.IsNullOrEmpty(currentFilter))
+    {
+        <a asp-action="Articles">クリア</a>
+    }
+</form>
 
 <a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleDateSortParm"]">開催日で並び替え</a> |
 <a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleTitleSortParm"]">タイトルで並び替え</a>

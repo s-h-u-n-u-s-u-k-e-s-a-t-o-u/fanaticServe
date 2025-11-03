@@ -3,6 +3,7 @@ using fanaticServe.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace fanaticServe.Controllers;
 
@@ -17,13 +18,13 @@ public class AlbumsController : Controller
 
     // GET: Albums
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder)
+    public async Task<IActionResult> Index(string sortOrder, string searchString)
     {
         // 並び変えの判定
         ViewData["DateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["TitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
-        /// 一覧表形式でアルバム情報を表示する
+        // 一覧表形式でアルバム情報を表示する
         var records =
             from absal in _context.Abstract_albums
             join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
@@ -38,6 +39,12 @@ public class AlbumsController : Controller
                 Release_on = alb.Release_On,
                 Media = media.Name ?? ""
             };
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            // 部分一致（SQL に翻訳されます）
+            records = records.Where(d => d.DetailTitle.Contains(searchString));
+        }
 
         switch (sortOrder)
         {
@@ -77,7 +84,7 @@ public class AlbumsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Articles(string sortOrder)
+    public async Task<IActionResult> Articles(string sortOrder, string searchString)
     {
         // 並び変えの判定
         ViewData["ArticleDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
@@ -126,9 +133,19 @@ public class AlbumsController : Controller
             {
                 foreach (var album in article.Albums)
                 {
-                    album.Tracks = await GetTracks(album.Album_id);
+                    album.Tracks = await GetTracks(album.Album_id, searchString);
+                }
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    article.Albums = article.Albums.Where(a => a.Tracks != null && a.Tracks.Any());
                 }
             }
+        }
+
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            articles = articles.Where(ar => ar.Albums != null && ar.Albums.Any()).ToList();
         }
 
         switch (sortOrder)
@@ -222,7 +239,7 @@ public class AlbumsController : Controller
         return album;
     }
 
-    private async Task<List<Track>> GetTracks(Guid album_id)
+    private async Task<List<Track>> GetTracks(Guid album_id, String searchString = "")
     {
         var tracks =
             from trk in _context.Tracks
@@ -236,6 +253,12 @@ public class AlbumsController : Controller
                 Length = trk.Length,
                 Song_Id = trk.Song_Id
             };
+
+        if (!String.IsNullOrEmpty(searchString))
+        {
+            tracks = tracks.Where(t => t.Title.Contains(searchString));
+        }
+
         return await tracks.ToListAsync();
     }
 
