@@ -3,7 +3,6 @@ using fanaticServe.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace fanaticServe.Controllers;
 
@@ -164,40 +163,47 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Articles(string sortOrder)
+    public async Task<IActionResult> Articles(string sortOrder, string searchString)
     {
         // ソート条件の初期化
         ViewData["ArticleDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
         ViewData["ArticleTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["CurrentFilter"] = searchString;
 
         var articles =
-            await (
+                        await (
             from absEvent in _context.Abstract_events
             select new ArticleEvent()
             {
                 Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title
-            }
-            ).ToListAsync()
-            ;
+            }).ToListAsync();
 
         // イベント詳細を取得
         foreach (var article in articles)
         {
-            article.LiveEvents = await (
+            var query =
                 from linkedList in _context.Abstract_event_links
                 join liveEvent in _context.LiveEvents
                 on linkedList.Event_Id equals liveEvent.Live_Event_Id
                 where linkedList.Abstract_Event_Id == article.Abstract_event_id
-                orderby liveEvent.Perform_At
                 select new DetailEvent()
                 {
                     Live_event_id = liveEvent.Live_Event_Id,
                     Title = liveEvent.Title,
                     Place = liveEvent.Place,
                     Perform_at = liveEvent.Perform_At
-                }
-                ).ToListAsync();
+                };
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // 部分一致（SQL に翻訳されます）
+                query = query.Where(d => d.Title.Contains(searchString));
+            }
+            query = query.OrderBy(e => e.Perform_at);
+
+            article.LiveEvents = await query.ToListAsync();
 
             if (article.LiveEvents != null && article.LiveEvents.Any())
             {
@@ -205,28 +211,36 @@ public class EventsController : Controller
                 foreach (var liveEvent in article.LiveEvents)
                 {
                     liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
+                    liveEvent.Note = (await GetLiveEventNote(liveEvent.Live_event_id))?.Note;
                 }
             }
         }
 
-        // ソート条件に応じて並び替え
+        var filteredArticles = articles.Where(a => a.LiveEvents != null && a.LiveEvents.Any());
+
+        // 全体の並び替え（記事レベル）
         switch (sortOrder)
         {
             case "date_desc":
-                articles = articles.OrderByDescending(e => e.Perform_on).ToList();
+                //                articles = articles.OrderByDescending(e => e.Perform_on).ToList();
+                filteredArticles = filteredArticles.OrderByDescending(e => e.Perform_on);
                 break;
             case "title":
-                articles = articles.OrderBy(e => e.Title).ToList();
+                //                articles = articles.OrderBy(e => e.Title).ToList();
+                filteredArticles = filteredArticles.OrderBy(e => e.Title);
+
                 break;
             case "title_desc":
-                articles = articles.OrderByDescending(e => e.Title).ToList();
+                //                articles = articles.OrderByDescending(e => e.Title).ToList();
+                filteredArticles = filteredArticles.OrderByDescending(e => e.Title);
                 break;
             default:
-                articles = articles.OrderBy(e => e.Perform_on).ToList();
+                //                articles = articles.OrderBy(e => e.Perform_on).ToList();
+                filteredArticles = filteredArticles.OrderBy(e => e.Perform_on);
                 break;
         }
 
-        return View(articles);
+        return View(filteredArticles);
     }
 
     private async Task<List<ShowableSetList>> GetSelList(Guid Live_event_id)

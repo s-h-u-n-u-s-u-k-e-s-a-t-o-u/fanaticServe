@@ -15,22 +15,29 @@ public class SongsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder)
+    public async Task<IActionResult> Index(string sortOrder, string searchString)
     {
         ViewData["TitleSort"] = String.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
         ViewData["CountSort"] = sortOrder == "Count" ? "Count_desc" : "Count";
 
-        var songs = await (
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["CurrentFilter"] = searchString;
+
+        var songs =
             _context.Songs
             .Select(song => new ShowableSong()
             {
                 Song_Id = song.Song_Id,
                 Title = song.Title,
                 Kana = song.Kana
-            })
-            ).ToListAsync();
+            });
 
-        foreach (var song in songs)
+        if (!String.IsNullOrEmpty(searchString) ){
+            songs = songs.Where(s => s.Title.Contains(searchString) || s.Kana.Contains(searchString));
+        }
+
+        var songList = await songs.ToListAsync();
+        foreach (var song in songList)
         {
             var setlist = await (
                  _context.Set_list
@@ -58,21 +65,20 @@ public class SongsController : Controller
         switch (sortOrder)
         {
             case "Count_desc":
-                songs = songs.OrderByDescending(s => s.Count).ToList();
+                songList = songList.OrderByDescending(s => s.Count).ToList();
                 break;
             case "Count":
-                songs = songs.OrderBy(s => s.Count).ToList();
+                songList = songList.OrderBy(s => s.Count).ToList();
                 break;
             case "Title_desc":
-                songs = songs.OrderByDescending(s => s.Kana).ToList();
+                songList = songList.OrderByDescending(s => s.Kana).ToList();
                 break;
             default:
-                songs = songs.OrderBy(s => s.Kana).ToList();
+                songList = songList.OrderBy(s => s.Kana).ToList();
                 break;
         }
 
-
-        return View(songs);
+        return View(songList);
     }
 
     [HttpGet]

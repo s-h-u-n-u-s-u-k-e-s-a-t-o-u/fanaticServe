@@ -2,10 +2,22 @@
 
 @{
     ViewData["Title"] = "discography";
-    String preTitle ="";
+    String preTitle = "";
+    var currentFilter = ViewData["CurrentFilter"] as string;
+    var currentSort = ViewData["CurrentSort"] as string;
 }
 
 <h1>@ViewData["Title"] </h1>
+
+<form asp-action="Index" method="get" class="mb-2">
+    <input type="text" name="searchString" value="@currentFilter" placeholder="タイトルで検索" />
+    <input type="hidden" name="sortOrder" value="@currentSort" />
+    <button type="submit">検索</button>
+    @if (!string.IsNullOrEmpty(currentFilter))
+    {
+        <a asp-action="Index">クリア</a>
+    }
+</form>
 
 <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSort"]">発売日で並び替え</a> |
 <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSort"]">タイトルで並び替え</a>
