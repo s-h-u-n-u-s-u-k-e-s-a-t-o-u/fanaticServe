@@ -9,9 +9,9 @@ namespace fanaticServe.Controllers;
 
 public class AlbumsController : Controller
 {
-    private readonly FanaticServeContext _context;
+    private readonly IFanaticServeContext _context;
 
-    public AlbumsController(FanaticServeContext context)
+    public AlbumsController(IFanaticServeContext context)
     {
         _context = context;
     }

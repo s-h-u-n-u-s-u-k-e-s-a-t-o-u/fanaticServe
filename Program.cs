@@ -13,24 +13,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add OpenTelemetry and configure it to use Azure Monitor.
 // APPLICATIONINSIGHTS_CONNECTION_STRING という名前で環境変数を設定し、UseAzureMonitor()を呼び出せば自動的に認識されます。
-
-// var aiConnStr = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
-// Console.WriteLine($"[DEBUG] Azure Monitor接続文字列: {aiConnStr}");
-
 builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Configuration.AddEnvironmentVariables(prefix: "SQLCONNSTR_SSSWare_");
-var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_SSSWare_ConnectionStrings__DefaultConnection");
+// Database を使わない -> DbContext 登録を削除し、ファイルコンテキストを登録する
+// 既定では ContentRoot/DataSource/*.dat を読み込みます
+builder.Services.AddSingleton<IFanaticServeContext>(sp =>
+    new FanaticServeFileContext(builder.Environment.ContentRootPath));
 
-builder.Services.AddDbContext<FanaticServeContext>(options =>
-    options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure()));
-
-// データベース例外フィルター
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+// データベース例外フィルターは不要なのでコメントアウト（必要なら別処理）
+// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
 
@@ -38,7 +32,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -51,4 +44,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
