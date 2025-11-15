@@ -60,14 +60,14 @@ public class EventsController : Controller
 
     // GET: Events/Details/5
     [HttpGet]
-    public async Task<IActionResult> Detail(Guid? id)
+    public IActionResult Detail(Guid? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var liveEvent = await _context.LiveEvents
+        var liveEvent =  _context.LiveEvents
             .Where(le => le.Live_Event_Id == id)
             .Select(le => new DetailEvent
             {
@@ -76,7 +76,7 @@ public class EventsController : Controller
                 Place = le.Place,
                 Perform_at = le.Perform_At
             })
-            .FirstOrDefaultAsync();
+            .FirstOrDefault();
 
         if (liveEvent == null)
         {
@@ -90,7 +90,7 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> EventGroup(Guid? id, string sortOrder)
+    public IActionResult EventGroup(Guid? id, string sortOrder)
     {
         if (id == null)
         {
@@ -101,7 +101,7 @@ public class EventsController : Controller
         ViewData["GroupDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
         ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
-        var eventGroup = await (
+        var eventGroup =  (
             from absEvent in _context.Abstract_events
             where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
@@ -109,14 +109,14 @@ public class EventsController : Controller
                 Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title
             }
-            ).FirstOrDefaultAsync();
+            ).FirstOrDefault();
 
         if (eventGroup == null)
         {
             return NotFound();
         }
 
-        eventGroup.LiveEvents = await (
+        eventGroup.LiveEvents = (
             from linkedList in _context.Abstract_event_links
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
@@ -128,7 +128,7 @@ public class EventsController : Controller
                 Perform_at = liveEvent.Perform_At,
                 Place = liveEvent.Place
             }
-            ).ToListAsync();
+            ).ToList();
 
         if (eventGroup.LiveEvents != null && eventGroup.LiveEvents.Any())
         {
