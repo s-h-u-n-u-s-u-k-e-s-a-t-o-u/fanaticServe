@@ -3,7 +3,6 @@ using fanaticServe.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace fanaticServe.Controllers;
 
@@ -18,7 +17,7 @@ public class AlbumsController : Controller
 
     // GET: Albums
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder, string searchString)
+    public IActionResult Index(string sortOrder, string searchString)
     {
         // 並び変えの判定
         ViewData["DateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
@@ -62,12 +61,12 @@ public class AlbumsController : Controller
                 break;
         }
 
-        return View(await records.ToListAsync());
+        return View(records);
     }
 
     // GET: Albums/Details/5
     [HttpGet]
-    public async Task<IActionResult> Detail(Guid? id)
+    public IActionResult Detail(Guid? id)
     {
         if (id == null)
         {
@@ -80,29 +79,29 @@ public class AlbumsController : Controller
             return NotFound();
         }
 
-        return View(await album);
+        return View(album);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Articles(string sortOrder, string searchString)
+    public IActionResult Articles(string sortOrder, string searchString)
     {
         // 並び変えの判定
         ViewData["ArticleDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["ArticleTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
         var articles =
-            await (
+             (
             from absAlbum in _context.Abstract_albums
             select new ArticleAlbum()
             {
                 Abstract_album_id = absAlbum.Abstract_Album_Id,
                 Title = absAlbum.Title,
             }
-            ).ToListAsync();
+            ).ToList();
 
         foreach (var article in articles)
         {
-            article.Albums = await (
+                var albums= 
                 from absAlbumLink in _context.Abstract_album_links
 
                 join album in _context.Albums
@@ -113,7 +112,7 @@ public class AlbumsController : Controller
                 from mediaType in mt.DefaultIfEmpty()
 
                 join l in _context.Labels
-                on album.Label_Id equals l.Label_Id into lb
+                on album.Label_Id  equals l.Label_Id into lb
                 from labelName in lb.DefaultIfEmpty()
 
                 where absAlbumLink.Abstract_Album_Id.Equals(article.Abstract_album_id)
@@ -124,16 +123,18 @@ public class AlbumsController : Controller
                     Title = album.Title,
                     Code = album.Code,
                     Release_on = album.Release_On,
-                    Label = labelName.Name,
-                    Media = mediaType.Name
+                    Label = labelName == null ? "" : labelName.Name,
+                    Media = mediaType.Name ?? ""
                 }
-                ).ToListAsync();
+                ;
+
+            article.Albums = albums?.Where(a => a != null).ToList();
 
             if (article.Albums != null)
             {
                 foreach (var album in article.Albums)
                 {
-                    album.Tracks = await GetTracks(album.Album_id, searchString);
+                    album.Tracks = GetTracks(album.Album_id, searchString);
                 }
 
                 if (!string.IsNullOrEmpty(searchString))
@@ -167,7 +168,7 @@ public class AlbumsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> AlbumGroup(Guid? id, string sortOrder)
+    public IActionResult AlbumGroup(Guid? id, string sortOrder)
     {
         if (id == null)
         {
@@ -178,7 +179,7 @@ public class AlbumsController : Controller
         ViewData["GroupDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["GroupTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
-        var article = await GetArticleAlbum(id.Value);
+        var article = GetArticleAlbum(id.Value);
 
         if (article != null)
         {
@@ -204,18 +205,20 @@ public class AlbumsController : Controller
         return View(article);
     }
 
-    private async Task<DetailAlbum?> GetDetailAlbum(Guid album_id)
+    private DetailAlbum? GetDetailAlbum(Guid album_id)
     {
         var album =
-            await (
+             (
             from lk in _context.Abstract_album_links
             join alb in _context.Albums
             on lk.Album_Id equals alb.Album_Id
             where album_id.Equals(lk.Album_Id)
             orderby alb.Release_On
+
             join label in _context.Labels
             on alb.Label_Id equals label.Label_Id into joinedTable1
             from jt1 in joinedTable1.DefaultIfEmpty()
+            
             join media in _context.MediaTypes
             on alb.Media_Type equals media.Media_Type into joinedTable2
             from jt2 in joinedTable2.DefaultIfEmpty()
@@ -225,21 +228,22 @@ public class AlbumsController : Controller
                 Title = alb.Title,
                 Code = alb.Code,
                 Release_on = alb.Release_On,
-                Label = jt1.Name ?? "",
+                Label = jt1 == null ? "" : jt1.Name,
                 Media = jt2.Name ?? ""
             }
-            ).FirstOrDefaultAsync();
+            ).FirstOrDefault();
 
-        if (album != null)
+        if (album == null)
         {
-            // アルバムにトラック情報を紐づけ                
-            album.Tracks = await GetTracks(album.Album_id);
+            return null;
         }
 
+        // アルバムにトラック情報を紐づけ                
+        album.Tracks = GetTracks(album.Album_id);
         return album;
     }
 
-    private async Task<List<Track>> GetTracks(Guid album_id, String searchString = "")
+    private List<Track> GetTracks(Guid album_id, String searchString = "")
     {
         var tracks =
             from trk in _context.Tracks
@@ -259,18 +263,18 @@ public class AlbumsController : Controller
             tracks = tracks.Where(t => t.Title.Contains(searchString));
         }
 
-        return await tracks.ToListAsync();
+        return tracks.ToList();
     }
 
-    private async Task<ArticleAlbum?> GetArticleAlbum(Guid id)
+    private ArticleAlbum GetArticleAlbum(Guid id)
     {
         var subTbl2 =
-        await (
+        (
         from link in _context.Abstract_album_links
         join album in _context.Albums on link.Album_Id equals album.Album_Id
         group new { link, album } by link.Abstract_Album_Id into tbl2
         select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
-        ).FirstOrDefaultAsync();
+        ).FirstOrDefault();
 
         if (subTbl2 == null)
         {
@@ -279,7 +283,7 @@ public class AlbumsController : Controller
 
         // 記事として表示する整形済みの抽象アルバム
         var article =
-            await (
+             (
             from abs in _context.Abstract_albums
             where abs.Abstract_Album_Id.Equals(id)
             select new ArticleAlbum()
@@ -288,36 +292,42 @@ public class AlbumsController : Controller
                 Title = abs.Title,
                 Release_On = subTbl2.release_on
             }
-            ).FirstOrDefaultAsync();
+            ).FirstOrDefault();
 
         // 抽象アルバムとアルバムを紐づけ
-        if (article != null)
+        if (article == null)
         {
-            article.Albums =
-                await (
-                from lk in _context.Abstract_album_links
-                join alb in _context.Albums
-                on lk.Album_Id equals alb.Album_Id
-                where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
-                join label in _context.Labels on alb.Label_Id equals label.Label_Id into joinedTable1
-                from jt1 in joinedTable1.DefaultIfEmpty()
-                join media in _context.MediaTypes on alb.Media_Type equals media.Media_Type into joinedTable2
-                from jt2 in joinedTable2.DefaultIfEmpty()
-                select new DetailAlbum()
-                {
-                    Album_id = alb.Album_Id,
-                    Title = alb.Title,
-                    Code = alb.Code,
-                    Release_on = alb.Release_On,
-                    Label = jt1.Name ?? "",
-                    Media = jt2.Name ?? ""
-                }).ToListAsync();
+            return null;
+        }
 
-            // アルバムにトラック情報を紐づけ
-            foreach (var album in article.Albums)
+        article.Albums =
+            (
+            from lk in _context.Abstract_album_links
+            join alb in _context.Albums
+            on lk.Album_Id equals alb.Album_Id
+            where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
+
+            join label in _context.Labels 
+            on alb.Label_Id equals label.Label_Id into joinedTable1
+            from jt1 in joinedTable1.DefaultIfEmpty()
+            
+            join media in _context.MediaTypes 
+            on alb.Media_Type equals media.Media_Type into joinedTable2
+            from jt2 in joinedTable2.DefaultIfEmpty()
+            select new DetailAlbum()
             {
-                album.Tracks = await GetTracks(album.Album_id);
-            }
+                Album_id = alb.Album_Id,
+                Title = alb.Title,
+                Code = alb.Code,
+                Release_on = alb.Release_On,
+                Label = jt1 == null ? "" : jt1.Name,
+                Media = jt2.Name ?? ""
+            }).ToList();
+
+        // アルバムにトラック情報を紐づけ
+        foreach (var album in article.Albums)
+        {
+            album.Tracks = GetTracks(album.Album_id);
         }
 
         return article;

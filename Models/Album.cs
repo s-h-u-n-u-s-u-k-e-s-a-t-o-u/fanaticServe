@@ -39,7 +39,7 @@ public partial class Album
     /// <summary>
     /// レーベルID
     /// </summary>
-    public Guid? Label_Id { get; set; }
+    public Guid? Label_Id { get; set; } 
 
     /// <summary>
     /// 登録日時
