@@ -1,7 +1,6 @@
 ﻿using fanaticServe.Data;
 using fanaticServe.Dto;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Controllers;
 
@@ -15,7 +14,7 @@ public class SongsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder, string searchString)
+    public IActionResult Index(string sortOrder, string searchString)
     {
         ViewData["TitleSort"] = String.IsNullOrEmpty(sortOrder) ? "Title_desc" : "";
         ViewData["CountSort"] = sortOrder == "Count" ? "Count_desc" : "Count";
@@ -32,14 +31,15 @@ public class SongsController : Controller
                 Kana = song.Kana
             });
 
-        if (!String.IsNullOrEmpty(searchString) ){
+        if (!String.IsNullOrEmpty(searchString))
+        {
             songs = songs.Where(s => s.Title.Contains(searchString) || s.Kana.Contains(searchString));
         }
 
-        var songList = await songs.ToListAsync();
+        var songList = songs.ToList();
         foreach (var song in songList)
         {
-            var setlist = await (
+            var setlist = (
                  _context.Set_lists
                 .Where(sl => sl.Song_Id == song.Song_Id)
                 .Join(
@@ -48,7 +48,7 @@ public class SongsController : Controller
                     le => le.Live_Event_Id,
                     (sl, le) => new { le.Live_Event_Id, le.Perform_At, le.Title })
                 .OrderByDescending(sl => sl.Perform_At)
-                ).ToListAsync();
+                ).ToList();
 
             if (setlist != null && setlist.Count > 0)
             {
@@ -82,7 +82,7 @@ public class SongsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Detail(Guid? id)
+    public IActionResult Detail(Guid? id)
     {
         if (id == null)
         {
@@ -90,14 +90,14 @@ public class SongsController : Controller
         }
 
         var song =
-          await (from s in _context.Songs
-                 where s.Song_Id == id
-                 select new DetailSong()
-                 {
-                     Song_Id = s.Song_Id,
-                     Title = s.Title,
-                     Kana = s.Kana,
-                 }).FirstOrDefaultAsync();
+           (from s in _context.Songs
+            where s.Song_Id == id
+            select new DetailSong()
+            {
+                Song_Id = s.Song_Id,
+                Title = s.Title,
+                Kana = s.Kana,
+            }).FirstOrDefault();
 
         if (song == null)
         {
@@ -105,7 +105,7 @@ public class SongsController : Controller
         }
 
         song.Albums =
-            await (
+            (
             from album in _context.Albums
             join track in _context.Tracks
             on album.Album_Id equals track.Album_Id
@@ -125,10 +125,10 @@ public class SongsController : Controller
             }).OrderBy(a => a.Release_on)
             .ThenBy(suba => suba.Code)
             .ThenBy(suba => suba.Track_No)
-            .ToArrayAsync();
+            .ToArray();
 
         song.LiveEvents =
-            await (
+            (
             from liveEvent in _context.LiveEvents
             join setList in _context.Set_lists.DefaultIfEmpty()
             on liveEvent.Live_Event_Id equals setList.Live_Event_Id
@@ -141,7 +141,7 @@ public class SongsController : Controller
                 Place = liveEvent.Place,
                 Perform_At = liveEvent.Perform_At
             }
-            ).ToArrayAsync();
+            ).ToArray();
 
         return View(song);
     }
