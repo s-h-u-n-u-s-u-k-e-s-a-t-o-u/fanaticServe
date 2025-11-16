@@ -1,7 +1,6 @@
-using fanaticServe.Data;
-using Microsoft.EntityFrameworkCore;
 // Import the Azure.Monitor.OpenTelemetry.AspNetCore namespace.
 using Azure.Monitor.OpenTelemetry.AspNetCore;
+using fanaticServe.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add OpenTelemetry and configure it to use Azure Monitor.
 // APPLICATIONINSIGHTS_CONNECTION_STRING という名前で環境変数を設定し、UseAzureMonitor()を呼び出せば自動的に認識されます。
-builder.Services.AddOpenTelemetry().UseAzureMonitor();
+// builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
