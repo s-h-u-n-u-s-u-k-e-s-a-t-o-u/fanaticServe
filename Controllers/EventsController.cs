@@ -2,7 +2,6 @@
 using fanaticServe.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Controllers;
 
@@ -16,7 +15,7 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder)
+    public IActionResult Index(string sortOrder)
     {
         // ソート条件の初期化
         ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -54,7 +53,7 @@ public class EventsController : Controller
                 break;
         }
 
-        return View(await events.ToListAsync());
+        return View(events);
     }
 
     // GET: Events/Details/5
@@ -66,7 +65,7 @@ public class EventsController : Controller
             return NotFound();
         }
 
-        var liveEvent =  _context.LiveEvents
+        var liveEvent = _context.LiveEvents
             .Where(le => le.Live_Event_Id == id)
             .Select(le => new DetailEvent
             {
@@ -100,7 +99,7 @@ public class EventsController : Controller
         ViewData["GroupDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
         ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
-        var eventGroup =  (
+        var eventGroup = (
             from absEvent in _context.Abstract_events
             where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
@@ -190,7 +189,7 @@ public class EventsController : Controller
             ;
 
         // 抽象イベントごとにまとめる
-        var  filteredArticles = _context.Abstract_events
+        var filteredArticles = _context.Abstract_events
             .Join(joinedEvents,
             ae => ae.Abstract_Event_Id,
             je => je.Key,
@@ -223,49 +222,6 @@ public class EventsController : Controller
             }
 
         }
-
-        //var articles =
-        //    (from absEvent in _context.Abstract_events
-        //     select new ArticleEvent()
-        //     {
-        //         Abstract_event_id = absEvent.Abstract_Event_Id,
-        //         Title = absEvent.Title
-        //     }).ToList();
-        //// イベント詳細を取得
-        //foreach (var article in articles)
-        //{
-        //    var query =
-        //        from linkedList in _context.Abstract_event_links
-        //        join liveEvent in _context.LiveEvents
-        //        on linkedList.Event_Id equals liveEvent.Live_Event_Id
-        //        where linkedList.Abstract_Event_Id == article.Abstract_event_id
-        //        select new DetailEvent()
-        //        {
-        //            Live_event_id = liveEvent.Live_Event_Id,
-        //            Title = liveEvent.Title,
-        //            Place = liveEvent.Place,
-        //            Perform_at = liveEvent.Perform_At
-        //        };
-
-        //    if (!string.IsNullOrEmpty(searchString))
-        //    {
-        //        // 部分一致（SQL に翻訳されます）
-        //        query = query.Where(d => d.Title.Contains(searchString));
-        //    }
-
-        //    article.LiveEvents = query.OrderBy(e => e.Perform_at).ToList();
-
-        //    if (article.LiveEvents != null && article.LiveEvents.Any())
-        //    {
-        //        article.Perform_on = article.LiveEvents.Min(e => e.Perform_at);
-        //        foreach (var liveEvent in article.LiveEvents)
-        //        {
-        //            liveEvent.SetLists = GetSelList(liveEvent.Live_event_id);
-        //            liveEvent.Note = GetLiveEventNote(liveEvent.Live_event_id)?.Note;
-        //        }
-        //    }
-        //}
-        //var filteredArticles = articles.Where(a => a.LiveEvents != null && a.LiveEvents.Any());
 
         // 全体の並び替え（記事レベル）
         switch (sortOrder)
@@ -316,5 +272,4 @@ public class EventsController : Controller
     {
         return _context.Live_Event_Notes.SingleOrDefault(le => le.Live_Event_Id == liveEventId);
     }
-
 }
