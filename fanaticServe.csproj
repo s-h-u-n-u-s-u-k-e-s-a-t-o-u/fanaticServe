@@ -31,8 +31,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Data\**\*.dat">
+    <Content Include="DataSource\**\*.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
