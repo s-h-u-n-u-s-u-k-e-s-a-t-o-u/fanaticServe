@@ -1,9 +1,8 @@
-﻿using fanaticServe.Data;
-using fanaticServe.Dto;
-using fanaticServe.Models;
+﻿using fanaticServe.Core.Dto;
+using fanaticServe.Core.Models;
+using fanaticServe.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace fanaticServe.Controllers;
 

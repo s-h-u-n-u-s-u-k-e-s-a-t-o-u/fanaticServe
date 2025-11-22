@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using fanaticServe.Constants;
+﻿using fanaticServe.Core.Constants;
+using System.ComponentModel.DataAnnotations;
 
-namespace fanaticServe.Dto;
+namespace fanaticServe;
 
 public class ReleaseNote
 {

@@ -1,5 +1,5 @@
 ﻿using fanaticServe.Data;
-using fanaticServe.Dto;
+using fanaticServe.Core.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

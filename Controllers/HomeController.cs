@@ -1,5 +1,5 @@
+using fanaticServe.Core.Models;
 using fanaticServe.Data;
-using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -28,7 +28,7 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult ReleaseNote()
     {
-        return View(fanaticServe.Dto.ReleaseNote.GetReleaseNotes());
+        return View(fanaticServe.ReleaseNote.GetReleaseNotes());
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

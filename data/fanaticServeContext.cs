@@ -1,4 +1,4 @@
-﻿using fanaticServe.Models;
+﻿using fanaticServe.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Data;
