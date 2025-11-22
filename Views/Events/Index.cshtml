@@ -10,11 +10,13 @@
 <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">開催日時で並び替え</a> |
 <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]">タイトルで並び替え</a>
 
+<TargetBadge />
+
 <table class="table">
     <thead class="only-pc">
         <tr>
             <th>
-                    @Html.DisplayNameFor(model => model.Perform_at)
+                @Html.DisplayNameFor(model => model.Perform_at)
             </th>
             <th>
             </th>

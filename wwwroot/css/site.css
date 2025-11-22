@@ -1,88 +1,101 @@
+:root {
+	--text-color: #444;
+	--image-color: #ff63ad;
+}
+
 html {
-    font-size: 11px;
+	font-size: 11px;
 }
 
-/* 769px�ȏ�̂Ƃ� */
+/* 769px */
 @media screen and (min-width: 769px) {
-    .only-sp {
-        display: none;
-    }
+	.only-sp {
+		display: none;
+	}
 }
 
-/* 768px�ȉ��̂Ƃ� */
+/* 768px */
 @media screen and (max-width: 768px) {
-    .only-pc {
-        display: none;
-    }
+	.only-pc {
+		display: none;
+	}
 }
 
 @media (min-width: 769px) {
-  html {
-    font-size: 16px;
-  }
+	html {
+		font-size: 16px;
+	}
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+	box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+	margin-bottom: 60px;
 }
 
 .ruby {
-    font-size: 9pt;
+	font-size: 9pt;
 }
 
 .container .row [class*=col-] {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .base-bg-color {
-    background-color: #f3aaa1;
+	background-color: #f3aaa1;
 }
 
 .article-outer {
-    background-color: #ff63ad;
-    width: 100%;
-    max-width: 1320px;
-    padding: 1px;
-    margin-bottom: 2px;
-    border-style: solid;
-    border-color: #ffffff;
-    border-width: 2px;
-    border-radius: 18px;
+	/* background-color: #ff63ad; */
+	background-color: var(--image-color );
+	max-width: 1320px;
+	padding: 1px;
+	margin-bottom: 2px;
+	border-style: solid;
+	border-color: #ffffff;
+	border-width: 2px;
+	border-radius: 18px;
 }
 
-    .article-outer > .article-inner {
-        width: 100%;
-        padding: 0;
-        background-color: #faf4ec;
-        border-style: solid;
-        border-color: black;
-        border-width: 5px;
-        border-radius: 15px;
-        padding: 5px;
-    }
+	.article-outer > .article-inner {
+		width: 100%;
+		padding: 0;
+		background-color: #faf4ec;
+		border-style: solid;
+		border-color: black;
+		border-width: 5px;
+		border-radius: 15px;
+		padding: 5px;
+	}
 
 .article-detail {
-    margin-top:10px;
+	margin-top: 10px;
 }
-    .article-detail:nth-child(1) {
-        margin-top: 0;
-    }
 
+	.article-detail:nth-child(1) {
+		margin-top: 0;
+	}
 
 .set-list-number {
-    width: 10%
+	width: 10%
 }
 
 .set-list-title {
-    width: 40%
+	width: 40%
+}
+
+.text-image-color {
+	color: var(--image-color );
+}
+
+.border-image-color {
+	border-color: var(--image-color ) !important;
 }
