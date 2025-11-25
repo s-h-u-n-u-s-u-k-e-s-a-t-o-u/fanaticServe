@@ -23,8 +23,8 @@ public class EventsController : Controller
         ViewData["TitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
         var events =
-            from absEvent in _context.Abstract_events
-            join link in _context.Abstract_event_links
+            from absEvent in _context.AbstractEvents
+            join link in _context.AbstractEventLinks
             on absEvent.Abstract_Event_Id equals link.Abstract_Event_Id
             join liveEvent in _context.LiveEvents
             on link.Event_Id equals liveEvent.Live_Event_Id
@@ -101,7 +101,7 @@ public class EventsController : Controller
         ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
         var eventGroup = await (
-            from absEvent in _context.Abstract_events
+            from absEvent in _context.AbstractEvents
             where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
             {
@@ -116,7 +116,7 @@ public class EventsController : Controller
         }
 
         eventGroup.LiveEvents = await (
-            from linkedList in _context.Abstract_event_links
+            from linkedList in _context.AbstractEventLinks
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
             where linkedList.Abstract_Event_Id == id
@@ -173,7 +173,7 @@ public class EventsController : Controller
 
         var articles =
                         await (
-            from absEvent in _context.Abstract_events
+            from absEvent in _context.AbstractEvents
             select new ArticleEvent()
             {
                 Abstract_event_id = absEvent.Abstract_Event_Id,
@@ -184,7 +184,7 @@ public class EventsController : Controller
         foreach (var article in articles)
         {
             var query =
-                from linkedList in _context.Abstract_event_links
+                from linkedList in _context.AbstractEventLinks
                 join liveEvent in _context.LiveEvents
                 on linkedList.Event_Id equals liveEvent.Live_Event_Id
                 where linkedList.Abstract_Event_Id == article.Abstract_event_id
@@ -246,7 +246,7 @@ public class EventsController : Controller
     private async Task<List<ShowableSetList>> GetSelList(Guid Live_event_id)
     {
         return await (
-            from setList in _context.Set_list
+            from setList in _context.SetLists
             join slNote in _context.SetListNotes
             on setList.Set_List_Id equals slNote.Set_List_Id into joinT
             where setList.Live_Event_Id == Live_event_id
@@ -266,7 +266,7 @@ public class EventsController : Controller
 
     async private Task<Live_Event_Note?> GetLiveEventNote(Guid liveEventId)
     {
-        return await _context.Live_Event_Notes.SingleOrDefaultAsync(le => le.Live_Event_Id == liveEventId);
+        return await _context.LiveEventNotes.SingleOrDefaultAsync(le => le.Live_Event_Id == liveEventId);
     }
 
 }

@@ -40,7 +40,7 @@ public class SongsController : Controller
         foreach (var song in songList)
         {
             var setlist = await (
-                 _context.Set_list
+                 _context.SetLists
                 .Where(sl => sl.Song_Id == song.Song_Id)
                 .Join(
                      _context.LiveEvents,
@@ -130,7 +130,7 @@ public class SongsController : Controller
         song.LiveEvents =
             await (
             from liveEvent in _context.LiveEvents
-            join setList in _context.Set_list.DefaultIfEmpty()
+            join setList in _context.SetLists.DefaultIfEmpty()
             on liveEvent.Live_Event_Id equals setList.Live_Event_Id
             where setList.Song_Id == id
             orderby liveEvent.Perform_At
