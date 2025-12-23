@@ -16,6 +16,7 @@ public class ReleaseNote
     {
         // Versionは単純に整数でカウントアップする
         var releaseNotes = new ReleaseNote[] {
+            new ReleaseNote() {Version = "Pre NoDatabase r1.0" , Note = "データベースを使用しないバージョン公開", ReleaseDate = new DateTime(2025,11, 16), },
             new ReleaseNote() {Version = "Pre r2.5" , Note = "setlist、discography、discography - 収録曲、songに検索機能追加", ReleaseDate = new DateTime(2025,11, 4), },
             new ReleaseNote() {Version = "Pre r2.4" , Note = "event listに備考を追加", ReleaseDate = new DateTime(2025,10, 14), },
             new ReleaseNote() {Version = "Pre r2.3" , Note = "discography、songに並べ替え機能追加", ReleaseDate = new DateTime(2025,10, 1), },

@@ -9,9 +9,9 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    private readonly FanaticServeContext _context;
+    private readonly IFanaticServeContext _context;
 
-    public HomeController(ILogger<HomeController> logger, FanaticServeContext context)
+    public HomeController(ILogger<HomeController> logger, IFanaticServeContext context)
     {
         _logger = logger;
         _context = context;

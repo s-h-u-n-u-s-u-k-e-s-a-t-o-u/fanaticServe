@@ -2,21 +2,20 @@
 using fanaticServe.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace fanaticServe.Controllers;
 
 public class EventsController : Controller
 {
-    private readonly FanaticServeContext _context;
+    private readonly IFanaticServeContext _context;
 
-    public EventsController(FanaticServeContext context)
+    public EventsController(IFanaticServeContext context)
     {
         _context = context;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(string sortOrder)
+    public IActionResult Index(string sortOrder)
     {
         // ソート条件の初期化
         ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -54,19 +53,19 @@ public class EventsController : Controller
                 break;
         }
 
-        return View(await events.ToListAsync());
+        return View(events);
     }
 
     // GET: Events/Details/5
     [HttpGet]
-    public async Task<IActionResult> Detail(Guid? id)
+    public IActionResult Detail(Guid? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var liveEvent = await _context.LiveEvents
+        var liveEvent = _context.LiveEvents
             .Where(le => le.Live_Event_Id == id)
             .Select(le => new DetailEvent
             {
@@ -75,21 +74,21 @@ public class EventsController : Controller
                 Place = le.Place,
                 Perform_at = le.Perform_At
             })
-            .FirstOrDefaultAsync();
+            .FirstOrDefault();
 
         if (liveEvent == null)
         {
             return NotFound();
         }
 
-        liveEvent.SetLists = await GetSelList(id.Value);
-        liveEvent.Note = (await GetLiveEventNote(liveEvent.Live_event_id))?.Note;
+        liveEvent.SetLists = GetSelList(id.Value);
+        liveEvent.Note = GetLiveEventNote(liveEvent.Live_event_id)?.Note;
 
         return View(liveEvent);
     }
 
     [HttpGet]
-    public async Task<IActionResult> EventGroup(Guid? id, string sortOrder)
+    public IActionResult EventGroup(Guid? id, string sortOrder)
     {
         if (id == null)
         {
@@ -100,7 +99,7 @@ public class EventsController : Controller
         ViewData["GroupDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
         ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
-        var eventGroup = await (
+        var eventGroup = (
             from absEvent in _context.Abstract_events
             where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
@@ -108,14 +107,14 @@ public class EventsController : Controller
                 Abstract_event_id = absEvent.Abstract_Event_Id,
                 Title = absEvent.Title
             }
-            ).FirstOrDefaultAsync();
+            ).FirstOrDefault();
 
         if (eventGroup == null)
         {
             return NotFound();
         }
 
-        eventGroup.LiveEvents = await (
+        eventGroup.LiveEvents = (
             from linkedList in _context.Abstract_event_links
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
@@ -127,7 +126,7 @@ public class EventsController : Controller
                 Perform_at = liveEvent.Perform_At,
                 Place = liveEvent.Place
             }
-            ).ToListAsync();
+            ).ToList();
 
         if (eventGroup.LiveEvents != null && eventGroup.LiveEvents.Any())
         {
@@ -135,8 +134,8 @@ public class EventsController : Controller
 
             foreach (var liveEvent in eventGroup.LiveEvents)
             {
-                liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
-                liveEvent.Note = (await GetLiveEventNote(liveEvent.Live_event_id))?.Note;
+                liveEvent.SetLists = GetSelList(liveEvent.Live_event_id);
+                liveEvent.Note = GetLiveEventNote(liveEvent.Live_event_id)?.Note;
             }
         }
 
@@ -163,7 +162,7 @@ public class EventsController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Articles(string sortOrder, string searchString)
+    public IActionResult Articles(string sortOrder, string searchString)
     {
         // ソート条件の初期化
         ViewData["ArticleDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
@@ -171,102 +170,106 @@ public class EventsController : Controller
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentFilter"] = searchString;
 
-        var articles =
-                        await (
-            from absEvent in _context.Abstract_events
-            select new ArticleEvent()
-            {
-                Abstract_event_id = absEvent.Abstract_Event_Id,
-                Title = absEvent.Title
-            }).ToListAsync();
+        var events = _context.LiveEvents;
 
-        // イベント詳細を取得
-        foreach (var article in articles)
+        // 検索文字列によるフィルタリング
+        if (!String.IsNullOrEmpty(searchString))
         {
-            var query =
-                from linkedList in _context.Abstract_event_links
-                join liveEvent in _context.LiveEvents
-                on linkedList.Event_Id equals liveEvent.Live_Event_Id
-                where linkedList.Abstract_Event_Id == article.Abstract_event_id
-                select new DetailEvent()
-                {
-                    Live_event_id = liveEvent.Live_Event_Id,
-                    Title = liveEvent.Title,
-                    Place = liveEvent.Place,
-                    Perform_at = liveEvent.Perform_At
-                };
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                // 部分一致（SQL に翻訳されます）
-                query = query.Where(d => d.Title.Contains(searchString));
-            }
-            query = query.OrderBy(e => e.Perform_at);
-
-            article.LiveEvents = await query.ToListAsync();
-
-            if (article.LiveEvents != null && article.LiveEvents.Any())
-            {
-                article.Perform_on = article.LiveEvents.Min(e => e.Perform_at);
-                foreach (var liveEvent in article.LiveEvents)
-                {
-                    liveEvent.SetLists = await GetSelList(liveEvent.Live_event_id);
-                    liveEvent.Note = (await GetLiveEventNote(liveEvent.Live_event_id))?.Note;
-                }
-            }
+            events = events.Where(e => e.Title.Contains(searchString));
         }
 
-        var filteredArticles = articles.Where(a => a.LiveEvents != null && a.LiveEvents.Any());
+        // イベントリンク + イベント
+        var joinedEvents =
+            _context.Abstract_event_links
+            .Join(events,
+                link => link.Event_Id,
+                liveEvent => liveEvent.Live_Event_Id,
+                (link, liveEvent) => new { Abstract_Event_Id = link.Abstract_Event_Id, Live_Event = liveEvent })
+            .GroupBy(x => x.Abstract_Event_Id)
+            ;
+
+        // 抽象イベントごとにまとめる
+        var filteredArticles = _context.Abstract_events
+            .Join(joinedEvents,
+            ae => ae.Abstract_Event_Id,
+            je => je.Key,
+            (ae, je) => new { ae, je })
+            .Select(x => new ArticleEvent()
+            {
+                Abstract_event_id = x.ae.Abstract_Event_Id,
+                Title = x.ae.Title,
+                LiveEvents = x.je.Select(je => new DetailEvent()
+                {
+                    Live_event_id = je.Live_Event.Live_Event_Id,
+                    Title = je.Live_Event.Title,
+                    Place = je.Live_Event.Place,
+                    Perform_at = je.Live_Event.Perform_At,
+                }).ToList()
+            }
+            ).ToList();
+
+        foreach (var article in filteredArticles)
+        {
+            if (article.LiveEvents != null)
+            {
+                foreach (var liveEvent in article.LiveEvents)
+                {
+                    liveEvent.SetLists = GetSelList(liveEvent.Live_event_id);
+                    liveEvent.Note = GetLiveEventNote(liveEvent.Live_event_id)?.Note;
+                }
+
+                article.Perform_on = article.LiveEvents.Min(le => le.Perform_at);
+            }
+
+        }
 
         // 全体の並び替え（記事レベル）
         switch (sortOrder)
         {
             case "date_desc":
-                //                articles = articles.OrderByDescending(e => e.Perform_on).ToList();
-                filteredArticles = filteredArticles.OrderByDescending(e => e.Perform_on);
+                filteredArticles = filteredArticles.OrderByDescending(e => e.Perform_on).ToList();
                 break;
             case "title":
-                //                articles = articles.OrderBy(e => e.Title).ToList();
-                filteredArticles = filteredArticles.OrderBy(e => e.Title);
+                filteredArticles = filteredArticles.OrderBy(e => e.Title).ToList();
 
                 break;
             case "title_desc":
-                //                articles = articles.OrderByDescending(e => e.Title).ToList();
-                filteredArticles = filteredArticles.OrderByDescending(e => e.Title);
+                filteredArticles = filteredArticles.OrderByDescending(e => e.Title).ToList();
                 break;
             default:
-                //                articles = articles.OrderBy(e => e.Perform_on).ToList();
-                filteredArticles = filteredArticles.OrderBy(e => e.Perform_on);
+                filteredArticles = filteredArticles.OrderBy(e => e.Perform_on).ToList();
                 break;
         }
 
         return View(filteredArticles);
     }
 
-    private async Task<List<ShowableSetList>> GetSelList(Guid Live_event_id)
+    private List<ShowableSetList>? GetSelList(Guid Live_event_id)
     {
-        return await (
-            from setList in _context.Set_list
-            join slNote in _context.SetListNotes
-            on setList.Set_List_Id equals slNote.Set_List_Id into joinT
-            where setList.Live_Event_Id == Live_event_id
-            orderby setList.Set_List_No
-            from subT in joinT.DefaultIfEmpty()
-            select new ShowableSetList()
+        var query = _context.Set_lists
+            .Where(setList => setList.Live_Event_Id == Live_event_id)
+            .OrderBy(setList => setList.Set_List_No)
+            ;
+
+        return query.GroupJoin(_context.Set_List_Notes,
+            setlist => setlist.Set_List_Id,
+            note => note.Set_List_Id,
+            (setlist, note) => new { s = setlist, n = note }
+            )
+            .SelectMany(o => o.n.DefaultIfEmpty(),
+            (obj, p2) => new ShowableSetList()
             {
-                Set_List_Id = setList.Set_List_Id,
-                Live_Event_Id = setList.Live_Event_Id,
-                Set_List_No = setList.Set_List_No,
-                Title = setList.Title,
-                Song_id = setList.Song_Id,
-                Note = subT.Note ?? ""
-            }
-        ).ToListAsync();
+                Set_List_Id = obj.s.Set_List_Id,
+                Live_Event_Id = obj.s.Live_Event_Id,
+                Set_List_No = obj.s.Set_List_No,
+                Title = obj.s.Title,
+                Song_id = obj.s.Song_Id,
+                Note = p2 == null ? "" : p2.Note,
+            }).ToList();
     }
 
-    async private Task<Live_Event_Note?> GetLiveEventNote(Guid liveEventId)
+    private Live_Event_Note? GetLiveEventNote(Guid liveEventId)
     {
-        return await _context.Live_Event_Notes.SingleOrDefaultAsync(le => le.Live_Event_Id == liveEventId);
+        return _context.Live_Event_Notes.SingleOrDefault(le => le.Live_Event_Id == liveEventId);
     }
-
 }
