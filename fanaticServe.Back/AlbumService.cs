@@ -1,3 +1,16 @@
+<<<<<<< HEAD
+﻿using fanaticServe.Back;
+using fanaticServe.Core.Data;
+using Microsoft.AspNetCore.Mvc;
+
+namespace fanaticServe.Controllers;
+
+public class AlbumsController : Controller
+{
+    private readonly IFanaticServeContext _context;
+
+    public AlbumsController(IFanaticServeContext context)
+=======
 ﻿using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
 using fanaticServe.Core.Models;
@@ -8,26 +21,17 @@ public class AlbumService : IAlbums
 {
     private readonly IFanaticServeContext _context;
     public AlbumService(IFanaticServeContext context)
+>>>>>>> ディレクトリ構成変更
     {
         _context = context;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="sortOrder"></param>
-    /// <param name="searchString"></param>
-    /// <returns></returns>
-    public IEnumerable<ArticleAlbum> GetAlbumArticles(string sortOrder, string searchString)
+    public IEnumerable<ShowableAlbum> GetAllAlbums(string sortOrder, string searchString)
     {
-        // 並び変えの判定
-        ViewData["DateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
-        ViewData["TitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
-
         // 一覧表形式でアルバム情報を表示する
         var records =
-            from absal in _context.Abstract_albums
-            join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
+            from absal in _context.AbstractAlbums
+            join lk in _context.AbstractAlbumLinks on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
             select new ShowableAlbum()
@@ -61,38 +65,14 @@ public class AlbumService : IAlbums
                 records = records.OrderBy(r => r.Release_on);
                 break;
         }
-
-        return View(records);
+        return records;
     }
 
-    // GET: Albums/Details/5
-    [HttpGet]
-    public IActionResult Detail(Guid? id)
+    public IEnumerable<ArticleAlbum> GetAlbumArticles(string sortOrder, string searchString)
     {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var album = GetDetailAlbum(id.Value);
-        if (album == null)
-        {
-            return NotFound();
-        }
-
-        return View(album);
-    }
-
-    [HttpGet]
-    public IActionResult Articles(string sortOrder, string searchString)
-    {
-        // 並び変えの判定
-        ViewData["ArticleDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
-        ViewData["ArticleTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
-
         var articles =
              (
-            from absAlbum in _context.Abstract_albums
+            from absAlbum in _context.AbstractAlbums
             select new ArticleAlbum()
             {
                 Abstract_album_id = absAlbum.Abstract_Album_Id,
@@ -102,32 +82,32 @@ public class AlbumService : IAlbums
 
         foreach (var article in articles)
         {
-                var albums= 
-                from absAlbumLink in _context.Abstract_album_links
+            var albums =
+            from absAlbumLink in _context.AbstractAlbumLinks
 
-                join album in _context.Albums
-                on absAlbumLink.Album_Id equals album.Album_Id
+            join album in _context.Albums
+            on absAlbumLink.Album_Id equals album.Album_Id
 
-                join media in _context.MediaTypes
-                on album.Media_Type equals media.Media_Type into mt
-                from mediaType in mt.DefaultIfEmpty()
+            join media in _context.MediaTypes
+            on album.Media_Type equals media.Media_Type into mt
+            from mediaType in mt.DefaultIfEmpty()
 
-                join l in _context.Labels
-                on album.Label_Id  equals l.Label_Id into lb
-                from labelName in lb.DefaultIfEmpty()
+            join l in _context.Labels
+            on album.Label_Id equals l.Label_Id into lb
+            from labelName in lb.DefaultIfEmpty()
 
-                where absAlbumLink.Abstract_Album_Id.Equals(article.Abstract_album_id)
-                orderby album.Release_On
-                select new DetailAlbum()
-                {
-                    Album_id = album.Album_Id,
-                    Title = album.Title,
-                    Code = album.Code,
-                    Release_on = album.Release_On,
-                    Label = labelName == null ? "" : labelName.Name,
-                    Media = mediaType.Name ?? ""
-                }
-                ;
+            where absAlbumLink.Abstract_Album_Id.Equals(article.Abstract_album_id)
+            orderby album.Release_On
+            select new DetailAlbum()
+            {
+                Album_id = album.Album_Id,
+                Title = album.Title,
+                Code = album.Code,
+                Release_on = album.Release_On,
+                Label = labelName == null ? "" : labelName.Name,
+                Media = mediaType.Name ?? ""
+            }
+            ;
 
             article.Albums = albums?.Where(a => a != null).ToList();
 
@@ -165,33 +145,13 @@ public class AlbumService : IAlbums
                 articles = articles.OrderBy(r => r.Release_On).ToList();
                 break;
         }
-        return View(articles);
+
+        return articles;
     }
 
-    [HttpGet]
-    public IActionResult AlbumGroup(Guid? id, string sortOrder)
+    public ArticleAlbum GetAlbumGroup(Guid id, string sortOrder)
     {
-        // 一覧表形式でアルバム情報を表示する
-        var records =
-            from absal in _context.AbstractAlbums
-            join lk in _context.AbstractAlbumLinks on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
-            join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
-            join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
-            select new ShowableAlbum()
-            {
-                Abstract_album_id = absal.Abstract_Album_Id,
-                Title = absal.Title,
-                Album_id = alb.Album_Id,
-                DetailTitle = alb.Title,
-                Release_on = alb.Release_On,
-                Media = media.Name ?? ""
-            };
-
-        // 並び変えの判定
-        ViewData["GroupDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
-        ViewData["GroupTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
-
-        var article = GetArticleAlbum(id.Value);
+        var article = GetArticleAlbum(id);
 
         if (article != null)
         {
@@ -214,14 +174,100 @@ public class AlbumService : IAlbums
                     break;
             }
         }
-        return View(article);
+        return article;
     }
 
-    private DetailAlbum? GetDetailAlbum(Guid album_id)
+    public DetailAlbum GetDetailAlbum(Guid id)
     {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public ArticleAlbum GetAlbumGroup(Guid id)
+    {
+
+        var subTbl2 =
+        (
+        from link in _context.AbstractAlbumLinks
+        join album in _context.Albums on link.Album_Id equals album.Album_Id
+        group new { link, album } by link.Abstract_Album_Id into tbl2
+        select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
+        ).FirstOrDefault();
+
+        if (subTbl2 == null)
+        {
+            return null;
+        }
+
+        // 記事として表示する整形済みの抽象アルバム
+        var article =
+             (
+            from abs in _context.AbstractAlbums
+            where abs.Abstract_Album_Id.Equals(id)
+            select new ArticleAlbum()
+            {
+                Abstract_album_id = abs.Abstract_Album_Id,
+                Title = abs.Title,
+                Release_On = subTbl2.release_on
+            }
+            ).FirstOrDefault();
+
+        // 抽象アルバムとアルバムを紐づけ
+        if (article == null)
+        {
+            return null;
+        }
+
+        article.Albums =
+            (
+            from lk in _context.AbstractAlbumLinks
+            join alb in _context.Albums
+            on lk.Album_Id equals alb.Album_Id
+            where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
+
+            join label in _context.Labels
+            on alb.Label_Id equals label.Label_Id into joinedTable1
+            from jt1 in joinedTable1.DefaultIfEmpty()
+
+            join media in _context.MediaTypes
+            on alb.Media_Type equals media.Media_Type into joinedTable2
+            from jt2 in joinedTable2.DefaultIfEmpty()
+            select new DetailAlbum()
+            {
+                Album_id = alb.Album_Id,
+                Title = alb.Title,
+                Code = alb.Code,
+                Release_on = alb.Release_On,
+                Label = jt1 == null ? "" : jt1.Name,
+                Media = jt2.Name ?? ""
+            }).ToList();
+
+        // アルバムにトラック情報を紐づけ
+        foreach (var album in article.Albums)
+        {
+            album.Tracks = GetTracks(album.Album_id);
+        }
+
+        return article;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="album_id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public DetailAlbum GetDetailAlbum(Guid album_id)
+    {
+
         var album =
              (
-            from lk in _context.Abstract_album_links
+            from lk in _context.AbstractAlbumLinks
             join alb in _context.Albums
             on lk.Album_Id equals alb.Album_Id
             where album_id.Equals(lk.Album_Id)
@@ -230,7 +276,7 @@ public class AlbumService : IAlbums
             join label in _context.Labels
             on alb.Label_Id equals label.Label_Id into joinedTable1
             from jt1 in joinedTable1.DefaultIfEmpty()
-            
+
             join media in _context.MediaTypes
             on alb.Media_Type equals media.Media_Type into joinedTable2
             from jt2 in joinedTable2.DefaultIfEmpty()
@@ -255,6 +301,12 @@ public class AlbumService : IAlbums
         return album;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="album_id"></param>
+    /// <param name="searchString"></param>
+    /// <returns></returns>
     private List<Track> GetTracks(Guid album_id, String searchString = "")
     {
         var tracks =
@@ -277,71 +329,5 @@ public class AlbumService : IAlbums
 
         return tracks.ToList();
     }
-
-    private ArticleAlbum GetArticleAlbum(Guid id)
-    {
-        var subTbl2 =
-        (
-        from link in _context.Abstract_album_links
-        join album in _context.Albums on link.Album_Id equals album.Album_Id
-        group new { link, album } by link.Abstract_Album_Id into tbl2
-        select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
-        ).FirstOrDefault();
-
-        if (subTbl2 == null)
-        {
-            return null;
-        }
-
-        // 記事として表示する整形済みの抽象アルバム
-        var article =
-             (
-            from abs in _context.Abstract_albums
-            where abs.Abstract_Album_Id.Equals(id)
-            select new ArticleAlbum()
-            {
-                Abstract_album_id = abs.Abstract_Album_Id,
-                Title = abs.Title,
-                Release_On = subTbl2.release_on
-            }
-            ).FirstOrDefault();
-
-        // 抽象アルバムとアルバムを紐づけ
-        if (article == null)
-        {
-            return null;
-        }
-
-        article.Albums =
-            (
-            from lk in _context.Abstract_album_links
-            join alb in _context.Albums
-            on lk.Album_Id equals alb.Album_Id
-            where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
-
-            join label in _context.Labels 
-            on alb.Label_Id equals label.Label_Id into joinedTable1
-            from jt1 in joinedTable1.DefaultIfEmpty()
-            
-            join media in _context.MediaTypes 
-            on alb.Media_Type equals media.Media_Type into joinedTable2
-            from jt2 in joinedTable2.DefaultIfEmpty()
-            select new DetailAlbum()
-            {
-                Album_id = alb.Album_Id,
-                Title = alb.Title,
-                Code = alb.Code,
-                Release_on = alb.Release_On,
-                Label = jt1 == null ? "" : jt1.Name,
-                Media = jt2.Name ?? ""
-            }).ToList();
-
-        // アルバムにトラック情報を紐づけ
-        foreach (var album in article.Albums)
-        {
-            album.Tracks = GetTracks(album.Album_id);
-        }
-
-        return article;
-    }
 }
+>>>>>>> ディレクトリ構成変更
