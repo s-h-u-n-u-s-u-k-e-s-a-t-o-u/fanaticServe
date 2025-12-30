@@ -38,6 +38,8 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
+    permissions:
+      contents: read # Limit GITHUB_TOKEN to read-only for this job
     
     steps:
       - name: Download artifact from build job
