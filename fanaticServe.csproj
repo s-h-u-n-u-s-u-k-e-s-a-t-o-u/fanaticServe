@@ -7,6 +7,14 @@
     <UserSecretsId>d6c176e8-b88e-4839-8128-2ddad8e484ff</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Remove="Views\Albums\Create.cshtml" />
     <Content Remove="Views\Albums\Delete.cshtml" />
