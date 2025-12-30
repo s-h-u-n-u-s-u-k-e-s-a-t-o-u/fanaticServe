@@ -2,7 +2,6 @@
 using fanaticServe.Core.Data;
 using fanaticServe.Data;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // ƒƒO‚Ìİ’è
