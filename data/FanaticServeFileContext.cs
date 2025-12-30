@@ -1,4 +1,5 @@
-﻿using fanaticServe.Models;
+﻿using fanaticServe.Core.Models;
+using fanaticServe.Core.Data;
 using System.Reflection;
 using System.Text;
 
@@ -12,44 +13,43 @@ public class FanaticServeFileContext : IFanaticServeContext
     {
         _dataFolder = Path.Combine(contentRootPath, "DataSource");
         // 初期読み込み（必要なら遅延に変更可能）
-        Abstract_albums = LoadFile<Abstract_album>("Abstract_album").AsQueryable();
-        Abstract_Album_Notes = LoadFile<Abstract_Album_Note>("Abstract_Album_Note").AsQueryable();
-        Abstract_album_links = LoadFile<Abstract_album_link>("Abstract_album_link").AsQueryable();
+        AbstractAlbums = LoadFile<Abstract_album>("Abstract_album").AsQueryable();
+        AbstractAlbumNotes = LoadFile<Abstract_Album_Note>("Abstract_Album_Note").AsQueryable();
+        AbstractAlbumLinks = LoadFile<Abstract_album_link>("Abstract_album_link").AsQueryable();
         Albums = LoadFile<Album>("Album").AsQueryable();
-        Album_Notes = LoadFile<Album_Note>("Album_Note").AsQueryable();
+        AlbumNotes = LoadFile<Album_Note>("Album_Note").AsQueryable();
 
         MediaTypes = LoadFile<MediaType>("Media").AsQueryable();
         Labels = LoadFile<Label>("Label").AsQueryable();
         Tracks = LoadFile<Track>("Track").AsQueryable();
 
-        Abstract_events = LoadFile<Abstract_event>("Abstract_event").AsQueryable();
-        Abstract_event_links = LoadFile<Abstract_event_link>("Abstract_event_link").AsQueryable();
+        AbstractEvents = LoadFile<Abstract_event>("Abstract_event").AsQueryable();
+        AbstractEventLinks = LoadFile<Abstract_event_link>("Abstract_event_link").AsQueryable();
         LiveEvents = LoadFile<LiveEvent>("Live_Event").AsQueryable();
-        Live_Event_Notes = LoadFile<Live_Event_Note>("Live_Event_Note").AsQueryable();
-        Set_lists = LoadFile<Set_list>("Set_list").AsQueryable();
-        Set_List_Notes = LoadFile<Set_List_Note>("Set_List_Note").AsQueryable();
+        LiveEventNotes = LoadFile<Live_Event_Note>("Live_Event_Note").AsQueryable();
+        SetLists = LoadFile<Set_list>("Set_list").AsQueryable();
+        SetListNotes = LoadFile<Set_List_Note>("Set_List_Note").AsQueryable();
         Songs = LoadFile<Song>("Song").AsQueryable();
     }
 
-    public IQueryable<Abstract_album> Abstract_albums { get; }
-    public IQueryable<Abstract_Album_Note> Abstract_Album_Notes { get; }   
-    public IQueryable<Abstract_album_link> Abstract_album_links { get; }
+    public IQueryable<Abstract_album> AbstractAlbums { get; }
+    public IQueryable<Abstract_Album_Note> AbstractAlbumNotes { get; }   
+    public IQueryable<Abstract_album_link> AbstractAlbumLinks { get; }
     public IQueryable<Album> Albums { get; }
-    public IQueryable<Album_Note> Album_Notes { get; }    
+    public IQueryable<Album_Note> AlbumNotes { get; }    
 
     public IQueryable<MediaType> MediaTypes { get; }
     public IQueryable<Label> Labels { get; }
     public IQueryable<Track> Tracks { get; }
 
-    public IQueryable<Abstract_event> Abstract_events { get; }
-    public IQueryable<Abstract_event_link> Abstract_event_links { get; }
+    public IQueryable<Abstract_event> AbstractEvents { get; }
+    public IQueryable<Abstract_event_link> AbstractEventLinks { get; }
     public IQueryable<LiveEvent> LiveEvents { get; }
-    public IQueryable<Live_Event_Note> Live_Event_Notes { get; }
-    public IQueryable<Set_list> Set_lists { get; }
-    public IQueryable<Set_List_Note> Set_List_Notes { get; }
+    public IQueryable<Live_Event_Note> LiveEventNotes { get; }
+    public IQueryable<Set_list> SetLists { get; }
+    public IQueryable<Set_List_Note> SetListNotes { get; }
 
     public IQueryable<Song> Songs { get; }
-
 
     private List<T> LoadFile<T>(string fileName) where T : new()
     {

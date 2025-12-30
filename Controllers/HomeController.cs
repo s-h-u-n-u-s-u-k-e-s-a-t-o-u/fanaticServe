@@ -1,4 +1,4 @@
-using fanaticServe.Data;
+using fanaticServe.Core.Data;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

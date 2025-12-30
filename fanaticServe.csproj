@@ -37,4 +37,9 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\fanaticServe.Back\fanaticServe.Back.csproj" />
+    <ProjectReference Include="..\fanaticServe.Core\fanaticServe.Core.csproj" />
+  </ItemGroup>
+
 </Project>

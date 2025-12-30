@@ -1,5 +1,5 @@
 // Import the Azure.Monitor.OpenTelemetry.AspNetCore namespace.
-using Azure.Monitor.OpenTelemetry.AspNetCore;
+using fanaticServe.Core.Data;
 using fanaticServe.Data;
 
 

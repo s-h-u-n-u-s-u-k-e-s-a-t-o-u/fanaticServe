@@ -1,6 +1,6 @@
-﻿using fanaticServe.Data;
-using fanaticServe.Dto;
-using fanaticServe.Models;
+﻿using fanaticServe.Core.Data;
+using fanaticServe.Core.Dto;
+using fanaticServe.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
@@ -24,8 +24,8 @@ public class AlbumsController : Controller
 
         // 一覧表形式でアルバム情報を表示する
         var records =
-            from absal in _context.Abstract_albums
-            join lk in _context.Abstract_album_links on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
+            from absal in _context.AbstractAlbums
+            join lk in _context.AbstractAlbumLinks on absal.Abstract_Album_Id equals lk.Abstract_Album_Id
             join alb in _context.Albums on lk.Album_Id equals alb.Album_Id
             join media in _context.MediaTypes.DefaultIfEmpty() on alb.Media_Type equals media.Media_Type
             select new ShowableAlbum()
@@ -90,7 +90,7 @@ public class AlbumsController : Controller
 
         var articles =
              (
-            from absAlbum in _context.Abstract_albums
+            from absAlbum in _context.AbstractAlbums
             select new ArticleAlbum()
             {
                 Abstract_album_id = absAlbum.Abstract_Album_Id,
@@ -101,7 +101,7 @@ public class AlbumsController : Controller
         foreach (var article in articles)
         {
                 var albums= 
-                from absAlbumLink in _context.Abstract_album_links
+                from absAlbumLink in _context.AbstractAlbumLinks
 
                 join album in _context.Albums
                 on absAlbumLink.Album_Id equals album.Album_Id
@@ -208,7 +208,7 @@ public class AlbumsController : Controller
     {
         var album =
              (
-            from lk in _context.Abstract_album_links
+            from lk in _context.AbstractAlbumLinks
             join alb in _context.Albums
             on lk.Album_Id equals alb.Album_Id
             where album_id.Equals(lk.Album_Id)
@@ -269,7 +269,7 @@ public class AlbumsController : Controller
     {
         var subTbl2 =
         (
-        from link in _context.Abstract_album_links
+        from link in _context.AbstractAlbumLinks
         join album in _context.Albums on link.Album_Id equals album.Album_Id
         group new { link, album } by link.Abstract_Album_Id into tbl2
         select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
@@ -283,7 +283,7 @@ public class AlbumsController : Controller
         // 記事として表示する整形済みの抽象アルバム
         var article =
              (
-            from abs in _context.Abstract_albums
+            from abs in _context.AbstractAlbums
             where abs.Abstract_Album_Id.Equals(id)
             select new ArticleAlbum()
             {
@@ -301,7 +301,7 @@ public class AlbumsController : Controller
 
         article.Albums =
             (
-            from lk in _context.Abstract_album_links
+            from lk in _context.AbstractAlbumLinks
             join alb in _context.Albums
             on lk.Album_Id equals alb.Album_Id
             where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)

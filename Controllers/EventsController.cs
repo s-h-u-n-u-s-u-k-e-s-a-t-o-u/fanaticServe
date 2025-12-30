@@ -1,6 +1,6 @@
-﻿using fanaticServe.Data;
-using fanaticServe.Dto;
-using fanaticServe.Models;
+﻿using fanaticServe.Core.Data;
+using fanaticServe.Core.Dto;
+using fanaticServe.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
@@ -22,8 +22,8 @@ public class EventsController : Controller
         ViewData["TitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
         var events =
-            from absEvent in _context.Abstract_events
-            join link in _context.Abstract_event_links
+            from absEvent in _context.AbstractEvents
+            join link in _context.AbstractEventLinks
             on absEvent.Abstract_Event_Id equals link.Abstract_Event_Id
             join liveEvent in _context.LiveEvents
             on link.Event_Id equals liveEvent.Live_Event_Id
@@ -100,7 +100,7 @@ public class EventsController : Controller
         ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
 
         var eventGroup = (
-            from absEvent in _context.Abstract_events
+            from absEvent in _context.AbstractEvents
             where absEvent.Abstract_Event_Id == id
             select new ArticleEvent()
             {
@@ -115,7 +115,7 @@ public class EventsController : Controller
         }
 
         eventGroup.LiveEvents = (
-            from linkedList in _context.Abstract_event_links
+            from linkedList in _context.AbstractEventLinks
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
             where linkedList.Abstract_Event_Id == id
@@ -180,7 +180,7 @@ public class EventsController : Controller
 
         // イベントリンク + イベント
         var joinedEvents =
-            _context.Abstract_event_links
+            _context.AbstractEventLinks
             .Join(events,
                 link => link.Event_Id,
                 liveEvent => liveEvent.Live_Event_Id,
@@ -189,7 +189,7 @@ public class EventsController : Controller
             ;
 
         // 抽象イベントごとにまとめる
-        var filteredArticles = _context.Abstract_events
+        var filteredArticles = _context.AbstractEvents
             .Join(joinedEvents,
             ae => ae.Abstract_Event_Id,
             je => je.Key,
@@ -246,12 +246,12 @@ public class EventsController : Controller
 
     private List<ShowableSetList>? GetSelList(Guid Live_event_id)
     {
-        var query = _context.Set_lists
+        var query = _context.SetLists
             .Where(setList => setList.Live_Event_Id == Live_event_id)
             .OrderBy(setList => setList.Set_List_No)
             ;
 
-        return query.GroupJoin(_context.Set_List_Notes,
+        return query.GroupJoin(_context.SetListNotes,
             setlist => setlist.Set_List_Id,
             note => note.Set_List_Id,
             (setlist, note) => new { s = setlist, n = note }
@@ -270,6 +270,6 @@ public class EventsController : Controller
 
     private Live_Event_Note? GetLiveEventNote(Guid liveEventId)
     {
-        return _context.Live_Event_Notes.SingleOrDefault(le => le.Live_Event_Id == liveEventId);
+        return _context.LiveEventNotes.SingleOrDefault(le => le.Live_Event_Id == liveEventId);
     }
 }
