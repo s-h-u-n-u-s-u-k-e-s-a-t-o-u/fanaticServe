@@ -1,7 +1,5 @@
 ﻿using fanaticServe.Back;
 using fanaticServe.Core.Data;
-using fanaticServe.Core.Dto;
-using fanaticServe.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
