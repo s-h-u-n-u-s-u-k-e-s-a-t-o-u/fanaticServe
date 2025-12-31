@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-﻿using fanaticServe.Back;
-using fanaticServe.Core.Data;
-using Microsoft.AspNetCore.Mvc;
-
-namespace fanaticServe.Controllers;
-
-public class AlbumsController : Controller
-{
-    private readonly IFanaticServeContext _context;
-
-    public AlbumsController(IFanaticServeContext context)
-=======
 ﻿using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
 using fanaticServe.Core.Models;
@@ -21,7 +8,6 @@ public class AlbumService : IAlbums
 {
     private readonly IFanaticServeContext _context;
     public AlbumService(IFanaticServeContext context)
->>>>>>> ディレクトリ構成変更
     {
         _context = context;
     }
@@ -177,11 +163,6 @@ public class AlbumService : IAlbums
         return article;
     }
 
-    public DetailAlbum GetDetailAlbum(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
     /// <summary>
     /// 
     /// </summary>
@@ -329,5 +310,72 @@ public class AlbumService : IAlbums
 
         return tracks.ToList();
     }
+
+    private ArticleAlbum GetArticleAlbum(Guid id)
+    {
+        var subTbl2 =
+        (
+        from link in _context.AbstractAlbumLinks
+        join album in _context.Albums on link.Album_Id equals album.Album_Id
+        group new { link, album } by link.Abstract_Album_Id into tbl2
+        select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
+        ).FirstOrDefault();
+
+        if (subTbl2 == null)
+        {
+            return null;
+        }
+
+        // 記事として表示する整形済みの抽象アルバム
+        var article =
+             (
+            from abs in _context.AbstractAlbums
+            where abs.Abstract_Album_Id.Equals(id)
+            select new ArticleAlbum()
+            {
+                Abstract_album_id = abs.Abstract_Album_Id,
+                Title = abs.Title,
+                Release_On = subTbl2.release_on
+            }
+            ).FirstOrDefault();
+
+        // 抽象アルバムとアルバムを紐づけ
+        if (article == null)
+        {
+            return null;
+        }
+
+        article.Albums =
+            (
+            from lk in _context.AbstractAlbumLinks
+            join alb in _context.Albums
+            on lk.Album_Id equals alb.Album_Id
+            where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
+
+            join label in _context.Labels
+            on alb.Label_Id equals label.Label_Id into joinedTable1
+            from jt1 in joinedTable1.DefaultIfEmpty()
+
+            join media in _context.MediaTypes
+            on alb.Media_Type equals media.Media_Type into joinedTable2
+            from jt2 in joinedTable2.DefaultIfEmpty()
+            select new DetailAlbum()
+            {
+                Album_id = alb.Album_Id,
+                Title = alb.Title,
+                Code = alb.Code,
+                Release_on = alb.Release_On,
+                Label = jt1 == null ? "" : jt1.Name,
+                Media = jt2.Name ?? ""
+            }).ToList();
+
+        // アルバムにトラック情報を紐づけ
+        foreach (var album in article.Albums)
+        {
+            album.Tracks = GetTracks(album.Album_id);
+        }
+
+        return article;
+    }
 }
->>>>>>> ディレクトリ構成変更
+
