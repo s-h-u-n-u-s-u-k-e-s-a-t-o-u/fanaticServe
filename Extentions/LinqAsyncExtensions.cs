@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Microsoft.EntityFrameworkCore
+namespace Microsoft.fanaticServe.Extentions
 {
     // LINQ-to-Objects 上で EF の非同期メソッド呼び出しを互換的に使えるようにする簡易拡張。
     public static class LinqAsyncExtensions

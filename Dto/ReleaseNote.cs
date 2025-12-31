@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using fanaticServe.Constants;
+using fanaticServe.Core.Constants;
 
 namespace fanaticServe.Dto;
 

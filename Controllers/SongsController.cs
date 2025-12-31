@@ -1,5 +1,5 @@
-﻿using fanaticServe.Data;
-using fanaticServe.Dto;
+﻿using fanaticServe.Back;
+using fanaticServe.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
@@ -22,63 +22,7 @@ public class SongsController : Controller
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentFilter"] = searchString;
 
-        var songs =
-            _context.Songs
-            .Select(song => new ShowableSong()
-            {
-                Song_Id = song.Song_Id,
-                Title = song.Title,
-                Kana = song.Kana
-            });
-
-        if (!String.IsNullOrEmpty(searchString))
-        {
-            songs = songs.Where(s => s.Title.Contains(searchString) || s.Kana.Contains(searchString));
-        }
-
-        var songList = songs.ToList();
-        foreach (var song in songList)
-        {
-            var setlist = (
-                 _context.Set_lists
-                .Where(sl => sl.Song_Id == song.Song_Id)
-                .Join(
-                     _context.LiveEvents,
-                    sl => sl.Live_Event_Id,
-                    le => le.Live_Event_Id,
-                    (sl, le) => new { le.Live_Event_Id, le.Perform_At, le.Title })
-                .OrderByDescending(sl => sl.Perform_At)
-                ).ToList();
-
-            if (setlist != null && setlist.Count > 0)
-            {
-                song.Count = setlist.Count;
-                var rec = setlist
-                    .Select(r => new { r.Live_Event_Id, r.Perform_At, r.Title })
-                    .First();
-                song.LiveEventID = rec.Live_Event_Id;
-                song.EventTitle = rec.Title;
-                song.LastPeformAt = rec.Perform_At;
-            }
-        }
-
-        switch (sortOrder)
-        {
-            case "Count_desc":
-                songList = songList.OrderByDescending(s => s.Count).ToList();
-                break;
-            case "Count":
-                songList = songList.OrderBy(s => s.Count).ToList();
-                break;
-            case "Title_desc":
-                songList = songList.OrderByDescending(s => s.Kana).ToList();
-                break;
-            default:
-                songList = songList.OrderBy(s => s.Kana).ToList();
-                break;
-        }
-
-        return View(songList);
+        return View(new SongService(_context).GetAllSongs(sortOrder, searchString));
     }
 
     [HttpGet]
@@ -89,60 +33,6 @@ public class SongsController : Controller
             return NotFound();
         }
 
-        var song =
-           (from s in _context.Songs
-            where s.Song_Id == id
-            select new DetailSong()
-            {
-                Song_Id = s.Song_Id,
-                Title = s.Title,
-                Kana = s.Kana,
-            }).FirstOrDefault();
-
-        if (song == null)
-        {
-            return NotFound();
-        }
-
-        song.Albums =
-            (
-            from album in _context.Albums
-            join track in _context.Tracks
-            on album.Album_Id equals track.Album_Id
-            join media in _context.MediaTypes.DefaultIfEmpty() on album.Media_Type equals media.Media_Type
-            where track.Song_Id == id
-            orderby album.Release_On
-            select new ShowableAlbum()
-            {
-                Album_id = album.Album_Id,
-                Code = album.Code,
-                Title = album.Title,
-                DetailTitle = album.Title,
-                Release_on = album.Release_On,
-                Media = media.Name ?? "",
-                Track_No = track.Track_No,
-                Track_Title = track.Title
-            }).OrderBy(a => a.Release_on)
-            .ThenBy(suba => suba.Code)
-            .ThenBy(suba => suba.Track_No)
-            .ToArray();
-
-        song.LiveEvents =
-            (
-            from liveEvent in _context.LiveEvents
-            join setList in _context.Set_lists.DefaultIfEmpty()
-            on liveEvent.Live_Event_Id equals setList.Live_Event_Id
-            where setList.Song_Id == id
-            orderby liveEvent.Perform_At
-            select new ShowableLiveEvent()
-            {
-                Live_Event_Id = liveEvent.Live_Event_Id,
-                Title = liveEvent.Title,
-                Place = liveEvent.Place,
-                Perform_At = liveEvent.Perform_At
-            }
-            ).ToArray();
-
-        return View(song);
+        return View(new SongService(_context).GetSong(id.Value));
     }
 }
