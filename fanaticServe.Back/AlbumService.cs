@@ -163,11 +163,131 @@ public class AlbumService : IAlbums
         return article;
     }
 
-    public DetailAlbum GetDetailAlbum(Guid id)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public ArticleAlbum GetAlbumGroup(Guid id)
     {
-        throw new NotImplementedException();
+
+        var subTbl2 =
+        (
+        from link in _context.AbstractAlbumLinks
+        join album in _context.Albums on link.Album_Id equals album.Album_Id
+        group new { link, album } by link.Abstract_Album_Id into tbl2
+        select new { abstract_album_id = tbl2.Key, release_on = tbl2.Min(m => m.album.Release_On) }
+        ).FirstOrDefault();
+
+        if (subTbl2 == null)
+        {
+            return null;
+        }
+
+        // 記事として表示する整形済みの抽象アルバム
+        var article =
+             (
+            from abs in _context.AbstractAlbums
+            where abs.Abstract_Album_Id.Equals(id)
+            select new ArticleAlbum()
+            {
+                Abstract_album_id = abs.Abstract_Album_Id,
+                Title = abs.Title,
+                Release_On = subTbl2.release_on
+            }
+            ).FirstOrDefault();
+
+        // 抽象アルバムとアルバムを紐づけ
+        if (article == null)
+        {
+            return null;
+        }
+
+        article.Albums =
+            (
+            from lk in _context.AbstractAlbumLinks
+            join alb in _context.Albums
+            on lk.Album_Id equals alb.Album_Id
+            where lk.Abstract_Album_Id.Equals(article.Abstract_album_id)
+
+            join label in _context.Labels
+            on alb.Label_Id equals label.Label_Id into joinedTable1
+            from jt1 in joinedTable1.DefaultIfEmpty()
+
+            join media in _context.MediaTypes
+            on alb.Media_Type equals media.Media_Type into joinedTable2
+            from jt2 in joinedTable2.DefaultIfEmpty()
+            select new DetailAlbum()
+            {
+                Album_id = alb.Album_Id,
+                Title = alb.Title,
+                Code = alb.Code,
+                Release_on = alb.Release_On,
+                Label = jt1 == null ? "" : jt1.Name,
+                Media = jt2.Name ?? ""
+            }).ToList();
+
+        // アルバムにトラック情報を紐づけ
+        foreach (var album in article.Albums)
+        {
+            album.Tracks = GetTracks(album.Album_id);
+        }
+
+        return article;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="album_id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public DetailAlbum GetDetailAlbum(Guid album_id)
+    {
+
+        var album =
+             (
+            from lk in _context.AbstractAlbumLinks
+            join alb in _context.Albums
+            on lk.Album_Id equals alb.Album_Id
+            where album_id.Equals(lk.Album_Id)
+            orderby alb.Release_On
+
+            join label in _context.Labels
+            on alb.Label_Id equals label.Label_Id into joinedTable1
+            from jt1 in joinedTable1.DefaultIfEmpty()
+
+            join media in _context.MediaTypes
+            on alb.Media_Type equals media.Media_Type into joinedTable2
+            from jt2 in joinedTable2.DefaultIfEmpty()
+            select new DetailAlbum()
+            {
+                Album_id = alb.Album_Id,
+                Title = alb.Title,
+                Code = alb.Code,
+                Release_on = alb.Release_On,
+                Label = jt1 == null ? "" : jt1.Name,
+                Media = jt2.Name ?? ""
+            }
+            ).FirstOrDefault();
+
+        if (album == null)
+        {
+            return null;
+        }
+
+        // アルバムにトラック情報を紐づけ                
+        album.Tracks = GetTracks(album.Album_id);
+        return album;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="album_id"></param>
+    /// <param name="searchString"></param>
+    /// <returns></returns>
     private List<Track> GetTracks(Guid album_id, String searchString = "")
     {
         var tracks =
@@ -258,3 +378,4 @@ public class AlbumService : IAlbums
         return article;
     }
 }
+
