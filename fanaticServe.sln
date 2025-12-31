@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Core", ".\fana
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Back", ".\fanaticServe.Back\fanaticServe.Back.csproj", "{582CCAEC-7196-F2BF-A164-7A721D2BE54B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Core", "..\fanaticServe.Core\fanaticServe.Core.csproj", "{4BB8D2CE-69C5-FF51-489A-FC426721B6F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Back", "..\fanaticServe.Back\fanaticServe.Back.csproj", "{582CCAEC-7196-F2BF-A164-7A721D2BE54B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
