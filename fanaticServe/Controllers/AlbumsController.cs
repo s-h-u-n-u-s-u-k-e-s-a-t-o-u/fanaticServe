@@ -63,6 +63,6 @@ public class AlbumsController : Controller
         ViewData["GroupDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["GroupTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
-        return View(new AlbumService(_context).GetAlbumGroup(id.Value));
+        return View(new AlbumService(_context).GetAlbumGroup(id.Value, sortOrder));
     }    
 }
