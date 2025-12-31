@@ -13,9 +13,10 @@ public interface IAlbums
     /// <summary>
     /// 
     /// </summary>
+    /// <remarks>Albums/Articles</remarks>
     /// <param name="id"></param>
     /// <returns></returns>
-    public ArticleAlbum GetAlbumGroup(Guid id);
+    public ArticleAlbum GetAlbumGroup(Guid id, string sortOrder);
 
     /// <summary>
     /// 
