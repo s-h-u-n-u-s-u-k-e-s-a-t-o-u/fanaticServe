@@ -1,3 +1,4 @@
+
 ﻿using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
 using fanaticServe.Core.Models;
@@ -310,6 +311,7 @@ public class AlbumService : IAlbums
 
         return tracks.ToList();
     }
+
 
     private ArticleAlbum GetArticleAlbum(Guid id)
     {
