@@ -1,6 +1,7 @@
 ﻿@model fanaticServe.Core.Dto.DetailSong
 @{
     ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.Title;
 }
 
 <h1><ruby>@ViewData["Title"]<rt><span class="ruby">@Html.DisplayFor(m => m.Kana)</span></rt></ruby></h1>

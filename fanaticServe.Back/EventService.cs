@@ -226,6 +226,82 @@ public class EventService : IEvents
         return eventGroup;
     }
 
+    public List<DetailEvent> GetRecentlyChangedEvents(int limit)
+    {
+        // LiveEvntsのうち、更新日時が新しいものを取得する
+        var updatedEvents = _context.LiveEvents
+            .OrderByDescending(e => e.Modified_At)
+            .Take(limit)
+            .Select(e => new { Live_Event_Id = e.Live_Event_Id, Modified_At = e.Modified_At })
+            .ToList();
+
+        // セットリストからイベントIDでグループ化し、更新日時の最大値を取得する
+        var groupedSetList = _context.SetLists
+            .GroupBy(e => e.Live_Event_Id)
+            .Select(g => new { Live_Event_Id = g.Key, Modified_At = g.Max(e => e.Modified_At) })
+            .OrderByDescending(g => g.Modified_At)
+            .Take(limit)
+            .ToList();
+
+        // 両方の更新日時をマージして、最新のものを上限まで取得する
+        var recentEventIds = updatedEvents
+            .Concat(groupedSetList)
+            .OrderByDescending(e => e.Modified_At)
+            .Select(e => e.Live_Event_Id)
+            .Distinct()
+            .Take(limit)
+            .ToList();
+
+        var records = new List<DetailEvent>();
+
+        // イベントIDのリストに該当するライブイベント情報を取得する
+        this._context.LiveEvents
+            .Where(e => recentEventIds.Contains(e.Live_Event_Id))
+            .ToList()
+            .ForEach(e =>
+            {
+                var detailEvent = new DetailEvent()
+                {
+                    Live_event_id = e.Live_Event_Id,
+                    Title = e.Title,
+                    Place = e.Place,
+                    Perform_at = e.Perform_At,
+                    SetLists = GetSetList(e.Live_Event_Id),
+                    Note = GetLiveEventNote(e.Live_Event_Id)?.Note
+                };
+                records.Add(detailEvent);
+            });
+
+        return records;
+    }
+
+    public List<DetailEvent> GetRecentLiveEvent(int limit)
+    {
+        var records = new List<DetailEvent>();
+        var tommorow = DateTime.Now.AddDays(1);
+
+        this._context.LiveEvents
+            .Where(e => e.Perform_At < tommorow)
+            .OrderByDescending(e => e.Perform_At)
+            .Take(limit)
+            .ToList()
+            .ForEach(e =>
+            {
+                var detailEvent = new DetailEvent()
+                {
+                    Live_event_id = e.Live_Event_Id,
+                    Title = e.Title,
+                    Place = e.Place,
+                    Perform_at = e.Perform_At,
+                    SetLists = GetSetList(e.Live_Event_Id),
+                    Note = GetLiveEventNote(e.Live_Event_Id)?.Note
+                };
+                records.Add(detailEvent);
+            });
+
+        return records;
+    }
+
     private List<ShowableSetList>? GetSetList(Guid Live_event_id)
     {
         return (
