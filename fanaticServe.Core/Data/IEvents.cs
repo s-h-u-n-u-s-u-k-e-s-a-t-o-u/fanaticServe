@@ -25,4 +25,18 @@ public interface IEvents
     /// <remarks>Events/Details/{id} </remarks>
     /// <param name="eventId">イベントID</param>
     public DetailEvent GetDetailEvent(Guid eventId);
+
+    /// <summary>
+    /// 最近変更したライブ/イベントを取得する
+    /// </summary>
+    /// <param name="limit">取得する件数の上限</param>
+    /// <returns></returns>
+    public List<DetailEvent> GetRecentlyChangedEvents(int limit);
+
+    /// <summary>
+    /// 最近開催されたライブ/イベントを取得する
+    /// </summary>
+    /// <param name="limit">取得する件数の上限</param>
+    /// <returns></returns>
+    public List<DetailEvent> GetRecentLiveEvent(int limit);
 }

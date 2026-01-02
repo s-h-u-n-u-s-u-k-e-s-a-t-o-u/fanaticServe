@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<fanaticServe.Core.Dto.ShowableEvent>
-
 @{
     ViewData["Title"] = "event list";
+    ViewData["Description"] = "event list";
     String preTitle = "";
 }
 
@@ -14,7 +14,7 @@
     <thead class="only-pc">
         <tr>
             <th>
-                    @Html.DisplayNameFor(model => model.Perform_at)
+                @Html.DisplayNameFor(model => model.Perform_at)
             </th>
             <th>
             </th>

@@ -1,11 +1,48 @@
-﻿@{
-    ViewData["Title"] = "AO-fanatics ";
-}
+﻿@model DashBoard
+@using fanaticServe.Core.Dto
 
-<h1>概要</h1>
 <div>
-    <p>
-        本サイトは大橋彩香のアーティスト活動についてのファンサイトです。<br>
-        云々
-    </p>
+    <div>
+        <h3>最近のイベント</h3>
+    </div>
+    <div>
+        @foreach (var detailEvent in Model.RecentLiveEvents)
+        {
+            <article class="article-outer">
+                <div class="card article-inner">
+                    <div class="card-header ">
+                        <a asp-controller="Events" asp-action="detail" asp-route-id="@detailEvent.Live_event_id">
+                            @Html.DisplayFor(model => detailEvent.Title)
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @await Html.PartialAsync("_DetailEventView", detailEvent)
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+</div>
+
+<div>
+    <div>
+        <h3>最近の更新</h3>
+    </div>
+    <div>
+        @foreach (var detailEvent in Model.RecentlyChangedEvents)
+        {
+            <article class="article-outer">
+                <div class="card article-inner">
+                    <div class="card-header ">
+                        <a asp-controller="Events" asp-action="detail" asp-route-id="@detailEvent.Live_event_id">
+                            @Html.DisplayFor(model => detailEvent.Title)
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        @await Html.PartialAsync("_DetailEventView", detailEvent)
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
 </div>

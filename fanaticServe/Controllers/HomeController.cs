@@ -1,4 +1,5 @@
 using fanaticServe.Core.Data;
+using fanaticServe.Core.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -20,9 +21,17 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        return Redirect("/Events/Articles");
+        int limit = 3;
 
-        //        return View();
+        // Dashboard‚Ìƒf[ƒ^‚ğæ“¾‚µ‚ÄView‚É“n‚·
+        DashBoard dashboardData = new DashBoard();
+
+        var service = new fanaticServe.Back.EventService(_context);
+
+        dashboardData.RecentLiveEvents.AddRange(service.GetRecentLiveEvent(limit));
+        dashboardData.RecentlyChangedEvents.AddRange(service.GetRecentlyChangedEvents(limit));
+
+        return View(dashboardData);
     }
 
     [HttpGet]

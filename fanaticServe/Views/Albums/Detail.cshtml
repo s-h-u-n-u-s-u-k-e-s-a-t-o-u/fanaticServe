@@ -1,7 +1,8 @@
 ﻿@model fanaticServe.Core.Dto.DetailAlbum
 
 @{
-    ViewData["Title"] = Model.Title; 
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.Title;
 }
 <div>
     <h1>@Html.DisplayFor(modelItem => modelItem.Title)</h1>    
