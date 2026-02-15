@@ -21,4 +21,8 @@ public interface IFanaticServeContext
     IQueryable<Set_list> SetLists { get; }
     IQueryable<Set_List_Note> SetListNotes { get; }
     IQueryable<Song> Songs { get; }
+    IQueryable<RoleOnSong> RoleOnSongs { get; }
+    IQueryable<Role> Roles { get; }
+
+    IQueryable<Person> People { get; }
 }

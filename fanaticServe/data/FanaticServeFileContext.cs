@@ -30,6 +30,9 @@ public class FanaticServeFileContext : IFanaticServeContext
         SetLists = LoadFile<Set_list>("Set_list").AsQueryable();
         SetListNotes = LoadFile<Set_List_Note>("Set_List_Note").AsQueryable();
         Songs = LoadFile<Song>("Song").AsQueryable();
+        RoleOnSongs = LoadFile<RoleOnSong>("RoleOnSong").AsQueryable();
+        Roles = LoadFile<Role>("Role").AsQueryable();
+        People = LoadFile<Person>("Person").AsQueryable();
     }
 
     public IQueryable<Abstract_album> AbstractAlbums { get; }
@@ -50,6 +53,10 @@ public class FanaticServeFileContext : IFanaticServeContext
     public IQueryable<Set_List_Note> SetListNotes { get; }
 
     public IQueryable<Song> Songs { get; }
+    public IQueryable<RoleOnSong> RoleOnSongs { get; }
+    public IQueryable<Role> Roles { get; }
+    public IQueryable<Person> People { get; }
+
 
     private List<T> LoadFile<T>(string fileName) where T : new()
     {

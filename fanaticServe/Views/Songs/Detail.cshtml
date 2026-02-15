@@ -1,10 +1,22 @@
-﻿@model fanaticServe.Core.Dto.DetailSong
+﻿@using fanaticServe.Core.Dto
+@model fanaticServe.Core.Dto.DetailSong
+
 @{
     ViewData["Title"] = Model.Title;
     ViewData["Description"] = Model.Title;
 }
 
 <h1><ruby>@ViewData["Title"]<rt><span class="ruby">@Html.DisplayFor(m => m.Kana)</span></rt></ruby></h1>
+
+@if (Model.RoleWithPeople != null && Model.RoleWithPeople.Any())
+{
+    @foreach (RoleWithPerson roleWithPerson in Model.RoleWithPeople)
+    {
+        <span>@roleWithPerson.Role.Name</span>
+        <span><a asp-controller="People" asp-action="Detail" asp-route-id="@roleWithPerson.Person.Person_Id">@roleWithPerson.Person.Name</a></span>
+        <br />
+    }
+}
 
 <div class="article-outer">
     <div class="article-inner">

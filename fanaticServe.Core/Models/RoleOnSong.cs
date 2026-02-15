@@ -17,7 +17,7 @@ public partial class RoleOnSong
     /// <summary>
     /// 役割ID
     /// </summary>
-    public Guid Role_Id { get; set; }
+    public int Role_Id { get; set; }
 
     /// <summary>
     /// 人物ID

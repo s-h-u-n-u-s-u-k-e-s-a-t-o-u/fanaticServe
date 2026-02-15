@@ -6,7 +6,6 @@ namespace fanaticServe.Core.Dto;
 
 public class ShowableSong
 {
-
     /// <summary>
     /// 楽曲ID
     /// </summary>
@@ -37,7 +36,6 @@ public class ShowableSong
 
     [DisplayName("開催日")]
     [DisplayFormat(DataFormatString = Format.DateFormat)]
-    public DateTime? LastPeformAt { get; set; }
-
+    public DateTime? LastPerformAt { get; set; }
 
 }
