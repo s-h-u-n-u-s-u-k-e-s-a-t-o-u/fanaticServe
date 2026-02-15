@@ -1,5 +1,7 @@
 ﻿using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
+using fanaticServe.Core.Models;
+using System.Linq;
 
 namespace fanaticServe.Back;
 
@@ -55,7 +57,7 @@ public class SongService : ISongs
                     .First();
                 song.LiveEventID = rec.Live_Event_Id;
                 song.EventTitle = rec.Title;
-                song.LastPeformAt = rec.Perform_At;
+                song.LastPerformAt = rec.Perform_At;
             }
         }
 
@@ -124,6 +126,30 @@ public class SongService : ISongs
                 Perform_At = liveEvent.Perform_At
             }
             ).ToArray();
+
+        // Song_idで紐づくRoleOnSongsを取得
+        var roleOnSongs = _context.RoleOnSongs.Where(role => role.Song_Id == songId)
+            .Join(
+                _context.Roles,
+                roleOnSong => roleOnSong.Role_Id,
+                role => role.Role_Id,
+                (roleOnSong, role) => new { Person_Id = roleOnSong.Person_Id, role = role }
+            )
+            .Join(
+            _context.People,
+            roleOnSong => roleOnSong.Person_Id,
+            Person => Person.Person_Id,
+            (roleOnSong, person) => new RoleWithPerson()
+            {
+                Role = roleOnSong.role,
+                Person = person
+            }
+            )
+            .OrderBy(o =>o.Role.Name)
+            .ThenBy(o2=>o2.Person.Kana)
+            ;
+
+        song.RoleWithPeople.AddRange(roleOnSongs.ToList());
 
         return song;
     }

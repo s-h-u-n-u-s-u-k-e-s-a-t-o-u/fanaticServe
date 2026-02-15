@@ -38,7 +38,7 @@
                 @Html.DisplayNameFor(model => model.EventTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastPeformAt)
+                @Html.DisplayNameFor(model => model.LastPerformAt)
             </th>
         </tr>
     </thead>
@@ -59,7 +59,7 @@
                     <a asp-action="detail" asp-controller="Events" asp-route-id="@item.LiveEventID"> @Html.DisplayFor(modelItem => item.EventTitle)</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.LastPeformAt)
+                    @Html.DisplayFor(modelItem => item.LastPerformAt)
                 </td>
             </tr>
         }

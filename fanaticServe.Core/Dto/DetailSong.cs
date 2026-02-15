@@ -26,4 +26,5 @@ public class DetailSong
 
     public IEnumerable<ShowableAlbum>? Albums { get; set; }
     public IEnumerable<ShowableLiveEvent>? LiveEvents { get; set; }
+    public List<RoleWithPerson> RoleWithPeople { get; } = new List<RoleWithPerson>();
 }
