@@ -2,6 +2,7 @@ using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
 using fanaticServe.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace fanaticServe.Controllers;
