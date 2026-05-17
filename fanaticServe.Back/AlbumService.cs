@@ -70,6 +70,7 @@ public class AlbumService : IAlbums
         foreach (var article in articles)
         {
             var albums =
+                (
             from absAlbumLink in _context.AbstractAlbumLinks
 
             join album in _context.Albums
@@ -93,7 +94,7 @@ public class AlbumService : IAlbums
                 Release_on = album.Release_On,
                 Label = labelName == null ? "" : labelName.Name,
                 Media = mediaType.Name ?? ""
-            }
+            }).ToList();
             ;
 
             article.Albums = albums?.Where(a => a != null).ToList();
