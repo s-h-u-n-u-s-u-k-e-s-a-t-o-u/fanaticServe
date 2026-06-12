@@ -99,3 +99,24 @@ body {
 .border-image-color {
 	border-color: var(--image-color ) !important;
 }
+
+.badge
+{
+	margin-right: 1px;
+}
+
+.badge-singer {
+	color: var(--image-color );
+	border-color: var(--image-color ) !important;
+}
+
+.badge-cover {
+	color: var(--bs-orange );
+	border-color: var(--bs-orange ) !important;
+}
+
+.badge-medley {
+	color: var(--bs-cyan);
+	border-color: var(--bs-cyan) !important;
+}
+

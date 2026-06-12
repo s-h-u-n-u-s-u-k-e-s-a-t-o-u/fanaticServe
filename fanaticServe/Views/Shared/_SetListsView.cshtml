@@ -32,8 +32,18 @@
                     <td>
                         @Html.DisplayFor(model => setList.Note)
                         <div style="text-align:right">
-                            <TargetBadge />
-
+                            @if (setList.Singing)
+                            {
+                                <SingerBadge />
+                            }
+                            @if (setList.Cover)
+                            {
+                                <CoverBadge />
+                            }
+                            @if (setList.Medley)
+                            {
+                            <MedleyBadge />                                
+                            }
                         </div>
                     </td>
                 </tr>
