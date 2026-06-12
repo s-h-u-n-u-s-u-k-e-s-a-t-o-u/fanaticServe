@@ -35,6 +35,26 @@ public class ShowableSetList
     public Guid? Song_id { get; set; }
 
     /// <summary>
+    ///  歌唱フラグ
+    /// </summary>
+    public bool Singing { get; set; }
+
+    /// <summary>
+    ///  メドレーフラグ
+    /// </summary>
+    public bool Medley { get; set; }
+
+    /// <summary>
+    ///  カバーフラグ
+    /// </summary>
+    public bool Cover { get; set; }
+
+    /// <summary>
+    ///  パート区分
+    /// </summary>
+    public int Part_Type { get; set; }
+
+    /// <summary>
     /// ノート
     /// </summary>
     [DisplayName("ノート")]
