@@ -19,8 +19,8 @@
     }
 </form>
 
-<a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleDateSortParm"]">開催日で並び替え</a> |
-<a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleTitleSortParm"]">タイトルで並び替え</a>
+<a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleDateSortParam"]">開催日で並び替え</a> |
+<a asp-action="Articles" asp-route-sortOrder="@ViewData["ArticleTitleSortParam"]">タイトルで並び替え</a>
 
 @foreach (ArticleEvent abs in Model)
 {

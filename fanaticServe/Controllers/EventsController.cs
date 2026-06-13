@@ -17,8 +17,8 @@ public class EventsController : Controller
     public IActionResult Index(string sortOrder)
     {
         // ソート条件の初期化
-        ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-        ViewData["TitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
+        ViewData["DateSortParam"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["TitleSortParam"] = sortOrder == "title" ? "title_desc" : "title";
 
         return View(new EventService(_context).GetAllEvents(sortOrder));
     }
@@ -44,8 +44,8 @@ public class EventsController : Controller
         }
 
         // ソート条件の初期化
-        ViewData["GroupDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-        ViewData["GroupTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
+        ViewData["GroupDateSortParam"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["GroupTitleSortParam"] = sortOrder == "title" ? "title_desc" : "title";
 
         return View(new EventService(_context).GetEventGroup(id.Value, sortOrder));
     }
@@ -54,8 +54,8 @@ public class EventsController : Controller
     public IActionResult Articles(string sortOrder, string searchString)
     {
         // ソート条件の初期化
-        ViewData["ArticleDateSortParm"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
-        ViewData["ArticleTitleSortParm"] = sortOrder == "title" ? "title_desc" : "title";
+        ViewData["ArticleDateSortParam"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+        ViewData["ArticleTitleSortParam"] = sortOrder == "title" ? "title_desc" : "title";
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentFilter"] = searchString;
 

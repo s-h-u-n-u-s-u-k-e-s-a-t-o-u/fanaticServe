@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using fanaticServe.Core.Enum;
 
 namespace fanaticServe.Core.Models;
 
@@ -32,6 +33,26 @@ public partial class Set_list
     /// 楽曲ID
     /// </summary>
     public Guid? Song_Id { get; set; }
+
+    /// <summary>
+    ///  歌唱フラグ
+    /// </summary>
+    public bool Singing { get; set; }
+
+    /// <summary>
+    ///  メドレーフラグ
+    /// </summary>
+    public bool Medley { get; set; }
+
+    /// <summary>
+    ///  カバーフラグ
+    /// </summary>
+    public bool Cover { get; set; }
+
+    /// <summary>
+    ///  パート区分
+    /// </summary>
+    public int Part_Type { get; set; }
 
     /// <summary>
     /// 登録日時

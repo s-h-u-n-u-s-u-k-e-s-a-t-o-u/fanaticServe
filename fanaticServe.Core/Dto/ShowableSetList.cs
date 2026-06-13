@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using fanaticServe.Core.Enum;
+using System.ComponentModel;
 
 namespace fanaticServe.Core.Dto;
 
@@ -33,6 +34,26 @@ public class ShowableSetList
     /// </summary>
     [DisplayName("楽曲ID")]
     public Guid? Song_id { get; set; }
+
+    /// <summary>
+    ///  歌唱フラグ
+    /// </summary>
+    public bool Singing { get; set; }
+
+    /// <summary>
+    ///  メドレーフラグ
+    /// </summary>
+    public bool Medley { get; set; }
+
+    /// <summary>
+    ///  カバーフラグ
+    /// </summary>
+    public bool Cover { get; set; }
+
+    /// <summary>
+    ///  パート区分
+    /// </summary>
+    public Part Part_Type { get; set; }
 
     /// <summary>
     /// ノート

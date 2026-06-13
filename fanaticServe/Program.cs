@@ -5,8 +5,8 @@ using fanaticServe.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // ÉçÉOÇÃê›íË
-//builder.Logging.ClearProviders();
-//builder.Logging.AddConsole();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 //builder.Logging.AddDebug();
 
 // Add OpenTelemetry and configure it to use Azure Monitor.

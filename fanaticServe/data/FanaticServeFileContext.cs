@@ -2,6 +2,7 @@
 using fanaticServe.Core.Data;
 using System.Reflection;
 using System.Text;
+using fanaticServe.Core.Enum;
 
 namespace fanaticServe.Data;
 
@@ -29,6 +30,8 @@ public class FanaticServeFileContext : IFanaticServeContext
         LiveEventNotes = LoadFile<Live_Event_Note>("Live_Event_Note").AsQueryable();
         SetLists = LoadFile<Set_list>("Set_list").AsQueryable();
         SetListNotes = LoadFile<Set_List_Note>("Set_List_Note").AsQueryable();
+        Part = LoadFile<Part>("Part").AsQueryable();
+
         Songs = LoadFile<Song>("Song").AsQueryable();
         RoleOnSongs = LoadFile<RoleOnSong>("RoleOnSong").AsQueryable();
         Roles = LoadFile<Role>("Role").AsQueryable();
@@ -51,13 +54,19 @@ public class FanaticServeFileContext : IFanaticServeContext
     public IQueryable<Live_Event_Note> LiveEventNotes { get; }
     public IQueryable<Set_list> SetLists { get; }
     public IQueryable<Set_List_Note> SetListNotes { get; }
+    public IQueryable<Part> Part { get; }
 
     public IQueryable<Song> Songs { get; }
     public IQueryable<RoleOnSong> RoleOnSongs { get; }
     public IQueryable<Role> Roles { get; }
     public IQueryable<Person> People { get; }
 
-
+    /// <summary>
+    /// ファイルから同名のModelクラスのリストにデータを読み込む
+    /// </summary>
+    /// <typeparam name="T">Modelクラス</typeparam>
+    /// <param name="fileName">データを読み取るファイル</param>
+    /// <returns>ファイルから読み取ったデータのリスト</returns>
     private List<T> LoadFile<T>(string fileName) where T : new()
     {
         var result = new List<T>();
@@ -127,7 +136,13 @@ public class FanaticServeFileContext : IFanaticServeContext
         if (t == typeof(TimeSpan))
             return TimeSpan.TryParse(raw, out var ts) ? ts : (object?)null;
         if (t == typeof(bool))
-            return bool.TryParse(raw, out var b) ? b : (object?)null;
+        {
+            if (bool.TryParse(raw, out var b)) {
+                return   b;                
+            } else {
+                return ("1".Equals(raw));
+            }
+        }
         if (t.IsEnum)
         {
             try { return Enum.Parse(t, raw); } catch { return null; }

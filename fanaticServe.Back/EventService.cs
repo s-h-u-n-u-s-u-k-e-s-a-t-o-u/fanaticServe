@@ -1,6 +1,7 @@
 ﻿using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
 using fanaticServe.Core.Models;
+using fanaticServe.Core.Enum;
 
 namespace fanaticServe.Back;
 
@@ -318,6 +319,10 @@ public class EventService : IEvents
                        Set_List_No = setList.Set_List_No,
                        Title = setList.Title,
                        Song_id = setList.Song_Id,
+                       Singing = setList.Singing,
+                       Cover = setList.Cover,
+                       Medley = setList.Medley,
+                       Part_Type = PartParser.Parse(setList.Part_Type),
                        Note = (subT == null) ? "" : subT.Note ?? ""
                    }
                ).ToList();
