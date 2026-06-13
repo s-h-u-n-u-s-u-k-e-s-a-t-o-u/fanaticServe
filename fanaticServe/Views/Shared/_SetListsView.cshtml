@@ -30,21 +30,29 @@
                         }
                     </td>
                     <td>
-                        @Html.DisplayFor(model => setList.Note)
-                        <div style="text-align:right">
-                            @if (setList.Singing)
-                            {
-                                <SingerBadge />
-                            }
-                            @if (setList.Cover)
-                            {
-                                <CoverBadge />
-                            }
-                            @if (setList.Medley)
-                            {
-                            <MedleyBadge />                                
-                            }
-                        </div>
+                        @if (setList.Singing || setList.Cover || setList.Medley)
+                        {
+                            <div>
+                                @if (setList.Singing)
+                                {
+                                    <SingerBadge />
+                                }
+                                @if (setList.Cover)
+                                {
+                                    <CoverBadge />
+                                }
+                                @if (setList.Medley)
+                                {
+                                    <MedleyBadge />
+                                }
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(setList.Note))
+                        {
+                            <div>
+                                @Html.DisplayFor(model => setList.Note)
+                            </div>
+                        }
                     </td>
                 </tr>
             }

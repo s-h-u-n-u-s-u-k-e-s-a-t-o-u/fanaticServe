@@ -318,6 +318,9 @@ public class EventService : IEvents
                        Set_List_No = setList.Set_List_No,
                        Title = setList.Title,
                        Song_id = setList.Song_Id,
+                       Singing = setList.Singing,
+                       Cover = setList.Cover,
+                       Medley = setList.Medley,
                        Note = (subT == null) ? "" : subT.Note ?? ""
                    }
                ).ToList();

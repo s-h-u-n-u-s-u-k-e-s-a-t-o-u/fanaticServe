@@ -135,7 +135,13 @@ public class FanaticServeFileContext : IFanaticServeContext
         if (t == typeof(TimeSpan))
             return TimeSpan.TryParse(raw, out var ts) ? ts : (object?)null;
         if (t == typeof(bool))
-            return bool.TryParse(raw, out var b) ? b : (object?)null;
+        {
+            if (bool.TryParse(raw, out var b)) {
+                return   b;                
+            } else {
+                return ("1".Equals(raw));
+            }
+        }
         if (t.IsEnum)
         {
             try { return Enum.Parse(t, raw); } catch { return null; }
