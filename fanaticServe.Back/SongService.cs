@@ -40,7 +40,7 @@ public class SongService : ISongs
         {
             var setlist = (
                  _context.SetLists
-                .Where(sl => sl.Song_Id == song.Song_Id)
+                .Where(sl => sl.Song_Id == song.Song_Id && sl.Singing == true)
                 .Join(
                      _context.LiveEvents,
                     sl => sl.Live_Event_Id,
@@ -116,7 +116,7 @@ public class SongService : ISongs
             from liveEvent in _context.LiveEvents
             join setList in _context.SetLists.DefaultIfEmpty()
             on liveEvent.Live_Event_Id equals setList.Live_Event_Id
-            where setList.Song_Id == songId
+            where setList.Song_Id == songId && setList.Singing == true
             orderby liveEvent.Perform_At
             select new ShowableLiveEvent()
             {
