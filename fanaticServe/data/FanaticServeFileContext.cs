@@ -2,6 +2,7 @@
 using fanaticServe.Core.Data;
 using System.Reflection;
 using System.Text;
+using fanaticServe.Core.Enum;
 
 namespace fanaticServe.Data;
 

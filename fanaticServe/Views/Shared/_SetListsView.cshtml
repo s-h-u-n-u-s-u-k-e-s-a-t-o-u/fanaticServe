@@ -1,4 +1,5 @@
-﻿@model IEnumerable<fanaticServe.Core.Dto.ShowableSetList>
+﻿@using fanaticServe.Core.Enum
+@model IEnumerable<fanaticServe.Core.Dto.ShowableSetList>
 
 @if (Model != null && Model.Count() > 0)
 {
@@ -16,6 +17,10 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(model => setList.Set_List_No)
+                        @if (setList.Part_Type == Part.Encore)
+                        {
+                            <EncoreBadge />
+                        }
                     </td>
                     <td>
                         @if (setList.Song_id == null)
@@ -33,6 +38,7 @@
                         @if (setList.Singing || setList.Cover || setList.Medley)
                         {
                             <div>
+
                                 @if (setList.Singing)
                                 {
                                     <SingerBadge />

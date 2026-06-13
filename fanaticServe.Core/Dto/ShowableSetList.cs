@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using fanaticServe.Core.Enum;
+using System.ComponentModel;
 
 namespace fanaticServe.Core.Dto;
 
@@ -52,7 +53,7 @@ public class ShowableSetList
     /// <summary>
     ///  パート区分
     /// </summary>
-    public int Part_Type { get; set; }
+    public Part Part_Type { get; set; }
 
     /// <summary>
     /// ノート
