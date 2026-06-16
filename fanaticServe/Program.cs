@@ -1,7 +1,7 @@
 // Import the Azure.Monitor.OpenTelemetry.AspNetCore namespace.
 
 using fanaticServe.Core.Data;
-using fanaticServe.Data;
+using fanaticServe.Back.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +20,7 @@ builder.Logging.AddDebug();
 builder.Configuration.AddEnvironmentVariables(prefix: "SQLCONNSTR_SSSWare_");
 var connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_SSSWare_ConnectionStrings__DefaultConnection");
 
-builder.Services.AddDbContext<fanaticServe.Data.FanaticServeContext>(options =>
+builder.Services.AddDbContext<FanaticServeContext>(options =>
     options.UseSqlServer(connectionString, providerOptions => providerOptions.EnableRetryOnFailure()));
 
 

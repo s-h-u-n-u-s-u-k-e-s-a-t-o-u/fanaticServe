@@ -2,7 +2,7 @@
 using fanaticServe.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace fanaticServe.Data;
+namespace fanaticServe.Back.Data;
 
 public partial class FanaticServeContext : DbContext, IFanaticServeContext
 {

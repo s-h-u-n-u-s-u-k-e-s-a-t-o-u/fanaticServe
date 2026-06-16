@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using fanaticServe.Core.Enum;
 
-namespace fanaticServe.Data;
+namespace fanaticServe.Back.Data;
 
 public class FanaticServeFileContext : IFanaticServeContext
 {
