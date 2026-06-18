@@ -18,4 +18,7 @@
     <ProjectReference Include="..\fanaticServe.Core\fanaticServe.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="appsettings.Development.json" />
+  </ItemGroup>
 </Project>

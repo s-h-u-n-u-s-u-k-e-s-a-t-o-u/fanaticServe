@@ -1,0 +1,46 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model fanaticServe.Core.Dto.StarMatrix
+
+@{
+    ViewData["Title"] = "星取表";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            @for (int col = 0; col < Model.columnCount; col++)
+            {
+                <th style="width:2em; white-space: nowrap;transform:rotate(270deg);">@Html.DisplayFor(m => m.Header[col].Title)</th>
+            }
+        </tr>
+    </thead>
+
+    <tbody>
+        @for (int row = 0; row < Model.rowCount; row++)
+        {
+            <tr>
+                @{
+                    // 先頭のみRowHeaderから
+                }
+                <th>@Html.DisplayFor(m => m.RowHeader[row].Title)</th>
+                @for (int col = 0; col < Model.columnCount; col++)
+                {
+                    <td>
+                        @if (Model.Cells[row, col])
+                        {
+                            <span>●</span>
+                        }
+                    </td>
+                }
+
+            </tr>
+        }
+    </tbody>
+
+</table>
