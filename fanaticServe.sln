@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Core", "fanati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Back", "fanaticServe.Back\fanaticServe.Back.csproj", "{582CCAEC-7196-F2BF-A164-7A721D2BE54B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fanaticServe.Back.Tests", "fanaticServe.Back.Tests\fanaticServe.Back.Tests.csproj", "{D9527BF7-E11F-7046-25D4-3968DD438D10}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{582CCAEC-7196-F2BF-A164-7A721D2BE54B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{582CCAEC-7196-F2BF-A164-7A721D2BE54B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{582CCAEC-7196-F2BF-A164-7A721D2BE54B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9527BF7-E11F-7046-25D4-3968DD438D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9527BF7-E11F-7046-25D4-3968DD438D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9527BF7-E11F-7046-25D4-3968DD438D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9527BF7-E11F-7046-25D4-3968DD438D10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
