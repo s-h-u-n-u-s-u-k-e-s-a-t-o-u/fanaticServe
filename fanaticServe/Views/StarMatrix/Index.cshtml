@@ -1,0 +1,40 @@
+﻿@model fanaticServe.Core.Dto.StarMatrix
+
+@{
+    ViewData["Title"] = "星取表";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<!-- StarMatrixのModalを開くボタン -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#starMatrixModal">
+    星取表を表示
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="starMatrixModal" tabindex="-1" aria-labelledby="starMatrixModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="starMatrixModalLabel">@ViewData["Title"]</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @await Html.PartialAsync("_StarMatrixTable", Model)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // ページ読み込み時に自動的にModalを表示
+            const modal = new bootstrap.Modal(document.getElementById('starMatrixModal'));
+            modal.show();
+        });
+    </script>
+}
