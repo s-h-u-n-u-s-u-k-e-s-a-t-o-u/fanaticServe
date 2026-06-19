@@ -32,3 +32,4 @@ work/
 /fanaticServe.Back.Tests/DataSource/song.dat
 /fanaticServe.Back.Tests/DataSource/song_note.dat
 /fanaticServe.Back.Tests/DataSource/track.dat
+/fanaticServe.Back.Tests/fanaticServe.Back.Tests.csproj
