@@ -18,4 +18,11 @@ public class StarMatrixController : Controller
         var service = new StarMatrixService(_context);
         return View(service.GetStarMatrix());
     }
+
+    // Modalを表示するパーシャルビューを返すアクション
+    public IActionResult GetModal()
+    {
+        var service = new StarMatrixService(_context);
+        return PartialView("_StarMatrixModal", service.GetStarMatrix());
+    }
 }

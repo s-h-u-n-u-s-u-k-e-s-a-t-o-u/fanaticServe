@@ -1,0 +1,43 @@
+﻿@model fanaticServe.Core.Dto.StarMatrix
+
+<div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+    <table class="table table-sm table-bordered">
+        <thead style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">
+            <tr>
+                <th style="width: auto; position: sticky; left: 0; background-color: #f8f9fa; z-index: 11;">イベント</th>
+                @for (int col = 0; col < Model.columnCount; col++)
+                {
+                    var headerTitle = Model.Header[col].Title;
+                    var displayTitle = headerTitle.Length > 10 ? headerTitle.Substring(0, 10) + "…" : headerTitle;
+                    <th style="width: 2em; text-align: center;" title="@headerTitle">
+                        <div style="writing-mode: sideways-lr; white-space: nowrap; font-size: 0.75rem; cursor: help;">
+                            @displayTitle
+                        </div>
+                    </th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @for (int row = 0; row < Model.rowCount; row++)
+            {
+                var rowHeaderTitle = Model.RowHeader[row].Title;
+                var rowDisplayTitle = rowHeaderTitle.Length > 10 ? rowHeaderTitle.Substring(0, 10) + "…" : rowHeaderTitle;
+                <tr>
+                    <th style="font-size: 0.9rem; position: sticky; left: 0; background-color: #ffffff; z-index: 9;" title="@rowHeaderTitle">
+                        @rowDisplayTitle
+                    </th>
+                    @for (int col = 0; col < Model.columnCount; col++)
+                    {
+                        <td style="text-align: center; padding: 0.25rem;">
+                            @if (Model.Cells[row, col])
+                            {
+                                <span style="font-size: 1.2rem;">●</span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
