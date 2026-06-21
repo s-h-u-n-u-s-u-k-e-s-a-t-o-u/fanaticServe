@@ -1,6 +1,6 @@
 // Import the Azure.Monitor.OpenTelemetry.AspNetCore namespace.
 using fanaticServe.Core.Data;
-using fanaticServe.Data;
+using fanaticServe.Back.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
