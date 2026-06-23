@@ -144,6 +144,7 @@ public class EventService : IEvents
     /// <returns></returns>
     public DetailEvent GetDetailEvent(Guid eventId)
     {
+        // key項目指定なので1件しか取得できないが、firstを使う
         var liveEvent = _context.LiveEvents
             .Where(le => le.Live_Event_Id == eventId)
             .Select(le => new DetailEvent
@@ -151,7 +152,15 @@ public class EventService : IEvents
                 Live_event_id = le.Live_Event_Id,
                 Title = le.Title,
                 Place = le.Place,
-                Perform_at = le.Perform_At
+                Perform_at = le.Perform_At,
+                LiveEventUrls = _context.LiveEventUrls
+                    .Where(url => url.Live_Event_Id == le.Live_Event_Id)
+                    .Select(url => new Live_Event_Url
+                    {
+                        Live_Event_Id = url.Live_Event_Id,
+                        Url = url.Url,
+                        Description = url.Description
+                    }).ToList()
             })
             .First();
 
@@ -164,14 +173,14 @@ public class EventService : IEvents
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="abstId"></param>
+    /// <param name="abstractEventId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public ArticleEvent GetEventGroup(Guid abstId, string sortOrder)
+    public ArticleEvent GetEventGroup(Guid abstractEventId, string sortOrder)
     {
         var eventGroup = (
     from absEvent in _context.AbstractEvents
-    where absEvent.Abstract_Event_Id == abstId
+    where absEvent.Abstract_Event_Id == abstractEventId
     select new ArticleEvent()
     {
         Abstract_event_id = absEvent.Abstract_Event_Id,
@@ -183,7 +192,7 @@ public class EventService : IEvents
             from linkedList in _context.AbstractEventLinks
             join liveEvent in _context.LiveEvents
             on linkedList.Event_Id equals liveEvent.Live_Event_Id
-            where linkedList.Abstract_Event_Id == abstId
+            where linkedList.Abstract_Event_Id == abstractEventId
             select new DetailEvent()
             {
                 Live_event_id = liveEvent.Live_Event_Id,
@@ -229,7 +238,7 @@ public class EventService : IEvents
 
     public List<DetailEvent> GetRecentlyChangedEvents(int limit)
     {
-        // LiveEvntsのうち、更新日時が新しいものを取得する
+        // LiveEventsのうち、更新日時が新しいものを取得する
         var updatedEvents = _context.LiveEvents
             .OrderByDescending(e => e.Modified_At)
             .Take(limit)
@@ -279,10 +288,10 @@ public class EventService : IEvents
     public List<DetailEvent> GetRecentLiveEvent(int limit)
     {
         var records = new List<DetailEvent>();
-        var tommorow = DateTime.Now.AddDays(1);
+        var tomorrow = DateTime.Now.AddDays(1);
 
         this._context.LiveEvents
-            .Where(e => e.Perform_At < tommorow)
+            .Where(e => e.Perform_At < tomorrow)
             .OrderByDescending(e => e.Perform_At)
             .Take(limit)
             .ToList()

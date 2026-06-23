@@ -28,6 +28,8 @@ public class FanaticServeFileContext : IFanaticServeContext
         AbstractEventLinks = LoadFile<Abstract_event_link>("Abstract_event_link").AsQueryable();
         LiveEvents = LoadFile<LiveEvent>("Live_Event").AsQueryable();
         LiveEventNotes = LoadFile<Live_Event_Note>("Live_Event_Note").AsQueryable();
+        LiveEventUrls = LoadFile<Live_Event_Url>("Set_List_Note").AsQueryable();
+
         SetLists = LoadFile<Set_list>("Set_list").AsQueryable();
         SetListNotes = LoadFile<Set_List_Note>("Set_List_Note").AsQueryable();
         Part = LoadFile<Part>("Part").AsQueryable();
@@ -39,10 +41,10 @@ public class FanaticServeFileContext : IFanaticServeContext
     }
 
     public IQueryable<Abstract_album> AbstractAlbums { get; }
-    public IQueryable<Abstract_Album_Note> AbstractAlbumNotes { get; }   
+    public IQueryable<Abstract_Album_Note> AbstractAlbumNotes { get; }
     public IQueryable<Abstract_album_link> AbstractAlbumLinks { get; }
     public IQueryable<Album> Albums { get; }
-    public IQueryable<Album_Note> AlbumNotes { get; }    
+    public IQueryable<Album_Note> AlbumNotes { get; }
 
     public IQueryable<MediaType> MediaTypes { get; }
     public IQueryable<Label> Labels { get; }
@@ -52,6 +54,7 @@ public class FanaticServeFileContext : IFanaticServeContext
     public IQueryable<Abstract_event_link> AbstractEventLinks { get; }
     public IQueryable<LiveEvent> LiveEvents { get; }
     public IQueryable<Live_Event_Note> LiveEventNotes { get; }
+    public IQueryable<Live_Event_Url> LiveEventUrls { get; }
     public IQueryable<Set_list> SetLists { get; }
     public IQueryable<Set_List_Note> SetListNotes { get; }
     public IQueryable<Part> Part { get; }
@@ -60,6 +63,7 @@ public class FanaticServeFileContext : IFanaticServeContext
     public IQueryable<RoleOnSong> RoleOnSongs { get; }
     public IQueryable<Role> Roles { get; }
     public IQueryable<Person> People { get; }
+
 
     /// <summary>
     /// ファイルから同名のModelクラスのリストにデータを読み込む
@@ -137,9 +141,12 @@ public class FanaticServeFileContext : IFanaticServeContext
             return TimeSpan.TryParse(raw, out var ts) ? ts : (object?)null;
         if (t == typeof(bool))
         {
-            if (bool.TryParse(raw, out var b)) {
-                return   b;                
-            } else {
+            if (bool.TryParse(raw, out var b))
+            {
+                return b;
+            }
+            else
+            {
                 return ("1".Equals(raw));
             }
         }

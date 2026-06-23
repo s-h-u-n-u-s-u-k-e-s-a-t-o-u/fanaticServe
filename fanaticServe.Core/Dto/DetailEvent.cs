@@ -1,4 +1,5 @@
 ﻿using fanaticServe.Core.Constants;
+using fanaticServe.Core.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -36,5 +37,7 @@ public class DetailEvent
     public IEnumerable<ShowableSetList>? SetLists { get; set; }
 
     public string? Note { get; set; }
+
+    public IEnumerable<Live_Event_Url>? LiveEventUrls { get; set; }
 }
 

@@ -12,17 +12,15 @@ public interface IFanaticServeContext
     IQueryable<MediaType> MediaTypes { get; }
     IQueryable<Label> Labels { get; }
     IQueryable<Track> Tracks { get; }
-
     IQueryable<Abstract_event> AbstractEvents { get; }
     IQueryable<Abstract_event_link> AbstractEventLinks { get; }
     IQueryable<LiveEvent> LiveEvents { get; }
     IQueryable<Live_Event_Note> LiveEventNotes { get; }
-
+    IQueryable<Live_Event_Url> LiveEventUrls { get; }
     IQueryable<Set_list> SetLists { get; }
     IQueryable<Set_List_Note> SetListNotes { get; }
     IQueryable<Song> Songs { get; }
     IQueryable<RoleOnSong> RoleOnSongs { get; }
     IQueryable<Role> Roles { get; }
-
     IQueryable<Person> People { get; }
 }
