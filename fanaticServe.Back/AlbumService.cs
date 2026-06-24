@@ -1,5 +1,5 @@
 
-﻿using fanaticServe.Core.Data;
+using fanaticServe.Core.Data;
 using fanaticServe.Core.Dto;
 using fanaticServe.Core.Models;
 
@@ -10,6 +10,7 @@ public class AlbumService : IAlbums
     private readonly IFanaticServeContext _context;
     public AlbumService(IFanaticServeContext context)
     {
+        // DIでコンテキストを受け取る
         _context = context;
     }
 

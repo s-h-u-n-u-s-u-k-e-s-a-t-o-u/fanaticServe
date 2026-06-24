@@ -6,7 +6,7 @@ namespace fanaticServe.Back;
 /// <summary>
 /// 星取表を実現するサービスクラス
 /// </summary>
-public class StarMatrixService
+public class StarMatrixService: IStarMatrix
 {
     /// <summary>
     /// file dataコンテキスト
@@ -55,7 +55,7 @@ public class StarMatrixService
     /// ヘッダーに表示する文字列を含むデータを取得する。<br />表示にソート済み。
     /// </summary>
     /// <returns></returns>
-    public StarMatrixHeader[] getHeader()   
+    private StarMatrixHeader[] getHeader()   
     {
         StarMatrixHeader[] header = _context.Tracks
             .Join(_context.Albums, t => t.Album_Id, a => a.Album_Id, (t, a) => new { t.Song_Id, a.Release_On, t.Track_No })
@@ -76,7 +76,7 @@ public class StarMatrixService
         return header;
     }
 
-    public StarMatrixRowHeader[] GetRowHeader()
+    private StarMatrixRowHeader[] GetRowHeader()
     {
         // イベントを取得。セットリストとGroupJoin。セットリストが0件のものは除外する。
         var rowHeader = _context.LiveEvents

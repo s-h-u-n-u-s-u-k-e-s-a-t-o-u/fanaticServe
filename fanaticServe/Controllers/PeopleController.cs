@@ -1,16 +1,17 @@
-﻿using fanaticServe.Back;
-using fanaticServe.Core.Data;
+﻿using fanaticServe.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
 
 public class PeopleController : Controller
 {
-    private readonly IFanaticServeContext _context;
+    private readonly ILogger<PeopleController> _logger;
+    private readonly IPeople _people;
 
-    public PeopleController(IFanaticServeContext context)
+    public PeopleController(ILogger<PeopleController> logger, IPeople people)
     {
-        _context = context;
+        _logger = logger;
+        _people = people;
     }
 
     [HttpGet]
@@ -22,6 +23,6 @@ public class PeopleController : Controller
             return NotFound();
         }
 
-        return View(new PeopleService(_context).GetPerson(id.Value));
+        return View(_people.GetPerson(id.Value));
     }
 }
