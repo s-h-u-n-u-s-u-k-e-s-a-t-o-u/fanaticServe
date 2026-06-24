@@ -6,11 +6,12 @@ namespace fanaticServe.Controllers;
 
 public class AlbumsController : Controller
 {
-    private readonly IFanaticServeContext _context;
+    private readonly IAlbums _albums;
 
-    public AlbumsController(IFanaticServeContext context)
+    public AlbumsController(IAlbums albums)
     {
-        _context = context;
+        // DIでサービスを受け取る
+        _albums = albums;
     }
 
     // GET: Albums
@@ -21,7 +22,7 @@ public class AlbumsController : Controller
         ViewData["DateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["TitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
-        return View(new AlbumService(_context).GetAllAlbums(sortOrder, searchString));
+        return View(this._albums.GetAllAlbums(sortOrder, searchString));
     }
 
     // GET: Albums/Details/5
@@ -33,7 +34,7 @@ public class AlbumsController : Controller
             return NotFound();
         }
 
-        var album = new AlbumService(_context).GetDetailAlbum(id.Value);
+        var album = this._albums.GetDetailAlbum(id.Value);
         if (album == null)
         {
             return NotFound();
@@ -48,7 +49,7 @@ public class AlbumsController : Controller
         ViewData["ArticleDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["ArticleTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
-        return View(new AlbumService(_context).GetAlbumArticles(sortOrder,  searchString));
+        return View(this._albums.GetAlbumArticles(sortOrder, searchString));
     }
 
     [HttpGet]
@@ -63,6 +64,6 @@ public class AlbumsController : Controller
         ViewData["GroupDateSort"] = String.IsNullOrEmpty(sortOrder) ? "dateDesending" : "";
         ViewData["GroupTitleSort"] = sortOrder == "title" ? "titleDesending" : "title";
 
-        return View(new AlbumService(_context).GetAlbumGroup(id.Value, sortOrder));
-    }    
+        return View(this._albums.GetAlbumGroup(id.Value, sortOrder));
+    }
 }
