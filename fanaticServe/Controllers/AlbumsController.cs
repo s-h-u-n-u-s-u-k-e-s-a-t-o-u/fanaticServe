@@ -1,15 +1,16 @@
-﻿using fanaticServe.Back;
-using fanaticServe.Core.Data;
+﻿using fanaticServe.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
 
 public class AlbumsController : Controller
 {
+    private readonly ILogger<AlbumsController> _logger;
     private readonly IAlbums _albums;
 
-    public AlbumsController(IAlbums albums)
+    public AlbumsController(ILogger<AlbumsController> logger, IAlbums albums)
     {
+        _logger = logger;
         // DIでサービスを受け取る
         _albums = albums;
     }

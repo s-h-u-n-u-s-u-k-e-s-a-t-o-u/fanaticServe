@@ -5,10 +5,12 @@ namespace fanaticServe.Controllers;
 
 public class EventsController : Controller
 {
+    private readonly ILogger<EventsController> _logger;
     private readonly IEvents _events;
 
-    public EventsController(IEvents events)
+    public EventsController(ILogger<EventsController> logger, IEvents events)
     {
+        _logger = logger;
         _events = events;
     }
 

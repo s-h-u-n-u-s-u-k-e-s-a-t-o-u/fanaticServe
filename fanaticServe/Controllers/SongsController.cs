@@ -1,15 +1,16 @@
-﻿using fanaticServe.Back;
-using fanaticServe.Core.Data;
+﻿using fanaticServe.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
 
 public class SongsController : Controller
 {
+    private readonly ILogger<SongsController> _logger;
     private readonly ISongs _songs;
 
-    public SongsController(ISongs songs)
+    public SongsController(ILogger<SongsController> logger, ISongs songs)
     {
+        _logger = logger;
         _songs = songs;
     }
 

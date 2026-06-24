@@ -1,51 +1,70 @@
 // Import the Azure.Monitor.OpenTelemetry.AspNetCore namespace.
-using fanaticServe.Core.Data;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using fanaticServe.Back.Data;
+using fanaticServe.Core.Data;
+using fanaticServe.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ログの設定
+// ログの設定 - IIS環境でも詳細情報を出力
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 //builder.Logging.AddDebug();
+//builder.Logging.AddEventLog();  // Windowsイベントログにも出力
 
-// Add OpenTelemetry and configure it to use Azure Monitor.
-// APPLICATIONINSIGHTS_CONNECTION_STRING という名前で環境変数を設定し、UseAzureMonitor()を呼び出せば自動的に認識されます。
-// builder.Services.AddOpenTelemetry().UseAzureMonitor();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// Database を使わない -> DbContext 登録を削除し、ファイルコンテキストを登録する
-// 既定では ContentRoot/DataSource/*.dat を読み込みます
-builder.Services.AddSingleton<IFanaticServeContext>(sp =>
-    new FanaticServeFileContext(builder.Environment.ContentRootPath));
-
-// データベース例外フィルターは不要なのでコメントアウト（必要なら別処理）
-// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-// DIのためServiceを登録する
-builder.Services.AddScoped<IAlbums, fanaticServe.Back.AlbumService>();
-builder.Services.AddScoped<IEvents, fanaticServe.Back.EventService>();
-builder.Services.AddScoped<IPeople, fanaticServe.Back.PeopleService>();
-builder.Services.AddScoped<ISongs, fanaticServe.Back.SongService>(); 
-builder.Services.AddScoped<IStarMatrix, fanaticServe.Back.StarMatrixService>(); 
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+// 例外ハンドリング
+try
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    // Add OpenTelemetry - エラーハンドリング
+    if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING")))
+    {
+        builder.Services.AddOpenTelemetry().UseAzureMonitor();
+    }
+
+    // Add services to the container.
+    builder.Services.AddControllersWithViews();
+
+    // ファイルコンテキスト初期化
+    builder.Services.AddSingleton<IFanaticServeContext>(sp =>
+    {
+        var contentRoot = builder.Environment.ContentRootPath;
+        Console.WriteLine($"ContentRootPath: {contentRoot}");
+        Console.WriteLine($"DataSource path: {Path.Combine(contentRoot, "DataSource")}");
+        return new FanaticServeFileContext(contentRoot);
+    });
+
+    // DI登録
+    builder.Services.AddScoped<IAlbums, fanaticServe.Back.AlbumService>();
+    builder.Services.AddScoped<IEvents, fanaticServe.Back.EventService>();
+    builder.Services.AddScoped<IPeople, fanaticServe.Back.PeopleService>();
+    builder.Services.AddScoped<ISongs, fanaticServe.Back.SongService>(); 
+    builder.Services.AddScoped<IStarMatrix, fanaticServe.Back.StarMatrixService>(); 
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+
+    // アクセスログミドルウェアを追加
+    app.UseMiddleware<AccessLoggingMiddleware>();
+
+    app.UseRouting();
+    app.UseAuthorization();
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthorization();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+catch (Exception ex)
+{
+    Console.WriteLine($"Fatal error: {ex}");
+    throw;
+}

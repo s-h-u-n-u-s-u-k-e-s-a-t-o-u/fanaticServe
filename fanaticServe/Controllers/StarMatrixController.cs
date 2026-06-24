@@ -1,15 +1,16 @@
-﻿using fanaticServe.Back;
-using fanaticServe.Core.Data;
+﻿using fanaticServe.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
 
 public class StarMatrixController : Controller
 {
+    private readonly ILogger<StarMatrixController> _logger;
     private readonly IStarMatrix _starMatrix;
 
-    public StarMatrixController(IStarMatrix starMatrix)
+    public StarMatrixController(ILogger<StarMatrixController> logger, IStarMatrix starMatrix)
     {
+        _logger = logger;
         _starMatrix = starMatrix;
     }
 
