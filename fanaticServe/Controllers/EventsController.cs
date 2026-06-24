@@ -1,16 +1,15 @@
-﻿using fanaticServe.Back;
-using fanaticServe.Core.Data;
+﻿using fanaticServe.Core.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fanaticServe.Controllers;
 
 public class EventsController : Controller
 {
-    private readonly IFanaticServeContext _context;
+    private readonly IEvents _events;
 
-    public EventsController(IFanaticServeContext context)
+    public EventsController(IEvents events)
     {
-        _context = context;
+        _events = events;
     }
 
     [HttpGet]
@@ -20,7 +19,7 @@ public class EventsController : Controller
         ViewData["DateSortParam"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
         ViewData["TitleSortParam"] = sortOrder == "title" ? "title_desc" : "title";
 
-        return View(new EventService(_context).GetAllEvents(sortOrder));
+        return View(_events.GetAllEvents(sortOrder));
     }
 
     // GET: Events/Details/5
@@ -32,7 +31,7 @@ public class EventsController : Controller
             return NotFound();
         }
 
-        return View(new EventService(_context).GetDetailEvent(id.Value));
+        return View(_events.GetDetailEvent(id.Value));
     }
 
     [HttpGet]
@@ -47,7 +46,7 @@ public class EventsController : Controller
         ViewData["GroupDateSortParam"] = String.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
         ViewData["GroupTitleSortParam"] = sortOrder == "title" ? "title_desc" : "title";
 
-        return View(new EventService(_context).GetEventGroup(id.Value, sortOrder));
+        return View(_events.GetEventGroup(id.Value, sortOrder));
     }
 
     [HttpGet]
@@ -59,6 +58,6 @@ public class EventsController : Controller
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentFilter"] = searchString;
 
-        return View(new EventService(_context).GetAllEventArticles(sortOrder, searchString));
+        return View(_events.GetAllEventArticles(sortOrder, searchString));
     }
 }

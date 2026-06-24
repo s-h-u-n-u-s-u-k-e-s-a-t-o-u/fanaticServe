@@ -10,12 +10,12 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    private readonly IFanaticServeContext _context;
+    private readonly IEvents _events;
 
-    public HomeController(ILogger<HomeController> logger, IFanaticServeContext context)
+    public HomeController(ILogger<HomeController> logger, IEvents events)
     {
         _logger = logger;
-        _context = context;
+        _events = events;
     }
 
     [HttpGet]
@@ -26,10 +26,8 @@ public class HomeController : Controller
         // Dashboard‚Ìƒf[ƒ^‚ğæ“¾‚µ‚ÄView‚É“n‚·
         DashBoard dashboardData = new DashBoard();
 
-        var service = new fanaticServe.Back.EventService(_context);
-
-        dashboardData.RecentLiveEvents.AddRange(service.GetRecentLiveEvent(limit));
-        dashboardData.RecentlyChangedEvents.AddRange(service.GetRecentlyChangedEvents(limit));
+        dashboardData.RecentLiveEvents.AddRange(_events.GetRecentLiveEvent(limit));
+        dashboardData.RecentlyChangedEvents.AddRange(_events.GetRecentlyChangedEvents(limit));
 
         return View(dashboardData);
     }
