@@ -6,23 +6,21 @@ namespace fanaticServe.Controllers;
 
 public class StarMatrixController : Controller
 {
-    private readonly IFanaticServeContext _context;
+    private readonly IStarMatrix _starMatrix;
 
-    public StarMatrixController(IFanaticServeContext context)
+    public StarMatrixController(IStarMatrix starMatrix)
     {
-        _context = context;
+        _starMatrix = starMatrix;
     }
 
     public IActionResult Index()
     {
-        var service = new StarMatrixService(_context);
-        return View(service.GetStarMatrix());
+        return View(_starMatrix.GetStarMatrix());
     }
 
     // Modalを表示するパーシャルビューを返すアクション
     public IActionResult GetModal()
     {
-        var service = new StarMatrixService(_context);
-        return PartialView("_StarMatrixModal", service.GetStarMatrix());
+        return PartialView("_StarMatrixModal", _starMatrix.GetStarMatrix());
     }
 }
