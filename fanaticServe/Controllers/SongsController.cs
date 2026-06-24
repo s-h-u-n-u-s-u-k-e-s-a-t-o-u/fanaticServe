@@ -6,11 +6,11 @@ namespace fanaticServe.Controllers;
 
 public class SongsController : Controller
 {
-    private readonly IFanaticServeContext _context;
+    private readonly ISongs _songs;
 
-    public SongsController(IFanaticServeContext context)
+    public SongsController(ISongs songs)
     {
-        _context = context;
+        _songs = songs;
     }
 
     [HttpGet]
@@ -22,7 +22,7 @@ public class SongsController : Controller
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentFilter"] = searchString;
 
-        return View(new SongService(_context).GetAllSongs(sortOrder, searchString));
+        return View(_songs.GetAllSongs(sortOrder, searchString));
     }
 
     [HttpGet]
@@ -33,6 +33,6 @@ public class SongsController : Controller
             return NotFound();
         }
 
-        return View(new SongService(_context).GetSong(id.Value));
+        return View(_songs.GetSong(id.Value));
     }
 }
