@@ -24,6 +24,13 @@ builder.Services.AddSingleton<IFanaticServeContext>(sp =>
 // データベース例外フィルターは不要なのでコメントアウト（必要なら別処理）
 // builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// DIのためServiceを登録する
+builder.Services.AddScoped<IAlbums, fanaticServe.Back.AlbumService>();
+builder.Services.AddScoped<IEvents, fanaticServe.Back.EventService>();
+builder.Services.AddScoped<IPeople, fanaticServe.Back.PeopleService>();
+builder.Services.AddScoped<ISongs, fanaticServe.Back.SongService>(); 
+builder.Services.AddScoped<IStarMatrix, fanaticServe.Back.StarMatrixService>(); 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
