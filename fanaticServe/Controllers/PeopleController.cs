@@ -6,11 +6,11 @@ namespace fanaticServe.Controllers;
 
 public class PeopleController : Controller
 {
-    private readonly IFanaticServeContext _context;
+    private readonly IPeople _people;
 
-    public PeopleController(IFanaticServeContext context)
+    public PeopleController(IPeople people)
     {
-        _context = context;
+        _people = people;
     }
 
     [HttpGet]
@@ -22,6 +22,6 @@ public class PeopleController : Controller
             return NotFound();
         }
 
-        return View(new PeopleService(_context).GetPerson(id.Value));
+        return View(_people.GetPerson(id.Value));
     }
 }
