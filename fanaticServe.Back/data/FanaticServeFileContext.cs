@@ -28,7 +28,7 @@ public class FanaticServeFileContext : IFanaticServeContext
         AbstractEventLinks = LoadFile<Abstract_event_link>("Abstract_event_link").AsQueryable();
         LiveEvents = LoadFile<LiveEvent>("Live_Event").AsQueryable();
         LiveEventNotes = LoadFile<Live_Event_Note>("Live_Event_Note").AsQueryable();
-        LiveEventUrls = LoadFile<Live_Event_Url>("Set_List_Note").AsQueryable();
+        LiveEventUrls = LoadFile<Live_Event_Url>("Live_Event_Url").AsQueryable();
 
         SetLists = LoadFile<Set_list>("Set_list").AsQueryable();
         SetListNotes = LoadFile<Set_List_Note>("Set_List_Note").AsQueryable();

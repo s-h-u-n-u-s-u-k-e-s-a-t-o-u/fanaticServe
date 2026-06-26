@@ -152,17 +152,18 @@ public class EventService : IEvents
                 Live_event_id = le.Live_Event_Id,
                 Title = le.Title,
                 Place = le.Place,
-                Perform_at = le.Perform_At,
-                LiveEventUrls = _context.LiveEventUrls
-                    .Where(url => url.Live_Event_Id == le.Live_Event_Id)
+                Perform_at = le.Perform_At
+            })
+            .First();
+
+        liveEvent.LiveEventUrls = _context.LiveEventUrls
+                    .Where(url => url.Live_Event_Id == liveEvent.Live_event_id)
                     .Select(url => new Live_Event_Url
                     {
                         Live_Event_Id = url.Live_Event_Id,
                         Url = url.Url,
                         Description = url.Description
-                    }).ToList()
-            })
-            .First();
+                    }).ToList();
 
         liveEvent.SetLists = GetSetList(eventId);
         liveEvent.Note = GetLiveEventNote(liveEvent.Live_event_id)?.Note;
