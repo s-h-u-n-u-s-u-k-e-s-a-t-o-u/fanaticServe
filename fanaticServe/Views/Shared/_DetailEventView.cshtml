@@ -22,7 +22,7 @@
     </div>
 </div>
 
-@if (Model.LiveEventUrls != null && Model.LiveEventUrls.Count() > 0)
+@if (Model.LiveEventUrls != null && Model.LiveEventUrls.Any() )
 {
     var accId = $"acc-id-{Model.Live_event_id}";
     <div class="accordion">
