@@ -1,4 +1,5 @@
 ﻿using fanaticServe.Core.Constants;
+using fanaticServe.Core.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -42,5 +43,4 @@ public class ShowableEvent
     [DisplayName("開催日時")]
     [DisplayFormat(DataFormatString = Format.DateTimeFormat)]
     public DateTime? Perform_at { get; set; }
-
 }
