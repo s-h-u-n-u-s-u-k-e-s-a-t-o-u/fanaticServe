@@ -47,9 +47,9 @@ try
     {
         app.UseExceptionHandler("/Home/Error");
         app.UseHsts();
+        app.UseHttpsRedirection();
     }
 
-    app.UseHttpsRedirection();
     app.UseStaticFiles();
 
     // アクセスログミドルウェアを追加
@@ -60,6 +60,9 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    // Add a health check endpoint
+    app.MapGet("/health", () => Results.Ok());
 
     app.Run();
 }
